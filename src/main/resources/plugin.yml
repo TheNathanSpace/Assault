@@ -1,0 +1,4 @@
+name: ${project.name}
+main: com.thekingelessar.joinslot.JoinSlot
+version: ${project.version}
+author: TheKingElessar
