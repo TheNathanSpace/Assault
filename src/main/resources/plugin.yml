@@ -1,4 +1,4 @@
 name: ${project.name}
-main: com.thekingelessar.joinslot.JoinSlot
+main: com.thekingelessar.assault.Assault
 version: ${project.version}
 author: TheKingElessar
