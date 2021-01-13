@@ -2,3 +2,10 @@ name: ${project.name}
 main: com.thekingelessar.assault.Assault
 version: ${project.version}
 author: TheKingElessar
+commands:
+  assault:
+    description: Utility commands.
+    usage: |
+      /assault rollback <world name>
+      /assault load <world name> <auto-save>
+      /assault join <world name>

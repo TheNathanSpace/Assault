@@ -1,0 +1,22 @@
+world_name: example
+
+waiting_platform: 0 120 0
+
+spawns:
+  RED: -40 102 0
+  BLUE: 40 102 0
+
+buttons:
+  BLUE: 47 104 0
+
+emeralds:
+  - 25 101 5
+  - 25 101 -5
+
+impassable:
+  BLUE:
+    - 43 101 0
+    - 40 101 -3
+    - 37 101 0
+    - 40 101 3
+    - 34 101 0
