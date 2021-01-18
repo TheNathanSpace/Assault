@@ -1,8 +1,9 @@
 package com.thekingelessar.assault;
 
-import com.thekingelessar.assault.config.LoadMap;
-import com.thekingelessar.assault.config.Map;
-import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
+import com.thekingelessar.assault.commands.CommandAssault;
+import com.thekingelessar.assault.config.WorldConfig;
+import com.thekingelessar.assault.game.map.Map;
+import com.thekingelessar.assault.game.RegisterHandlers;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +14,6 @@ public class Assault extends JavaPlugin
     
     static public FileConfiguration mainConfig = null;
     static public String lobbyWorld;
-    static public String gameWorld;
     
     static public HashMap<String, Map> maps = new HashMap<>();
     
@@ -27,12 +27,11 @@ public class Assault extends JavaPlugin
         this.saveDefaultConfig();
         mainConfig = this.getConfig();
         lobbyWorld = mainConfig.getString("lobby_world");
-        gameWorld = mainConfig.getString("game_world");
         
-        Map mapObject = LoadMap.loadMap("example");
-        maps.put("example", mapObject);
+        Map mapObject = WorldConfig.loadWorldFromConfig("map_example.yml");
+        maps.put("map_example", mapObject);
         
-        this.getCommand("assault").setExecutor(new com.thekingelessar.assault.commands.Assault());
+        this.getCommand("assault").setExecutor(new CommandAssault());
         
         RegisterHandlers.registerHandlers();
         

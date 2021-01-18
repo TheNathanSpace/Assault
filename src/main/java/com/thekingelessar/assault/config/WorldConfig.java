@@ -1,19 +1,30 @@
 package com.thekingelessar.assault.config;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.game.map.Map;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
 
-public class LoadMap
+public class WorldConfig
 {
-    public static Map loadMap(String map)
+    public static Map loadWorldFromConfig(String map)
     {
-        map = "map_" + map + ".yml";
+        if (!map.startsWith("map_"))
+        {
+            map = "map_" + map;
+        }
+        
+        if (!map.endsWith(".yml"))
+        {
+            map = map + ".yml";
+        }
+        
+        map = "maps/" + map;
+        
         File playerDataFileObject = new File(Assault.INSTANCE.getDataFolder(), map);
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(playerDataFileObject);
         
         if (!playerDataFileObject.exists())
         {
@@ -21,7 +32,7 @@ public class LoadMap
             Assault.INSTANCE.saveResource(map, false);
         }
         
-        configuration = new YamlConfiguration();
+        YamlConfiguration configuration = new YamlConfiguration();
         try
         {
             configuration.load(playerDataFileObject);

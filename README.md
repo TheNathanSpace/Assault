@@ -1,7 +1,5 @@
 ## Roadmap
 
- - Restructure current world setup
-    - There should be as many worlds as the server wants, since each world is a map.
  - Spawning on game start and death
  - How to get money
     - Coins automatically tick up
@@ -19,6 +17,10 @@
 ### Completed
 
  - Build example map for testing (blue at least)
+ - Teams
+ - Me and my cohort built Saloon!
+ - Restructure current world setup
+    - There should be as many worlds as the server wants, since each world is a map.
 
 ---
 
@@ -35,3 +37,10 @@ Gamer Shop: Attackers spend Gamer Points (earned by killing defenders) on buffs
 Misc., inconsequential questions to answer in the future:
 
  - Should health be visible to enemies?
+ - "Big Iron" map-specific items
+ 
+---
+
+#### Resources
+
+ - [Scoreboard Management](https://bukkit.org/threads/tutorial-scoreboards-teams-with-the-bukkit-api.139655/)

@@ -1,7 +1,9 @@
-package com.thekingelessar.assault.game;
+package com.thekingelessar.assault.game.team;
 
+import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.util.Coordinate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
@@ -12,13 +14,13 @@ import java.util.UUID;
 
 public class GameTeam
 {
-    public TeamColor color;
+    public ChatColor color;
     public Team teamScoreboard;
     
     public ArrayList<UUID> members = new ArrayList<>();
     public Coordinate spawn;
     
-    public GameTeam(Coordinate spawn, TeamColor color, GameInstance instance)
+    public GameTeam(Coordinate spawn, ChatColor color, GameInstance instance)
     {
         this.color = color;
         this.spawn = spawn;
@@ -36,8 +38,18 @@ public class GameTeam
     
     public void addMember(UUID uuid)
     {
+        Player member = Bukkit.getPlayer(uuid);
+        
+        if (member == null)
+        {
+            return;
+        }
+        
         members.add(uuid);
-        teamScoreboard.addPlayer(Bukkit.getOfflinePlayer(uuid));
+        teamScoreboard.addPlayer(member);
+        
+        member.setDisplayName(this.color + member.getName() + ChatColor.RESET);
+        member.setPlayerListName(member.getDisplayName() + ChatColor.RESET);
     }
     
     public void addMember(String string)
@@ -55,7 +67,10 @@ public class GameTeam
     
     public void removeMember(UUID uuid)
     {
+        Player member = Bukkit.getPlayer(uuid);
+        
         members.remove(uuid);
-        teamScoreboard.removePlayer(Bukkit.getOfflinePlayer(uuid));
+        teamScoreboard.removePlayer(member);
     }
+    
 }

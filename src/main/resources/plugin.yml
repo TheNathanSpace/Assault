@@ -6,6 +6,7 @@ commands:
   assault:
     description: Utility commands.
     usage: |
+      /assault splitteams
       /assault rollback <world name>
       /assault load <world name> <auto-save>
       /assault join <world name>

@@ -1,5 +1,6 @@
-package com.thekingelessar.assault.config;
+package com.thekingelessar.assault.game.map;
 
+import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.util.Coordinate;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,7 +12,7 @@ public class Map
     public String name;
     
     public Coordinate waitingPlatform;
-    public HashMap<String, Coordinate> spawns = new HashMap<>();
+    public HashMap<TeamColor, Coordinate> spawns = new HashMap<>();
     
     
     public Map(YamlConfiguration config)
@@ -23,8 +24,8 @@ public class Map
         String redSpawnString = config.getString("spawns.RED");
         String blueSpawnString = config.getString("spawns.BLUE");
         
-        spawns.put("RED", new Coordinate(redSpawnString));
-        spawns.put("BLUE", new Coordinate(blueSpawnString));
+        spawns.put(TeamColor.RED, new Coordinate(redSpawnString));
+        spawns.put(TeamColor.GREEN, new Coordinate(blueSpawnString));
         
     }
     
