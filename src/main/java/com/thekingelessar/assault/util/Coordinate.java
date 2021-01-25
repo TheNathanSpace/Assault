@@ -1,5 +1,8 @@
 package com.thekingelessar.assault.util;
 
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,5 +59,9 @@ public class Coordinate
                 return;
             }
         }
+    }
+    
+    public Location toLocation(World world) {
+        return new Location(world, this.x, this.y, this.z);
     }
 }

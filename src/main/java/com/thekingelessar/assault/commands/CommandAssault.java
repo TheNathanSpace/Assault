@@ -16,6 +16,14 @@ public class CommandAssault implements CommandExecutor
         if (args == null || args.length == 0) return false;
         switch (args[0])
         {
+            case "start":
+                if (sender instanceof Player)
+                {
+                    GameInstance testInstance = new GameInstance(args[1]);
+                    testInstance.startWorld();
+                }
+                break;
+    
             case "splitteams":
                 if (sender instanceof Player)
                 {
@@ -28,17 +36,13 @@ public class CommandAssault implements CommandExecutor
                 WorldManager.closeWorld(Bukkit.getWorld(args[1]));
                 break;
             
-            case "load":
-                WorldManager.createWorldFromMap(args[1], Boolean.parseBoolean(args[2]));
+            case "create":
+                WorldManager.createWorldFromMap(args[1], Boolean.parseBoolean(args[2]), args[3]);
                 break;
             
             case "join":
                 if (sender instanceof Player)
                 {
-                    if (Bukkit.getWorld(args[1]) == null)
-                    {
-                        WorldManager.createWorldFromMap(args[1], Boolean.parseBoolean(args[2]));
-                    }
                     ((Player) sender).teleport(Bukkit.getWorld(args[1]).getSpawnLocation());
                 }
                 break;

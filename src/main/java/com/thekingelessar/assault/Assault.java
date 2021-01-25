@@ -28,8 +28,8 @@ public class Assault extends JavaPlugin
         mainConfig = this.getConfig();
         lobbyWorld = mainConfig.getString("lobby_world");
         
-        Map mapObject = WorldConfig.loadWorldFromConfig("map_example.yml");
-        maps.put("map_example", mapObject);
+        Map mapObject = WorldConfig.loadWorldFromConfig("map_saloon.yml");
+        maps.put("map_saloon", mapObject);
         
         this.getCommand("assault").setExecutor(new CommandAssault());
         

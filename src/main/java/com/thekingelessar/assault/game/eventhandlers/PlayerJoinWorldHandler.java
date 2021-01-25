@@ -17,10 +17,10 @@ public class PlayerJoinWorldHandler implements Listener
         Player player = playerChangedWorldEvent.getPlayer();
         org.bukkit.World newWorld = player.getWorld();
         
-        if (WorldManager.gameWorlds.containsKey(newWorld.getName()))
-        {
-            Map worldMap = Assault.maps.get(newWorld.getName());
-            player.teleport(new Location(newWorld, worldMap.waitingPlatform.x, worldMap.waitingPlatform.y, worldMap.waitingPlatform.z));
-        }
+//        if (WorldManager.gameWorlds.containsKey(newWorld.getName()))
+//        {
+//            Map worldMap = Assault.maps.get(newWorld.getName());
+//            player.teleport(new Location(newWorld, worldMap.waitingPlatform.x, worldMap.waitingPlatform.y, worldMap.waitingPlatform.z));
+//        }
     }
 }

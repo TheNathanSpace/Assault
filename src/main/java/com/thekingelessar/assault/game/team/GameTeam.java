@@ -14,18 +14,25 @@ import java.util.UUID;
 
 public class GameTeam
 {
-    public ChatColor color;
+    public TeamColor color;
     public Team teamScoreboard;
     
     public ArrayList<UUID> members = new ArrayList<>();
-    public Coordinate spawn;
+    public Coordinate defenderSpawn;
+    public Coordinate attackerSpawn;
     
-    public GameTeam(Coordinate spawn, ChatColor color, GameInstance instance)
+    public TeamStage teamStage;
+    
+    public GameTeam(TeamColor color, GameInstance instance)
     {
         this.color = color;
-        this.spawn = spawn;
-        
         createScoreboard(instance);
+    }
+    
+    public void setSpawns(Coordinate defenderSpawn, Coordinate attackerSpawn)
+    {
+        this.defenderSpawn = defenderSpawn;
+        this.attackerSpawn = attackerSpawn;
     }
     
     private void createScoreboard(GameInstance instance)

@@ -1,7 +1,9 @@
 ## Roadmap
-
+ 
+ - Game cycle
  - Spawning on game start and death
- - How to get money
+ - Block breaking/placing restrictions
+ - Resource generation/gathering
     - Coins automatically tick up
     - Emeralds spawn in physical locations near each base
     - GP on kill
@@ -10,25 +12,35 @@
         - Weapons
         - Blocks
         - Utility items
+        - Special map-specific items
     - Gamer Shop (team buffs)
         - Potion effects
         - Movement buffs
+ - Lobby/game instance stuff
+    - Moving players in/out of game
+    - Map voting
+    - Joining/leaving game while it's running
+ - Game modifiers (admin set or voting)
 
 ### Completed
 
  - Build example map for testing (blue at least)
  - Teams
- - Me and my cohort built Saloon!
- - Restructure current world setup
-    - There should be as many worlds as the server wants, since each world is a map.
+ - Me and my cohort built Saloon 😎
+ - Restructure current world setup (worlds vs. map)
+ - World copying/loading/deleting from maps
 
 ---
 
-#### Shops
+## Game Cycle
 
-UBOM: The normal shop that both teams use
-
-Gamer Shop: Attackers spend Gamer Points (earned by killing defenders) on buffs
+1. Everybody starts in a lobby world
+2. Each player that wants to join the game signifies it by running a command or something, then they're added to a list
+3. Once the game has enough players, the game instance is created, the map/players passed to it, and the game world created
+4. All the players are moved to the game world (on the waiting platform)
+5. The countdown starts
+6. Teams are split, and sent to their defending base in build mode
+7. Once building time is up, the attackers start
 
 ---
 
@@ -37,7 +49,6 @@ Gamer Shop: Attackers spend Gamer Points (earned by killing defenders) on buffs
 Misc., inconsequential questions to answer in the future:
 
  - Should health be visible to enemies?
- - "Big Iron" map-specific items
  
 ---
 
