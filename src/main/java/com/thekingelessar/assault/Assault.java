@@ -2,22 +2,26 @@ package com.thekingelessar.assault;
 
 import com.thekingelessar.assault.commands.CommandAssault;
 import com.thekingelessar.assault.config.WorldConfig;
+import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.map.Map;
-import com.thekingelessar.assault.game.RegisterHandlers;
+import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Assault extends JavaPlugin
 {
+    static public Assault INSTANCE;
     
     static public FileConfiguration mainConfig = null;
     static public String lobbyWorld;
     
     static public HashMap<String, Map> maps = new HashMap<>();
     
-    static public Assault INSTANCE;
+    static public List<GameInstance> gameInstances = new ArrayList<>();
     
     @Override
     public void onEnable()

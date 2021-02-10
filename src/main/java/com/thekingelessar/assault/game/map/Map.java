@@ -1,9 +1,11 @@
 package com.thekingelessar.assault.game.map;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Coordinate;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -23,6 +25,9 @@ public class Map
     public double voidLevel;
     
     public List<MapBase> bases = new ArrayList<>();
+    
+    public List<Material> placeableBlocks = new ArrayList<>();
+    public List<Material> breakableBlocks = new ArrayList<>();
     
     public Map(YamlConfiguration config)
     {
@@ -44,8 +49,6 @@ public class Map
             HashMap<String, HashMap<String, Object>> mappedBase = (HashMap<String, HashMap<String, Object>>) base;
             Set<String> baseTeamSet = mappedBase.keySet();
             String baseTeamString = baseTeamSet.iterator().next();
-            System.out.println("Base: " + baseTeamString);
-            
             TeamColor teamColor = TeamColor.valueOf(baseTeamString);
             
             HashMap<String, Object> baseSubMap = mappedBase.get(baseTeamString);
@@ -61,7 +64,44 @@ public class Map
             }
             
             MapBase mapBase = new MapBase(teamColor, defenderSpawn, attackerSpawn, emeraldSpawns);
+            System.out.println("Team " + teamColor + ", spawn " + defenderSpawn.toString());
             bases.add(mapBase);
+        }
+        
+        getBlocks(config);
+        
+    }
+    
+    public void getBlocks(YamlConfiguration config)
+    {
+        List<?> breakableList = config.getList("breakable_blocks");
+        
+        for (Object object : breakableList)
+        {
+            try
+            {
+                Material material = Material.valueOf(object.toString());
+                breakableBlocks.add(material);
+            }
+            catch (IllegalArgumentException exception)
+            {
+                Assault.INSTANCE.getLogger().warning("Invalid material in map configuration: " + object.toString());
+            }
+        }
+        
+        List<?> placeableList = config.getList("placeable_blocks");
+        
+        for (Object object : placeableList)
+        {
+            try
+            {
+                Material material = Material.valueOf(object.toString());
+                placeableBlocks.add(material);
+            }
+            catch (IllegalArgumentException exception)
+            {
+                Assault.INSTANCE.getLogger().warning("Invalid material in map configuration: " + object.toString());
+            }
         }
         
     }
@@ -79,7 +119,7 @@ public class Map
         {
             if (teamStage.equals(TeamStage.DEFENDING))
             {
-                if (base.defendingColor.equals(teamColor)) return base.defenderSpawn;
+                if (base.teamColor.equals(teamColor)) return base.defenderSpawn;
             }
             
             return base.attackerSpawn;

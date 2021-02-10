@@ -7,7 +7,6 @@ commands:
     description: Utility commands.
     usage: |
       /assault start <map name>
-      /assault splitteams
       /assault create <map name> <auto-save> <world ID>
       /assault join <world ID>
       /assault close <world ID>

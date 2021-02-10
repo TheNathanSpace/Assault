@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.util.Coordinate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,30 +15,38 @@ import java.util.UUID;
 
 public class GameTeam
 {
+    public GameInstance gameInstance;
+    
     public TeamColor color;
     public Team teamScoreboard;
     
     public ArrayList<UUID> members = new ArrayList<>();
-    public Coordinate defenderSpawn;
-    public Coordinate attackerSpawn;
     
     public TeamStage teamStage;
+    
+    public MapBase mapBase;
     
     public GameTeam(TeamColor color, GameInstance instance)
     {
         this.color = color;
-        createScoreboard(instance);
+        this.gameInstance = instance;
+        createScoreboard();
     }
     
-    public void setSpawns(Coordinate defenderSpawn, Coordinate attackerSpawn)
+    public void setTeamMapBase()
     {
-        this.defenderSpawn = defenderSpawn;
-        this.attackerSpawn = attackerSpawn;
+        for (MapBase base : gameInstance.gameMap.bases)
+        {
+            if (base.teamColor.equals(this.color))
+            {
+                this.mapBase = base;
+            }
+        }
     }
     
-    private void createScoreboard(GameInstance instance)
+    private void createScoreboard()
     {
-        teamScoreboard = instance.teamScoreboard.registerNewTeam(color.toString());
+        teamScoreboard = gameInstance.teamScoreboard.registerNewTeam(color.toString());
         teamScoreboard.setAllowFriendlyFire(false);
         teamScoreboard.setCanSeeFriendlyInvisibles(true);
         teamScoreboard.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
@@ -55,7 +64,7 @@ public class GameTeam
         members.add(uuid);
         teamScoreboard.addPlayer(member);
         
-        member.setDisplayName(this.color + member.getName() + ChatColor.RESET);
+        member.setDisplayName(this.color.chatColor + member.getName() + ChatColor.RESET);
         member.setPlayerListName(member.getDisplayName() + ChatColor.RESET);
     }
     

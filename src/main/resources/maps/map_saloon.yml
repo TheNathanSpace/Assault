@@ -20,3 +20,10 @@ bases:
         attacker_spawn: 36 106 10
         emerald_spawns:
           - 40.5 106 58.5
+
+# https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
+placeable_blocks:
+  - WOOL
+
+breakable_blocks:
+  - WOOL

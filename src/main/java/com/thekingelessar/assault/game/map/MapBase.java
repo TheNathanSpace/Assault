@@ -7,17 +7,19 @@ import java.util.List;
 
 public class MapBase
 {
+    public TeamColor teamColor;
+    public Coordinate defenderSpawn;
+    public Coordinate attackerSpawn;
+    public List<Coordinate> emeraldSpawns;
     
-    TeamColor defendingColor;
-    Coordinate defenderSpawn;
-    Coordinate attackerSpawn;
-    List<Coordinate> emeraldSpawn;
-    
-    public MapBase(TeamColor defendingColor, Coordinate defenderSpawn, Coordinate attackerSpawn, List<Coordinate> emeraldSpawn)
+    public MapBase(TeamColor teamColor, Coordinate defenderSpawn, Coordinate attackerSpawn, List<Coordinate> emeraldSpawns)
     {
-        this.defendingColor = defendingColor;
+        this.teamColor = teamColor;
         this.defenderSpawn = defenderSpawn;
         this.attackerSpawn = attackerSpawn;
-        this.emeraldSpawn = emeraldSpawn;
+        this.emeraldSpawns = emeraldSpawns;
     }
+    
+    // Emerald spawn should be located here, because you don't want
+    // emeralds spawning in both bases at the same time.
 }

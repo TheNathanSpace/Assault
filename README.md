@@ -2,7 +2,6 @@
  
  - Game cycle
  - Spawning on game start and death
- - Block breaking/placing restrictions
  - Resource generation/gathering
     - Coins automatically tick up
     - Emeralds spawn in physical locations near each base
@@ -24,12 +23,17 @@
 
 ### Completed
 
- - Build example map for testing (blue at least)
  - Teams
  - Me and my cohort built Saloon 😎
  - Restructure current world setup (worlds vs. map)
  - World copying/loading/deleting from maps
-
+ - Initial spawning (About at game cycle #6)
+ - Basic game restrictions
+     - Attacking players
+     - Placing blocks
+     - Destroying blocks
+ - Block breaking/placing restrictions (based on block type, nothing too complicated)
+ 
 ---
 
 ## Game Cycle

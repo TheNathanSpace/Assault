@@ -21,7 +21,7 @@ public class Coordinate
     
     public Coordinate(String coordinates)
     {
-        Pattern pattern = Pattern.compile("^ *(-?[0-9]+) *(-?[0-9]+) *(-?[0-9]+)");
+        Pattern pattern = Pattern.compile("^ *(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*)");
         Matcher matchedPattern = pattern.matcher(coordinates);
         
         if (matchedPattern.find())
@@ -61,7 +61,37 @@ public class Coordinate
         }
     }
     
-    public Location toLocation(World world) {
+    public Location toLocation(World world, Float yaw, Float pitch)
+    {
+        if (yaw != null && pitch != null)
+        {
+            return new Location(world, this.x, this.y, this.z, yaw, pitch);
+        }
+        
+        if (yaw == null && pitch != null)
+        {
+            return new Location(world, this.x, this.y, this.z, 0, pitch);
+        }
+        
+        if (yaw != null && pitch == null)
+        {
+            return new Location(world, this.x, this.y, this.z, yaw, 0);
+        }
+        
         return new Location(world, this.x, this.y, this.z);
     }
+    
+    public Location toLocation(World world)
+    {
+        return new Location(world, this.x, this.y, this.z);
+    }
+    
+    
+    @Override
+    public String toString()
+    {
+        return this.x + " " + this.y + " " + this.z;
+    }
+    
+    
 }

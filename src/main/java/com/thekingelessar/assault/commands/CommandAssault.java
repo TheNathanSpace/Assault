@@ -19,16 +19,10 @@ public class CommandAssault implements CommandExecutor
             case "start":
                 if (sender instanceof Player)
                 {
-                    GameInstance testInstance = new GameInstance(args[1]);
+                    Player senderPlayer = (Player) sender;
+                    GameInstance testInstance = new GameInstance(args[1], senderPlayer.getWorld().getPlayers(), null);
                     testInstance.startWorld();
-                }
-                break;
-    
-            case "splitteams":
-                if (sender instanceof Player)
-                {
-                    GameInstance testInstance = new GameInstance(args[1]);
-                    testInstance.createTeams();
+                    testInstance.sendPlayersToWorld();
                 }
                 break;
             

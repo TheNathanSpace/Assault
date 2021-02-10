@@ -28,4 +28,9 @@ public enum TeamColor
         this.chatColor = color;
     }
     
+    public String getFormattedName()
+    {
+        String fixedName = this.toString().replace("_", " ");
+        return this.chatColor + fixedName;
+    }
 }
