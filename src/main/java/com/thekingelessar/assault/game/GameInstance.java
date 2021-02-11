@@ -155,6 +155,8 @@ public class GameInstance
             
         }
         
+        gameMap.clearWaitingPlatform(gameWorld);
+        
         this.restoreHealth();
     }
     

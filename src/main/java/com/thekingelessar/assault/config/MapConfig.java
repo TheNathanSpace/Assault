@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class WorldConfig
+public class MapConfig
 {
     public static Map loadWorldFromConfig(String map)
     {

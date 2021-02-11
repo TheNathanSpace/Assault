@@ -1,1 +1,7 @@
 lobby_world: lobby_world_balloon
+
+# References maps in the maps/ directory.
+# Map files should be in the form map_[name].yml.
+# Here, they can be either saloon, map_saloon, saloon.yml, or map_saloon.yml.
+map_list:
+  - map_saloon

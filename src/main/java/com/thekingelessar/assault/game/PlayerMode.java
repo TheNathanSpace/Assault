@@ -4,14 +4,17 @@ import com.thekingelessar.assault.Assault;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public enum PlayerMode
 {
-    LOBBY(GameMode.ADVENTURE, false, false, false, false),
-    SPECTATOR(GameMode.SPECTATOR, false, false, false, false);
+    LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false),
+    SPECTATOR(GameMode.SPECTATOR, false, false, false, false, true, true),
+    PLAYER(GameMode.SURVIVAL, true, true, true, true, false, false);
     
     public GameMode gameMode;
     public boolean canBreakBlocks;
@@ -19,19 +22,37 @@ public enum PlayerMode
     public boolean canBeDamaged;
     public boolean canDamage;
     
-    PlayerMode(GameMode gameMode, boolean canBreakBlocks, boolean canPlaceBlocks, boolean canBeDamaged, boolean canDamage)
+    public boolean canFly;
+    public boolean isInvisible;
+    
+    PlayerMode(GameMode gameMode, boolean canBreakBlocks, boolean canPlaceBlocks, boolean canBeDamaged, boolean canDamage, boolean canFly, boolean isInvisible)
     {
         this.gameMode = gameMode;
         this.canBreakBlocks = canBreakBlocks;
         this.canPlaceBlocks = canPlaceBlocks;
         this.canBeDamaged = canBeDamaged;
         this.canDamage = canDamage;
+        
+        this.canFly = canFly;
+        this.isInvisible = isInvisible;
     }
     
     public static PlayerMode setPlayerMode(UUID playerUUID, PlayerMode playerMode)
     {
         Player player = Bukkit.getPlayer(playerUUID);
         player.setGameMode(playerMode.gameMode);
+        
+        player.setAllowFlight(playerMode.canFly);
+        
+        if (playerMode.isInvisible)
+        {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, true, false));
+        }
+        else
+        {
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        }
+        
         return playerMode;
     }
     

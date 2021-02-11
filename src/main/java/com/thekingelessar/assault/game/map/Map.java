@@ -5,7 +5,10 @@ import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Coordinate;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
@@ -127,6 +130,16 @@ public class Map
         
         return null;
         
+    }
+    
+    public void clearWaitingPlatform(World world)
+    {
+        List<Block> blocks = Util.selectBoundingBox(waitingPlatformBoundingBox.get(0).toLocation(world), waitingPlatformBoundingBox.get(1).toLocation(world), world);
+        
+        for (Block block : blocks)
+        {
+            block.setType(Material.AIR);
+        }
     }
     
 }

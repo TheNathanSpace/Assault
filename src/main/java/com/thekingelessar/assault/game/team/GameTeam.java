@@ -2,7 +2,6 @@ package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.map.MapBase;
-import com.thekingelessar.assault.util.Coordinate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

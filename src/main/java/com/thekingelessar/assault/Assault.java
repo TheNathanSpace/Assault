@@ -1,7 +1,7 @@
 package com.thekingelessar.assault;
 
 import com.thekingelessar.assault.commands.CommandAssault;
-import com.thekingelessar.assault.config.WorldConfig;
+import com.thekingelessar.assault.config.MapConfig;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
@@ -32,7 +32,7 @@ public class Assault extends JavaPlugin
         mainConfig = this.getConfig();
         lobbyWorld = mainConfig.getString("lobby_world");
         
-        Map mapObject = WorldConfig.loadWorldFromConfig("map_saloon.yml");
+        Map mapObject = MapConfig.loadWorldFromConfig("map_saloon.yml");
         maps.put("map_saloon", mapObject);
         
         this.getCommand("assault").setExecutor(new CommandAssault());

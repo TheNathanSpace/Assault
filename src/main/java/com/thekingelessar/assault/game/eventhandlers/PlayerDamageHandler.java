@@ -1,7 +1,10 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.game.PlayerMode;
+import com.thekingelessar.assault.game.countdown.TaskRespawnTimer;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,8 +29,11 @@ public class PlayerDamageHandler implements Listener
                     return;
                 }
                 
-                GameTeam playerTeam = playerGameInstance.getPlayerTeam(damagedPlayer.getUniqueId());
-                damagedPlayer.teleport(playerGameInstance.gameMap.getSpawn(playerTeam, null).toLocation(playerGameInstance.gameWorld));
+                damagedPlayer.setGameMode(GameMode.SPECTATOR);
+                PlayerMode.setPlayerMode(damagedPlayer.getUniqueId(), PlayerMode.SPECTATOR);
+                
+                TaskRespawnTimer respawnTimer = new TaskRespawnTimer(60, 0, 20, playerGameInstance, damagedPlayer);
+                respawnTimer.runTaskTimer(Assault.INSTANCE, respawnTimer.startDelay, respawnTimer.tickDelay);
                 
                 entityDamageEvent.setCancelled(true);
             }
