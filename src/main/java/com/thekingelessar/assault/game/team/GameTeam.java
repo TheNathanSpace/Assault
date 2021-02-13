@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.inventory.ShopBuildingStage;
 import com.thekingelessar.assault.game.map.MapBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,6 +25,8 @@ public class GameTeam
     public TeamStage teamStage;
     
     public MapBase mapBase;
+    
+    public ShopBuildingStage shopBuildingStage;
     
     public GameTeam(TeamColor color, GameInstance instance)
     {
@@ -86,6 +89,11 @@ public class GameTeam
         
         members.remove(uuid);
         teamScoreboard.removePlayer(member);
+    }
+    
+    public void createBuildingShop()
+    {
+        this.shopBuildingStage = new ShopBuildingStage(this.color, null);
     }
     
 }

@@ -16,13 +16,16 @@ public class PlayerBlockPlaceHandler implements Listener
         
         PlayerMode playerMode = PlayerMode.getPlayerMode(player);
         
-        if (!playerMode.canPlaceBlocks)
+        if (playerMode != null)
         {
-            blockPlaceEvent.setCancelled(true);
+            
+            if (!playerMode.canPlaceBlocks)
+            {
+                blockPlaceEvent.setCancelled(true);
+            }
         }
-    
+        
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
-    
         if (gameInstance != null)
         {
             if (!gameInstance.gameMap.placeableBlocks.contains(blockPlaceEvent.getBlock().getType()))
@@ -32,6 +35,6 @@ public class PlayerBlockPlaceHandler implements Listener
                 // Todo: error messages for player (this and block break)
             }
         }
-    
+        
     }
 }

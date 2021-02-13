@@ -1,6 +1,9 @@
 ## Roadmap
  
  - Full game cycle
+    - Building
+        - Start with a preset amount of credits
+        - Buy blocks to use in defenses
  - Resource generation/gathering
     - Coins automatically tick up
     - Emeralds spawn in physical locations near each base
@@ -11,6 +14,7 @@
         - Blocks
         - Utility items
         - Special map-specific items
+        - Some items take coins, more powerful ones take emeralds
     - Gamer Shop (team buffs)
         - Potion effects
         - Movement buffs

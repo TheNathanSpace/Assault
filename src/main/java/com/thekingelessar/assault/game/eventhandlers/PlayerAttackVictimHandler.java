@@ -16,11 +16,14 @@ public class PlayerAttackVictimHandler implements Listener
             Player attacker = (Player) entityAttackEvent.getDamager();
             PlayerMode attackerMode = PlayerMode.getPlayerMode(attacker);
             
-            // Cancel if attacker can't damage
-            if (!(attackerMode.canDamage))
+            if (attackerMode != null)
             {
-                entityAttackEvent.setCancelled(true);
-                return;
+                // Cancel if attacker can't damage
+                if (!(attackerMode.canDamage))
+                {
+                    entityAttackEvent.setCancelled(true);
+                    return;
+                }
             }
             
             if (entityAttackEvent.getEntity() instanceof Player)
@@ -28,10 +31,13 @@ public class PlayerAttackVictimHandler implements Listener
                 Player victim = (Player) entityAttackEvent.getEntity();
                 PlayerMode victimMode = PlayerMode.getPlayerMode(victim);
                 
-                // Cancel if victim can't take damage
-                if (!(victimMode.canBeDamaged))
+                if (victimMode != null)
                 {
-                    entityAttackEvent.setCancelled(true);
+                    // Cancel if victim can't take damage
+                    if (!(victimMode.canBeDamaged))
+                    {
+                        entityAttackEvent.setCancelled(true);
+                    }
                 }
             }
         }

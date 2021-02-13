@@ -99,6 +99,10 @@ public class GameInstance
             teamLists.add(sublist);
         }
         
+        if(this.players.size() == 1) {
+            teamLists.add(players);
+        }
+        
         for (java.util.Map.Entry<TeamColor, GameTeam> entry : teams.entrySet())
         {
             entry.getValue().addMembers(teamLists.remove(0));
@@ -146,6 +150,8 @@ public class GameInstance
                     
                     title.send(player);
                     
+                    PlayerMode.setPlayerMode(player.getUniqueId(), PlayerMode.PLAYER);
+                    
                 }
                 catch (Exception exception)
                 {
@@ -153,6 +159,7 @@ public class GameInstance
                 }
             }
             
+            team.getValue().createBuildingShop();
         }
         
         gameMap.clearWaitingPlatform(gameWorld);

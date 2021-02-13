@@ -10,3 +10,4 @@ commands:
       /assault create <map name> <auto-save> <world ID>
       /assault join <world ID>
       /assault close <world ID>
+      /assault shop_building

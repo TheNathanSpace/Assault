@@ -16,9 +16,12 @@ public class PlayerBlockBreakHandler implements Listener
         
         PlayerMode playerMode = PlayerMode.getPlayerMode(player);
         
-        if (!playerMode.canBreakBlocks)
+        if (playerMode != null)
         {
-            blockBreakEvent.setCancelled(true);
+            if (!playerMode.canBreakBlocks)
+            {
+                blockBreakEvent.setCancelled(true);
+            }
         }
         
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
