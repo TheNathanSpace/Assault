@@ -27,3 +27,5 @@ placeable_blocks:
 
 breakable_blocks:
   - WOOL
+  - DEAD_BUSH
+  - CACTUS

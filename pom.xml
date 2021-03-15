@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.thekingelessar.assault</groupId>
     <artifactId>assault</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
     <name>Assault</name>
-    <url></url>
+    <url>https://github.com/thekingelessar/assault</url>
     <description>Still in development</description>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -32,6 +33,31 @@
             </resource>
         </resources>
 
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>fr.mrmicky.fastboard</pattern>
+                            <!-- Replace with the package of your plugin ! -->
+                            <shadedPattern>com.thekingelessar.fastboard</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+            </plugin>
+        </plugins>
+
     </build>
 
     <dependencies>
@@ -41,12 +67,22 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>FastBoard</artifactId>
+            <version>1.1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

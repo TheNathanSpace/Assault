@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.countdown;
+package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;

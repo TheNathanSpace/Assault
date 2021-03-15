@@ -3,7 +3,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.PlayerMode;
-import com.thekingelessar.assault.game.countdown.TaskRespawnTimer;
+import com.thekingelessar.assault.game.timertasks.TaskRespawnTimer;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

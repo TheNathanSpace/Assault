@@ -30,6 +30,16 @@ public class CommandAssault implements CommandExecutor
                 }
                 break;
             
+            case "attack":
+                if (sender instanceof Player)
+                {
+                    for (GameInstance gameInstance : Assault.gameInstances)
+                    {
+                        gameInstance.startAttackMode();
+                    }
+                }
+                break;
+            
             case "close":
                 WorldManager.closeWorld(Bukkit.getWorld(args[1]));
                 break;
@@ -54,9 +64,11 @@ public class CommandAssault implements CommandExecutor
                     
                     if (gameInstance != null)
                     {
-                        GameTeam team = gameInstance.getPlayerTeam(player.getUniqueId());
-                        InventoryView inventoryView = player.openInventory(team.shopBuildingStage.inventory);
-                    } else {
+                        GameTeam team = gameInstance.getPlayerTeam(player);
+                        InventoryView inventoryView = player.openInventory(team.shopBuilding.inventory);
+                    }
+                    else
+                    {
                         System.out.println("Game instance null.");
                     }
                 }

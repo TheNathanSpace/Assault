@@ -8,9 +8,10 @@ public class RegisterHandlers
     static public void registerHandlers()
     {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageHandler(), Assault.INSTANCE);
-        Bukkit.getServer().getPluginManager().registerEvents(new PlantGrowthHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new VanillaWorldHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerAttackVictimHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBlockBreakHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBlockPlaceHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickHandler(), Assault.INSTANCE);
     }
 }

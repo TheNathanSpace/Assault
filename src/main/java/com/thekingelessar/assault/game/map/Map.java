@@ -107,6 +107,8 @@ public class Map
             }
         }
         
+        System.out.println("Breakable blocks: " + breakableList.toString());
+        
     }
     
     public Coordinate getSpawn(GameTeam team, TeamStage teamStage)

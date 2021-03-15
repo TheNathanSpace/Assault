@@ -1,6 +1,9 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.PlayerMode;
+import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,8 +42,25 @@ public class PlayerAttackVictimHandler implements Listener
                         entityAttackEvent.setCancelled(true);
                     }
                 }
+                
+                if (victim.getHealth() - entityAttackEvent.getDamage() < 1)
+                {
+                    GameInstance attackerInstance = GameInstance.getPlayerGameInstance(attacker);
+                    if (attackerInstance != null)
+                    {
+                        GameTeam gameTeam = attackerInstance.getPlayerTeam(attacker);
+                        
+                        if (gameTeam != null)
+                        {
+                            for (GamePlayer player : gameTeam.members)
+                            {
+                                player.playerBank.gamerPoints += 1;
+                                player.updateScoreboard();
+                            }
+                        }
+                    }
+                }
             }
         }
-        
     }
 }

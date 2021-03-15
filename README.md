@@ -59,9 +59,10 @@
 Misc., inconsequential questions to answer in the future:
 
  - Should health be visible to enemies?
+ - Are gamer points shared throughout entire team or kept by individual players?
  
 ---
 
 #### Resources
 
- - [Scoreboard Management](https://bukkit.org/threads/tutorial-scoreboards-teams-with-the-bukkit-api.139655/)
+[FastBoard](https://github.com/MrMicky-FR/FastBoard)

@@ -1,12 +1,16 @@
 package com.thekingelessar.assault.game;
 
 import com.thekingelessar.assault.Assault;
-import com.thekingelessar.assault.game.countdown.TaskGameStartDelay;
 import com.thekingelessar.assault.game.map.Map;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
+import com.thekingelessar.assault.game.team.TeamStage;
+import com.thekingelessar.assault.game.timertasks.TaskGameStartDelay;
+import com.thekingelessar.assault.game.timertasks.TaskGiveCoins;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Title;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -37,6 +41,11 @@ public class GameInstance
     
     public TaskGameStartDelay taskGameStartDelay;
     
+    public TaskGiveCoins taskGiveCoins;
+    
+    public HashMap<UUID, FastBoard> scoreboards = new HashMap<>();
+    
+    
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
         this.gameMap = Assault.maps.get(mapName);
@@ -52,6 +61,13 @@ public class GameInstance
     public void startWorld()
     {
         this.gameWorld = WorldManager.createWorldFromMap(this.gameMap.mapName, false, this.gameID);
+        
+        this.gameWorld.setGameRuleValue("DO_DAYLIGHT_CYCLE", "false");
+        this.gameWorld.setGameRuleValue("DO_MOB_SPAWNING", "false");
+        
+        Assault.INSTANCE.getLogger().info(Arrays.toString(this.gameWorld.getGameRules()));
+        
+        
         Assault.INSTANCE.getLogger().info("Opened new game world: " + gameWorld.getName());
     }
     
@@ -81,8 +97,11 @@ public class GameInstance
     {
         GameTeam redTeam = new GameTeam(TeamColor.RED, this);
         redTeam.setTeamMapBase();
+        redTeam.teamStage = TeamStage.DEFENDING;
+        
         GameTeam blueTeam = new GameTeam(TeamColor.BLUE, this);
         blueTeam.setTeamMapBase();
+        blueTeam.teamStage = TeamStage.DEFENDING;
         
         teams.put(TeamColor.RED, redTeam);
         teams.put(TeamColor.BLUE, blueTeam);
@@ -99,7 +118,8 @@ public class GameInstance
             teamLists.add(sublist);
         }
         
-        if(this.players.size() == 1) {
+        if (this.players.size() == 1)
+        {
             teamLists.add(players);
         }
         
@@ -109,14 +129,14 @@ public class GameInstance
         }
     }
     
-    public GameTeam getPlayerTeam(UUID uuid)
+    public GameTeam getPlayerTeam(Player player)
     {
         for (java.util.Map.Entry<TeamColor, GameTeam> team : teams.entrySet())
         {
             
-            for (UUID teamUUID : team.getValue().members)
+            for (Player teamPlayer : team.getValue().getPlayers())
             {
-                if (teamUUID.equals(uuid))
+                if (teamPlayer.equals(player))
                 {
                     return team.getValue();
                 }
@@ -136,16 +156,15 @@ public class GameInstance
         for (java.util.Map.Entry<TeamColor, GameTeam> team : teams.entrySet())
         {
             
-            for (UUID teamMember : team.getValue().members)
+            for (Player player : team.getValue().getPlayers())
             {
                 try
                 {
-                    Player player = Bukkit.getPlayer(teamMember);
-                    GameTeam gameTeam = getPlayerTeam(teamMember);
+                    GameTeam gameTeam = getPlayerTeam(player);
                     player.teleport(gameTeam.mapBase.defenderSpawn.toLocation(this.gameWorld, 180f, 0f));
                     // todo: add facing rotation for spawns so you can customize them
                     
-                    Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName() + ChatColor.WHITE + " team!", "Begin building your defenses!");
+                    Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false) + ChatColor.WHITE + " team!", "Begin building your defenses!");
                     title.clearTitle(player);
                     
                     title.send(player);
@@ -167,15 +186,20 @@ public class GameInstance
         this.restoreHealth();
     }
     
+    public void startAttackMode()
+    {
+        taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
+        taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
+        
+        this.gameStage = GameStage.ROUNDS;
+    }
+    
     public List<Player> getPlayers()
     {
         List<Player> players = new ArrayList<>();
         for (java.util.Map.Entry<TeamColor, GameTeam> entry : this.teams.entrySet())
         {
-            for (UUID uuid : entry.getValue().members)
-            {
-                players.add(Bukkit.getPlayer(uuid));
-            }
+            players.addAll(entry.getValue().getPlayers());
         }
         
         return players;
@@ -189,11 +213,22 @@ public class GameInstance
         }
     }
     
+    public void updateScoreboards()
+    {
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            for (GamePlayer player : gameTeam.members)
+            {
+                player.updateScoreboard();
+            }
+        }
+    }
+    
     public static GameInstance getPlayerGameInstance(Player player)
     {
         for (GameInstance gameInstance : Assault.gameInstances)
         {
-            if (gameInstance.getPlayerTeam(player.getUniqueId()) != null)
+            if (gameInstance.getPlayerTeam(player) != null)
             {
                 return gameInstance;
             }

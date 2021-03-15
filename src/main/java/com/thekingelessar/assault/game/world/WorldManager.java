@@ -122,7 +122,7 @@ public class WorldManager
     {
         try
         {
-            ArrayList<String> ignore = new ArrayList<String>(Arrays.asList("uid.dat", "session.dat"));
+            List<String> ignore = new ArrayList<String>(Arrays.asList("uid.dat", "session.dat"));
             if (!ignore.contains(source.getName()))
             {
                 if (source.isDirectory())

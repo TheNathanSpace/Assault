@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.countdown;
+package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.PlayerMode;
@@ -69,10 +69,10 @@ public class TaskRespawnTimer extends BukkitRunnable
         
         this.cancel();
         
-        GameTeam playerTeam = gameInstance.getPlayerTeam(player.getUniqueId());
+        GameTeam playerTeam = gameInstance.getPlayerTeam(player);
         PlayerMode mode = PlayerMode.setPlayerMode(player.getUniqueId(), PlayerMode.PLAYER);
         
         player.teleport(gameInstance.gameMap.getSpawn(playerTeam, null).toLocation(gameInstance.gameWorld));
-        
+        player.setHealth(player.getMaxHealth());
     }
 }

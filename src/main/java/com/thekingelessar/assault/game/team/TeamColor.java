@@ -28,9 +28,15 @@ public enum TeamColor
         this.chatColor = color;
     }
     
-    public String getFormattedName()
+    public String getFormattedName(boolean lower)
     {
         String fixedName = this.toString().replace("_", " ");
+        
+        if (lower)
+        {
+            fixedName = fixedName.toLowerCase();
+        }
+        
         return this.chatColor + fixedName;
     }
 }

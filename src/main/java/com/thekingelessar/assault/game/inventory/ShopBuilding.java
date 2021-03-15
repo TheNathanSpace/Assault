@@ -12,13 +12,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopBuildingStage
+public class ShopBuilding implements IShop
 {
-    public List<ItemStack> shopItems = new ArrayList<>();
+    public List<ShopItem> shopItems = new ArrayList<>();
     
     public Inventory inventory;
     
-    public ShopBuildingStage(TeamColor teamColor, List<ItemStack> additionalItems)
+    public List<ShopItem> getShopItems()
+    {
+        return shopItems;
+    }
+    
+    public ShopBuilding(TeamColor teamColor, List<ItemStack> additionalItems)
     {
         inventory = Bukkit.createInventory(null, 27, ChatColor.GRAY + "Shop");
         
@@ -26,7 +31,7 @@ public class ShopBuildingStage
         
         for (int i = 0; i < shopItems.size(); i++)
         {
-            inventory.setItem(i, shopItems.get(i));
+            inventory.setItem(i, shopItems.get(i).shopItemStack);
         }
     }
     
@@ -43,7 +48,9 @@ public class ShopBuildingStage
         
         itemStack.setItemMeta(itemMeta);
         
-        this.shopItems.add(itemStack);
+        ShopItem shopItem = new ShopItem(cost, currency, itemStack);
+        
+        this.shopItems.add(shopItem);
     }
     
 }
