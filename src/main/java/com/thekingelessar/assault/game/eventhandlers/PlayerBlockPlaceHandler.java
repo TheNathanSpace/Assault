@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.PlayerMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,13 +29,16 @@ public class PlayerBlockPlaceHandler implements Listener
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         if (gameInstance != null)
         {
-            if (!gameInstance.gameMap.placeableBlocks.contains(blockPlaceEvent.getBlock().getType()))
+            blockPlaceEvent.setCancelled(true);
+            
+            for (Material block : gameInstance.gameMap.placeableBlocks)
             {
-                blockPlaceEvent.setCancelled(true);
-                
-                // Todo: error messages for player (this and block break)
+                if (block.equals(blockPlaceEvent.getBlock().getType()))
+                {
+                    blockPlaceEvent.setCancelled(false);
+                    // Todo: error messages for player (this and block break)
+                }
             }
         }
-        
     }
 }

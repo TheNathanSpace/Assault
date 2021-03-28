@@ -58,7 +58,6 @@ public class CommandAssault implements CommandExecutor
             case "shop_building":
                 if (sender instanceof Player)
                 {
-                    System.out.println("Sender is a player.");
                     Player player = (Player) sender;
                     GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
                     
@@ -66,10 +65,6 @@ public class CommandAssault implements CommandExecutor
                     {
                         GameTeam team = gameInstance.getPlayerTeam(player);
                         InventoryView inventoryView = player.openInventory(team.shopBuilding.inventory);
-                    }
-                    else
-                    {
-                        System.out.println("Game instance null.");
                     }
                 }
                 break;

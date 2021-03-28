@@ -10,7 +10,6 @@ import com.thekingelessar.assault.game.timertasks.TaskGameStartDelay;
 import com.thekingelessar.assault.game.timertasks.TaskGiveCoins;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Title;
-import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -34,16 +33,14 @@ public class GameInstance
     public HashMap<TeamColor, GameTeam> teams = new HashMap<>();
     public Scoreboard teamScoreboard;
     
-    private List<Player> players;
-    private List<Player> spectators;
+    private final List<Player> players;
+    private final List<Player> spectators;
     
     public HashMap<UUID, PlayerMode> playerModes = new HashMap<>();
     
     public TaskGameStartDelay taskGameStartDelay;
     
     public TaskGiveCoins taskGiveCoins;
-    
-    public HashMap<UUID, FastBoard> scoreboards = new HashMap<>();
     
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
@@ -158,6 +155,8 @@ public class GameInstance
             
             for (Player player : team.getValue().getPlayers())
             {
+                team.getValue().getGamePlayer(player).playerBank.coins += 100;
+                
                 try
                 {
                     GameTeam gameTeam = getPlayerTeam(player);
@@ -181,6 +180,7 @@ public class GameInstance
             team.getValue().createBuildingShop();
         }
         
+        this.updateScoreboards();
         gameMap.clearWaitingPlatform(gameWorld);
         
         this.restoreHealth();

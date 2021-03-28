@@ -77,7 +77,7 @@ public class GamePlayer
         
         if (!hasEnough)
         {
-            player.playSound(player.getLocation(), Sound.PISTON_EXTEND, 0.8F, 1.0F);
+            player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
         }
         return false;
     }

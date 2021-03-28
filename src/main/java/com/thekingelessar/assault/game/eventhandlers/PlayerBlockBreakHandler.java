@@ -1,7 +1,9 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.PlayerMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,10 +30,14 @@ public class PlayerBlockBreakHandler implements Listener
         
         if (gameInstance != null)
         {
-            if (!gameInstance.gameMap.breakableBlocks.contains(blockBreakEvent.getBlock().getType()))
-            {
-                blockBreakEvent.setCancelled(true);
+            blockBreakEvent.setCancelled(true);
+    
+            for (Material block : gameInstance.gameMap.breakableBlocks) {
+                if (block.equals(blockBreakEvent.getBlock().getType())) {
+                    blockBreakEvent.setCancelled(false);
+                }
             }
+            
         }
     }
 }

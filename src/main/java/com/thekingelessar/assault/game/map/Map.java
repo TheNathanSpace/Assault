@@ -67,7 +67,6 @@ public class Map
             }
             
             MapBase mapBase = new MapBase(teamColor, defenderSpawn, attackerSpawn, emeraldSpawns);
-            System.out.println("Team " + teamColor + ", spawn " + defenderSpawn.toString());
             bases.add(mapBase);
         }
         
@@ -107,7 +106,7 @@ public class Map
             }
         }
         
-        System.out.println("Breakable blocks: " + breakableList.toString());
+        Assault.INSTANCE.getLogger().info("Breakable blocks: " + breakableList.toString());
         
     }
     

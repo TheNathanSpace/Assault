@@ -32,6 +32,8 @@ public class PlayerDamageHandler implements Listener
                 damagedPlayer.setGameMode(GameMode.SPECTATOR);
                 PlayerMode.setPlayerMode(damagedPlayer.getUniqueId(), PlayerMode.SPECTATOR);
                 
+                damagedPlayer.teleport(playerGameInstance.gameMap.waitingSpawn.toLocation(playerGameInstance.gameWorld));
+                
                 TaskRespawnTimer respawnTimer = new TaskRespawnTimer(60, 0, 20, playerGameInstance, damagedPlayer);
                 respawnTimer.runTaskTimer(Assault.INSTANCE, respawnTimer.startDelay, respawnTimer.tickDelay);
                 
