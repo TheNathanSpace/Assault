@@ -52,11 +52,14 @@ public class PlayerAttackVictimHandler implements Listener
                         
                         if (gameTeam != null)
                         {
-                            for (GamePlayer player : gameTeam.members)
-                            {
-                                player.playerBank.gamerPoints += 1;
-                                player.updateScoreboard();
-                            }
+                            GamePlayer player = gameTeam.getGamePlayer(attacker);
+                            
+                            player.playerBank.gamerPoints += 1;
+                            
+                            GamePlayer victimPlayer = attackerInstance.getPlayerTeam(victim).getGamePlayer(victim);
+                            player.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
+                            
+                            player.updateScoreboard();
                         }
                     }
                 }

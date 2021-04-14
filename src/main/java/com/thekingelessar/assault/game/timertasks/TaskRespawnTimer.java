@@ -41,7 +41,7 @@ public class TaskRespawnTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (ticksLeft < 0)
+        if (ticksLeft < 21)
         {
             finishTimer();
             return;
@@ -49,12 +49,7 @@ public class TaskRespawnTimer extends BukkitRunnable
         
         title.clearTitle(player);
         
-        String initialTitle = "";
-        
-        if (!(ticksLeft < startTicks))
-        {
-            initialTitle += "You have " + ChatColor.RED + "died" + ChatColor.RESET + "!";
-        }
+        String initialTitle = "You have " + ChatColor.RED + "died" + ChatColor.RESET + "!";
         
         title = new Title(initialTitle, "Respawning in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         

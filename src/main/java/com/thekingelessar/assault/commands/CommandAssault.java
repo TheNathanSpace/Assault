@@ -55,7 +55,7 @@ public class CommandAssault implements CommandExecutor
                 }
                 break;
             
-            case "shop_building":
+            case "shop":
                 if (sender instanceof Player)
                 {
                     Player player = (Player) sender;
@@ -64,9 +64,22 @@ public class CommandAssault implements CommandExecutor
                     if (gameInstance != null)
                     {
                         GameTeam team = gameInstance.getPlayerTeam(player);
-                        InventoryView inventoryView = player.openInventory(team.shopBuilding.inventory);
+    
+                        InventoryView inventoryView = null;
+                        
+                        switch (args[1])
+                        {
+                            case "building":
+                                inventoryView = player.openInventory(team.shopBuilding.inventory);
+                                break;
+                            case "attack":
+                                inventoryView = player.openInventory(team.shopAttack.inventory);
+                                break;
+                        }
+                        
                     }
                 }
+                
                 break;
         }
         return true;

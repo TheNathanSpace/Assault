@@ -64,6 +64,7 @@ public class GamePlayer
                 }
                 hasEnough = false;
             case EMERALDS:
+                // todo: purchase with emeralds
                 break;
             case GAMER_POINTS:
                 if (cost <= playerBank.gamerPoints)

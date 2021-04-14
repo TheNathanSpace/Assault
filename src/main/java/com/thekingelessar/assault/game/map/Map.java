@@ -105,9 +105,6 @@ public class Map
                 Assault.INSTANCE.getLogger().warning("Invalid material in map configuration: " + object.toString());
             }
         }
-        
-        Assault.INSTANCE.getLogger().info("Breakable blocks: " + breakableList.toString());
-        
     }
     
     public Coordinate getSpawn(GameTeam team, TeamStage teamStage)

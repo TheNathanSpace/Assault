@@ -191,6 +191,11 @@ public class GameInstance
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
         
+        for (java.util.Map.Entry<TeamColor, GameTeam> team : teams.entrySet())
+        {
+            team.getValue().createAttackShop();
+        }
+        
         this.gameStage = GameStage.ROUNDS;
     }
     

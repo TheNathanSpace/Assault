@@ -1,7 +1,8 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.inventory.ShopBuilding;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import org.bukkit.Bukkit;
@@ -28,6 +29,7 @@ public class GameTeam
     public MapBase mapBase;
     
     public ShopBuilding shopBuilding;
+    public ShopAttack shopAttack;
     
     public double secondsTaken;
     
@@ -99,6 +101,12 @@ public class GameTeam
     {
         this.shopBuilding = new ShopBuilding(this.color, null);
     }
+    
+    public void createAttackShop()
+    {
+        this.shopAttack = new ShopAttack(this.color, null);
+    }
+    
     
     public GamePlayer getGamePlayer(Player player)
     {

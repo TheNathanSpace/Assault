@@ -1,8 +1,9 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.inventory.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.ShopItem;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -33,40 +34,47 @@ public class InventoryClickHandler implements Listener
         Inventory inventoryOpen = inventoryClickEvent.getInventory();
         ItemStack itemClicked = inventoryClickEvent.getCurrentItem();
         
+        ShopItem shopItemClicked = null;
+        
         if (inventoryOpen.equals(gameInstance.getPlayerTeam(player).shopBuilding.inventory))
         {
             ShopBuilding shop = gameInstance.getPlayerTeam(player).shopBuilding;
-            ShopItem shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
-            
-            if (shopItemClicked == null)
-            {
-                return;
-            }
-            
-            boolean canPurchase = gamePlayer.purchaseItem(shopItemClicked.cost, shopItemClicked.currency);
-            
-            if (canPurchase)
-            {
-                ItemStack givingItemStack = shopItemClicked.realItemStack.clone();
-                
-                List<Material> durabilityList = new ArrayList<>();
-                durabilityList.add(Material.WOOL);
-                durabilityList.add(Material.STAINED_CLAY);
-                durabilityList.add(Material.STAINED_GLASS);
-                
-                if (durabilityList.contains(shopItemClicked.realItemStack.getType()))
-                {
-                    givingItemStack.setDurability(DyeColor.valueOf(gameInstance.getPlayerTeam(player).color.toString()).getData());
-                }
-                
-                player.getInventory().addItem(givingItemStack);
-                
-                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
-                
-                gamePlayer.updateScoreboard();
-            }
-            
-            inventoryClickEvent.setCancelled(true);
+            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
+        else if (inventoryOpen.equals(gameInstance.getPlayerTeam(player).shopAttack.inventory))
+        {
+            ShopAttack shop = gameInstance.getPlayerTeam(player).shopAttack;
+            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
+        }
+        
+        if (shopItemClicked == null)
+        {
+            return;
+        }
+        
+        boolean canPurchase = gamePlayer.purchaseItem(shopItemClicked.cost, shopItemClicked.currency);
+        
+        if (canPurchase)
+        {
+            ItemStack givingItemStack = shopItemClicked.realItemStack.clone();
+            
+            List<Material> durabilityList = new ArrayList<>();
+            durabilityList.add(Material.WOOL);
+            durabilityList.add(Material.STAINED_CLAY);
+            durabilityList.add(Material.STAINED_GLASS);
+            
+            if (durabilityList.contains(shopItemClicked.realItemStack.getType()))
+            {
+                givingItemStack.setDurability(DyeColor.valueOf(gameInstance.getPlayerTeam(player).color.toString()).getData());
+            }
+            
+            player.getInventory().addItem(givingItemStack);
+            
+            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+            
+            gamePlayer.updateScoreboard();
+        }
+        
+        inventoryClickEvent.setCancelled(true);
     }
 }

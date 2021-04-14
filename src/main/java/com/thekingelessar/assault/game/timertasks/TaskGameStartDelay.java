@@ -40,7 +40,7 @@ public class TaskGameStartDelay extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (ticksLeft < 0)
+        if (ticksLeft < 21)
         {
             finishTimer();
             return;
