@@ -5,6 +5,7 @@ import com.thekingelessar.assault.game.inventory.ShopItem;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -36,14 +37,16 @@ public class InventoryClickHandler implements Listener
         
         ShopItem shopItemClicked = null;
         
-        if (inventoryOpen.equals(gameInstance.getPlayerTeam(player).shopBuilding.inventory))
+        GameTeam playerTeam = gameInstance.getPlayerTeam(player);
+        
+        if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))
         {
-            ShopBuilding shop = gameInstance.getPlayerTeam(player).shopBuilding;
+            ShopBuilding shop = playerTeam.shopBuilding;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
-        else if (inventoryOpen.equals(gameInstance.getPlayerTeam(player).shopAttack.inventory))
+        else if (playerTeam.shopAttack != null && inventoryOpen.equals(playerTeam.shopAttack.inventory))
         {
-            ShopAttack shop = gameInstance.getPlayerTeam(player).shopAttack;
+            ShopAttack shop = playerTeam.shopAttack;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
         

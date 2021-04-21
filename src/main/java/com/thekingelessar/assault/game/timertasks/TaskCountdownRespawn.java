@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class TaskRespawnTimer extends BukkitRunnable
+public class TaskCountdownRespawn extends BukkitRunnable
 {
     public int startTicks;
     public int startDelay;
@@ -21,7 +21,7 @@ public class TaskRespawnTimer extends BukkitRunnable
     
     Title title;
     
-    public TaskRespawnTimer(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance, Player player)
+    public TaskCountdownRespawn(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance, Player player)
     {
         this.startTicks = startTicks;
         this.startDelay = startDelay;
@@ -41,7 +41,7 @@ public class TaskRespawnTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (ticksLeft < 21)
+        if (ticksLeft < 20)
         {
             finishTimer();
             return;
@@ -65,7 +65,7 @@ public class TaskRespawnTimer extends BukkitRunnable
         this.cancel();
         
         GameTeam playerTeam = gameInstance.getPlayerTeam(player);
-        PlayerMode mode = PlayerMode.setPlayerMode(player.getUniqueId(), PlayerMode.PLAYER);
+        PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, gameInstance);
         
         player.teleport(gameInstance.gameMap.getSpawn(playerTeam, null).toLocation(gameInstance.gameWorld));
         player.setHealth(player.getMaxHealth());

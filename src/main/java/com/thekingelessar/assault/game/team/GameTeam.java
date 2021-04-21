@@ -31,7 +31,9 @@ public class GameTeam
     public ShopBuilding shopBuilding;
     public ShopAttack shopAttack;
     
-    public double secondsTaken;
+    public int displaySeconds = 0;
+    public long startAttackingTime = 0; // in nanoseconds
+    public double finalAttackingTime = 0;
     
     public GameTeam(TeamColor color, GameInstance instance)
     {

@@ -37,9 +37,8 @@ public enum PlayerMode
         this.isInvisible = isInvisible;
     }
     
-    public static PlayerMode setPlayerMode(UUID playerUUID, PlayerMode playerMode)
+    public static PlayerMode setPlayerMode(Player player, PlayerMode playerMode, GameInstance gameInstance)
     {
-        Player player = Bukkit.getPlayer(playerUUID);
         player.setGameMode(playerMode.gameMode);
         
         player.setAllowFlight(playerMode.canFly);
@@ -52,7 +51,9 @@ public enum PlayerMode
         {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
-        
+    
+        gameInstance.playerModes.put(player, playerMode);
+    
         return playerMode;
     }
     
@@ -60,9 +61,9 @@ public enum PlayerMode
     {
         for (GameInstance gameInstance : Assault.gameInstances)
         {
-            for (HashMap.Entry<UUID, PlayerMode> playerEntry : gameInstance.playerModes.entrySet())
+            for (HashMap.Entry<Player, PlayerMode> playerEntry : gameInstance.playerModes.entrySet())
             {
-                if (player.getUniqueId().equals(playerEntry.getKey()))
+                if (player.equals(playerEntry.getKey()))
                 {
                     return playerEntry.getValue();
                 }

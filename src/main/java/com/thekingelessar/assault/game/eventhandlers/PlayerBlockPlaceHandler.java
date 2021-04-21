@@ -3,6 +3,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.PlayerMode;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,6 +39,11 @@ public class PlayerBlockPlaceHandler implements Listener
                     blockPlaceEvent.setCancelled(false);
                     // Todo: error messages for player (this and block break)
                 }
+            }
+            
+            if (blockPlaceEvent.getBlock().getType().equals(Material.TNT))
+            {
+                player.getWorld().spawnEntity(blockPlaceEvent.getBlock().getLocation(), EntityType.PRIMED_TNT);
             }
         }
     }

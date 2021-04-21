@@ -1,6 +1,5 @@
 ## Todo
 
-- Ending build stage
 - Attack stage (timing it and all that)
 - Team buff shop
 - Emeralds
@@ -45,6 +44,7 @@
         - Utility items
         - Special map-specific items
         - Some items take coins, more powerful ones take emeralds
+- Ending build stage
 
 ---
 

@@ -1,7 +1,9 @@
 package com.thekingelessar.assault.game.player;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.Currency;
+import com.thekingelessar.assault.game.team.TeamColor;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -23,7 +25,6 @@ public class GamePlayer
         this.gameInstance = gameInstance;
         this.playerBank = new PlayerBank(0, 0);
         this.scoreboard = new FastBoard(player);
-        
     }
     
     public void updateScoreboard()
@@ -38,8 +39,15 @@ public class GamePlayer
         
         lines.add("");
         
-        lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": "); // todo: times
-        lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": ");
+        if (gameInstance.gameStage.equals(GameStage.BUILDING_BASE))
+        {
+            lines.add(ChatColor.WHITE.toString() + ChatColor.BOLD + "Building time: " + ChatColor.RESET + gameInstance.buildingSecondsLeft);
+        }
+        else
+        {
+            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + gameInstance.teams.get(TeamColor.BLUE).displaySeconds);
+            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + gameInstance.teams.get(TeamColor.RED).displaySeconds);
+        }
         
         lines.add("");
         

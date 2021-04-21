@@ -5,7 +5,7 @@ public enum GameStage
     FILLING_LOBBY,
     SPLITTING_TEAMS,
     BUILDING_BASE,
-    ROUNDS,
+    ATTACK,
     FINISHED,
     CLOSING;
 }

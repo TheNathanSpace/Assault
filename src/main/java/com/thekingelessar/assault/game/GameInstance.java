@@ -6,7 +6,9 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
-import com.thekingelessar.assault.game.timertasks.TaskGameStartDelay;
+import com.thekingelessar.assault.game.timertasks.TaskAttackTimer;
+import com.thekingelessar.assault.game.timertasks.TaskCountdownBuilding;
+import com.thekingelessar.assault.game.timertasks.TaskCountdownGameStart;
 import com.thekingelessar.assault.game.timertasks.TaskGiveCoins;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Title;
@@ -36,12 +38,18 @@ public class GameInstance
     private final List<Player> players;
     private final List<Player> spectators;
     
-    public HashMap<UUID, PlayerMode> playerModes = new HashMap<>();
+    public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
-    public TaskGameStartDelay taskGameStartDelay;
+    public TaskCountdownGameStart taskCountdownGameStart;
+    public TaskCountdownBuilding taskCountdownBuilding;
+    public TaskAttackTimer taskAttackTimer;
+    
+    public HashMap<TeamColor, Integer> attackTimers = new HashMap<>();
+    public TeamColor attackingTeam;
+    
+    public int buildingSecondsLeft;
     
     public TaskGiveCoins taskGiveCoins;
-    
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
@@ -62,9 +70,6 @@ public class GameInstance
         this.gameWorld.setGameRuleValue("DO_DAYLIGHT_CYCLE", "false");
         this.gameWorld.setGameRuleValue("DO_MOB_SPAWNING", "false");
         
-        Assault.INSTANCE.getLogger().info(Arrays.toString(this.gameWorld.getGameRules()));
-        
-        
         Assault.INSTANCE.getLogger().info("Opened new game world: " + gameWorld.getName());
     }
     
@@ -73,8 +78,7 @@ public class GameInstance
         for (Player player : players)
         {
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
-            UUID playerUUID = player.getUniqueId();
-            playerModes.put(playerUUID, PlayerMode.setPlayerMode(playerUUID, PlayerMode.LOBBY));
+            PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
         }
         
         if (spectators != null)
@@ -86,8 +90,8 @@ public class GameInstance
             }
         }
         
-        taskGameStartDelay = new TaskGameStartDelay(200, 20, 20, this);
-        taskGameStartDelay.runTaskTimer(Assault.INSTANCE, taskGameStartDelay.startDelay, taskGameStartDelay.tickDelay);
+        taskCountdownGameStart = new TaskCountdownGameStart(200, 20, 20, this);
+        taskCountdownGameStart.runTaskTimer(Assault.INSTANCE, taskCountdownGameStart.startDelay, taskCountdownGameStart.tickDelay);
     }
     
     public void createTeams()
@@ -168,7 +172,7 @@ public class GameInstance
                     
                     title.send(player);
                     
-                    PlayerMode.setPlayerMode(player.getUniqueId(), PlayerMode.PLAYER);
+                    PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, this);
                     
                 }
                 catch (Exception exception)
@@ -184,6 +188,9 @@ public class GameInstance
         gameMap.clearWaitingPlatform(gameWorld);
         
         this.restoreHealth();
+        
+        taskCountdownBuilding = new TaskCountdownBuilding(3600, 20, 20, this);
+        taskCountdownBuilding.runTaskTimer(Assault.INSTANCE, taskCountdownBuilding.startDelay, taskCountdownBuilding.tickDelay);
     }
     
     public void startAttackMode()
@@ -191,12 +198,66 @@ public class GameInstance
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
         
-        for (java.util.Map.Entry<TeamColor, GameTeam> team : teams.entrySet())
+        taskAttackTimer = new TaskAttackTimer(0, 100, 0, this);
+        taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
+        
+        for (GameTeam gameTeam : teams.values())
         {
-            team.getValue().createAttackShop();
+            gameTeam.displaySeconds = 0;
+            gameTeam.createAttackShop();
         }
         
-        this.gameStage = GameStage.ROUNDS;
+        this.restoreHealth();
+        
+        this.gameStage = GameStage.ATTACK;
+        
+        List<TeamColor> randomList = new ArrayList<>(teams.keySet());
+        Collections.shuffle(randomList);
+        
+        this.attackingTeam = randomList.get(0);
+        this.teams.get(this.attackingTeam).teamStage = TeamStage.ATTACKING;
+        this.teams.get(randomList.get(1)).teamStage = TeamStage.DEFENDING;
+        
+        this.getAttackingTeam().startAttackingTime = System.nanoTime();
+        
+        for (GameTeam gameTeam : teams.values())
+        {
+            for (Player player : gameTeam.getPlayers())
+            {
+                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, this);
+                player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
+            }
+        }
+    }
+    
+    public void swapAttackingTeams()
+    {
+        taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
+        taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
+        
+        taskAttackTimer = new TaskAttackTimer(0, 100, 0, this);
+        taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
+        
+        for (GameTeam gameTeam : teams.values())
+        {
+            gameTeam.createAttackShop();
+        }
+        
+        this.restoreHealth();
+        
+        this.teams.get(this.attackingTeam).teamStage = TeamStage.DEFENDING;
+        this.getDefendingTeam().teamStage = TeamStage.ATTACKING;
+        
+        this.getAttackingTeam().startAttackingTime = System.nanoTime();
+        
+        for (GameTeam gameTeam : teams.values())
+        {
+            for (Player player : gameTeam.getPlayers())
+            {
+                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, this);
+                player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
+            }
+        }
     }
     
     public List<Player> getPlayers()
@@ -238,9 +299,24 @@ public class GameInstance
                 return gameInstance;
             }
         }
-        
         return null;
     }
     
+    public GameTeam getAttackingTeam()
+    {
+        return teams.get(this.attackingTeam);
+    }
+    
+    public GameTeam getDefendingTeam()
+    {
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.color.equals(this.attackingTeam))
+            {
+                return gameTeam;
+            }
+        }
+        return null;
+    }
     
 }

@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class TaskGameStartDelay extends BukkitRunnable
+public class TaskCountdownGameStart extends BukkitRunnable
 {
     public int startTicks;
     public int startDelay;
@@ -19,17 +19,15 @@ public class TaskGameStartDelay extends BukkitRunnable
     
     public GameInstance gameInstance;
     
-    Title title;
+    private Title title = new Title();
     
-    public TaskGameStartDelay(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
+    public TaskCountdownGameStart(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
         this.startTicks = startTicks;
         this.startDelay = startDelay;
         this.tickDelay = tickDelay;
         this.ticksLeft = this.startTicks;
         this.gameInstance = gameInstance;
-        
-        this.title = new Title();
     }
     
     @Override
@@ -40,7 +38,7 @@ public class TaskGameStartDelay extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (ticksLeft < 21)
+        if (ticksLeft < 20)
         {
             finishTimer();
             return;
@@ -71,7 +69,7 @@ public class TaskGameStartDelay extends BukkitRunnable
         }
         
         this.cancel();
-        this.gameInstance.taskGameStartDelay = null;
+        this.gameInstance.taskCountdownGameStart = null;
         this.gameInstance.gameStage = GameStage.SPLITTING_TEAMS;
         this.gameInstance.startGame();
     }
@@ -93,6 +91,6 @@ public class TaskGameStartDelay extends BukkitRunnable
         }
         
         this.cancel();
-        this.gameInstance.taskGameStartDelay = null;
+        this.gameInstance.taskCountdownGameStart = null;
     }
 }

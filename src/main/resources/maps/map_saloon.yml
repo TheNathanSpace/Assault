@@ -30,6 +30,7 @@ placeable_blocks:
   - COBBLESTONE
   - WEB
   - GRAVEL
+  - CACTUS
 
 breakable_blocks:
   - WOOL
