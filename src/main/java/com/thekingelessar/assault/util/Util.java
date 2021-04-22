@@ -75,4 +75,11 @@ public class Util
         
         return blocks;
     }
+    
+    public static String secondsToMinutes(int secondsRaw) {
+        int minute = (int) secondsRaw / 60;
+        int seconds = secondsRaw % 60;
+        
+        return String.format("%d:%d", minute, seconds);
+    }
 }

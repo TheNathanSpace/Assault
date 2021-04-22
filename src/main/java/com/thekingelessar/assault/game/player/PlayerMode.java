@@ -1,20 +1,20 @@
-package com.thekingelessar.assault.game;
+package com.thekingelessar.assault.game.player;
 
 import com.thekingelessar.assault.Assault;
-import org.bukkit.Bukkit;
+import com.thekingelessar.assault.game.GameInstance;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public enum PlayerMode
 {
     LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false),
     SPECTATOR(GameMode.SPECTATOR, false, false, false, false, true, true),
-    PLAYER(GameMode.SURVIVAL, true, true, true, true, false, false);
+    ATTACKING(GameMode.SURVIVAL, true, true, true, true, false, false),
+    BUILDING(GameMode.SURVIVAL, true, true, true, false, false, false);
     
     public GameMode gameMode;
     public boolean canBreakBlocks;

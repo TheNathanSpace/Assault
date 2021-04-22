@@ -3,6 +3,7 @@ package com.thekingelessar.assault.game;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
@@ -11,6 +12,7 @@ import com.thekingelessar.assault.game.timertasks.TaskCountdownBuilding;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownGameStart;
 import com.thekingelessar.assault.game.timertasks.TaskGiveCoins;
 import com.thekingelessar.assault.game.world.WorldManager;
+import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,6 +52,8 @@ public class GameInstance
     public int buildingSecondsLeft;
     
     public TaskGiveCoins taskGiveCoins;
+    
+    public List<Coordinate> placedBlocks = new ArrayList<>();
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
@@ -148,7 +152,7 @@ public class GameInstance
         return null;
     }
     
-    public void startGame()
+    public void startBuilding()
     {
         createTeams();
         
@@ -172,7 +176,7 @@ public class GameInstance
                     
                     title.send(player);
                     
-                    PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, this);
+                    PlayerMode.setPlayerMode(player, PlayerMode.BUILDING, this);
                     
                 }
                 catch (Exception exception)
@@ -198,7 +202,7 @@ public class GameInstance
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
         
-        taskAttackTimer = new TaskAttackTimer(0, 100, 0, this);
+        taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
         
         for (GameTeam gameTeam : teams.values())
@@ -224,8 +228,10 @@ public class GameInstance
         {
             for (Player player : gameTeam.getPlayers())
             {
-                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, this);
+                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
                 player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
+    
+                PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
             }
         }
     }
@@ -234,8 +240,8 @@ public class GameInstance
     {
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
-        
-        taskAttackTimer = new TaskAttackTimer(0, 100, 0, this);
+    
+        taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
         
         for (GameTeam gameTeam : teams.values())
@@ -254,7 +260,7 @@ public class GameInstance
         {
             for (Player player : gameTeam.getPlayers())
             {
-                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, this);
+                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
                 player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
             }
         }

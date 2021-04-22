@@ -57,6 +57,27 @@ public class InventoryClickHandler implements Listener
         
         boolean canPurchase = gamePlayer.purchaseItem(shopItemClicked.cost, shopItemClicked.currency);
         
+        List<Material> toolsList = new ArrayList<>();
+        toolsList.add(Material.SHEARS);
+        toolsList.add(Material.WOOD_AXE);
+        toolsList.add(Material.WOOD_PICKAXE);
+        toolsList.add(Material.STONE_AXE);
+        toolsList.add(Material.STONE_PICKAXE);
+        toolsList.add(Material.GOLD_AXE);
+        toolsList.add(Material.GOLD_PICKAXE);
+        toolsList.add(Material.DIAMOND_AXE);
+        toolsList.add(Material.DIAMOND_PICKAXE);
+        
+        for (ItemStack itemStack : player.getInventory().getContents())
+        {
+            if (toolsList.contains(itemStack.getType()))
+            {
+                player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                inventoryClickEvent.setCancelled(true);
+                return;
+            }
+        }
+        
         if (canPurchase)
         {
             ItemStack givingItemStack = shopItemClicked.realItemStack.clone();
@@ -72,6 +93,8 @@ public class InventoryClickHandler implements Listener
             }
             
             player.getInventory().addItem(givingItemStack);
+            
+            gamePlayer.addSpawnItem(givingItemStack);
             
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
             

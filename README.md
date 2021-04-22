@@ -1,6 +1,6 @@
 ## Todo
 
-- Attack stage (timing it and all that)
+- Swapping attacking teams
 - Team buff shop
 - Emeralds
 - Spawn items

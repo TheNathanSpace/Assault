@@ -1,7 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.PlayerMode;
+import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.entity.Player;

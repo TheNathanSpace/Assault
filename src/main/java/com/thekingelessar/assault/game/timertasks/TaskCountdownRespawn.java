@@ -1,8 +1,7 @@
 package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.PlayerMode;
-import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -63,11 +62,7 @@ public class TaskCountdownRespawn extends BukkitRunnable
         title.clearTitle(player);
         
         this.cancel();
-        
-        GameTeam playerTeam = gameInstance.getPlayerTeam(player);
-        PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.PLAYER, gameInstance);
-        
-        player.teleport(gameInstance.gameMap.getSpawn(playerTeam, null).toLocation(gameInstance.gameWorld));
-        player.setHealth(player.getMaxHealth());
+        GamePlayer gamePlayer = gameInstance.getPlayerTeam(player).getGamePlayer(player);
+        gamePlayer.respawn();
     }
 }

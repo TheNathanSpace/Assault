@@ -71,7 +71,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
         this.cancel();
         this.gameInstance.taskCountdownGameStart = null;
         this.gameInstance.gameStage = GameStage.SPLITTING_TEAMS;
-        this.gameInstance.startGame();
+        this.gameInstance.startBuilding();
     }
     
     public void cancelTimer()

@@ -1,8 +1,8 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
-import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.PlayerMode;
+import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.util.Coordinate;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,13 +30,24 @@ public class PlayerBlockBreakHandler implements Listener
         
         if (gameInstance != null)
         {
-            blockBreakEvent.setCancelled(true);
-    
-            for (Material block : gameInstance.gameMap.breakableBlocks) {
-                if (block.equals(blockBreakEvent.getBlock().getType())) {
-                    blockBreakEvent.setCancelled(false);
-                }
+            Coordinate placedCoord = new Coordinate(blockBreakEvent.getBlock().getLocation());
+            
+            if (gameInstance.placedBlocks.contains(placedCoord))
+            {
+                gameInstance.placedBlocks.remove(placedCoord);
             }
+            else if (!gameInstance.gameMap.breakableBlocks.contains(blockBreakEvent.getBlock().getType()))
+            {
+                blockBreakEvent.setCancelled(true);
+            }
+            
+//            for (Material block : gameInstance.gameMap.breakableBlocks)
+//            {
+//                if (block.equals(blockBreakEvent.getBlock().getType()))
+//                {
+//                    blockBreakEvent.setCancelled(false);
+//                }
+//            }
             
         }
     }

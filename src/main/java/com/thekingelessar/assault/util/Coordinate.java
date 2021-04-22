@@ -12,6 +12,12 @@ public class Coordinate
     public double y;
     public double z;
     
+    public Coordinate(Location location) {
+        this.x = location.getX();
+        this.y = location.getY();
+        this.z = location.getZ();
+    }
+    
     public Coordinate(double x, double y, double z)
     {
         this.x = x;

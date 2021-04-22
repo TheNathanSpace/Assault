@@ -33,7 +33,7 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        Integer attackingTime = gameInstance.attackTimers.get(gameInstance.attackingTeam);
+        Integer attackingTime = gameInstance.getAttackingTeam().displaySeconds;
         attackingTime++;
         
         gameInstance.teams.get(gameInstance.attackingTeam).displaySeconds = attackingTime;

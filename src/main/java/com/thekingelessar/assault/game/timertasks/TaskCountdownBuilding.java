@@ -75,7 +75,13 @@ public class TaskCountdownBuilding extends BukkitRunnable
         this.gameInstance.gameStage = GameStage.ATTACK;
         
         this.gameInstance.startAttackMode();
-        
+    
+        List<Player> players = gameInstance.getPlayers();
+        for (Player player : players)
+        {
+            title.clearTitle(player);
+        }
+    
         this.cancel();
     }
 }

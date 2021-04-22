@@ -1,8 +1,11 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.PlayerMode;
+import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.util.Coordinate;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,20 +33,23 @@ public class PlayerBlockPlaceHandler implements Listener
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         if (gameInstance != null)
         {
-            blockPlaceEvent.setCancelled(true);
+            gameInstance.placedBlocks.add(new Coordinate(blockPlaceEvent.getBlock().getLocation()));
             
-            for (Material block : gameInstance.gameMap.placeableBlocks)
-            {
-                if (block.equals(blockPlaceEvent.getBlock().getType()))
-                {
-                    blockPlaceEvent.setCancelled(false);
-                    // Todo: error messages for player (this and block break)
-                }
-            }
+//            blockPlaceEvent.setCancelled(true);
+//
+//            for (Material block : gameInstance.gameMap.placeableBlocks)
+//            {
+//                if (block.equals(blockPlaceEvent.getBlock().getType()))
+//                {
+//                    blockPlaceEvent.setCancelled(false);
+//                }
+//            }
             
             if (blockPlaceEvent.getBlock().getType().equals(Material.TNT))
             {
-                player.getWorld().spawnEntity(blockPlaceEvent.getBlock().getLocation(), EntityType.PRIMED_TNT);
+                Block placedBlock = blockPlaceEvent.getBlock();
+                Location location = new Location(placedBlock.getWorld(), placedBlock.getX() - .5, placedBlock.getY() - .5, placedBlock.getZ() - .5);
+                player.getWorld().spawnEntity(location, EntityType.PRIMED_TNT);
             }
         }
     }

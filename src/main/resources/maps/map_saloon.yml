@@ -33,12 +33,5 @@ placeable_blocks:
   - CACTUS
 
 breakable_blocks:
-  - WOOL
-  - STAINED_CLAY
-  - STAINED_GLASS
-  - WOOD
-  - COBBLESTONE
-  - WEB
-  - GRAVEL
   - DEAD_BUSH
   - CACTUS
