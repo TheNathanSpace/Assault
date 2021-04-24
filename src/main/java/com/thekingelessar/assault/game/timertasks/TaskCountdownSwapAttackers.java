@@ -1,15 +1,15 @@
 package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.util.Title;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class TaskCountdownGameStart extends BukkitRunnable
+public class TaskCountdownSwapAttackers extends BukkitRunnable
 {
     public int startTicks;
     public int startDelay;
@@ -21,7 +21,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
     
     private Title title = new Title();
     
-    public TaskCountdownGameStart(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
+    public TaskCountdownSwapAttackers(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
         this.startTicks = startTicks;
         this.startDelay = startDelay;
@@ -50,7 +50,9 @@ public class TaskCountdownGameStart extends BukkitRunnable
             title.clearTitle(player);
         }
         
-        title = new Title(" ", ChatColor.WHITE + "Game starts in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
+        String mainTitle = StringUtils.capitalize(gameInstance.getAttackingTeam().color.getFormattedName(true)) + ChatColor.WHITE + ": " + (Math.round(gameInstance.getAttackingTeam().finalAttackingTime * 100d) / 100d);
+        
+        title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         
         for (Player player : players)
         {
@@ -69,28 +71,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
         }
         
         this.cancel();
-        this.gameInstance.taskCountdownGameStart = null;
-        this.gameInstance.gameStage = GameStage.SPLITTING_TEAMS;
-        this.gameInstance.startBuildMode();
-    }
-    
-    public void cancelTimer()
-    {
-        List<Player> players = gameInstance.gameWorld.getPlayers();
-        for (Player player : players)
-        {
-            title.clearTitle(player);
-        }
-        
-        title = new Title(" ", ChatColor.WHITE + "Game start " + ChatColor.RED + "canceled", 0, 20, 20);
-        title.setTimingsToTicks();
-        
-        for (Player player : players)
-        {
-            title.send(player);
-        }
-        
-        this.cancel();
-        this.gameInstance.taskCountdownGameStart = null;
+        this.gameInstance.taskCountdownSwapAttackers = null;
+        this.gameInstance.swapAttackingTeams();
     }
 }

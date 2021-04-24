@@ -12,12 +12,16 @@ public class MapBase
     public Coordinate attackerSpawn;
     public List<Coordinate> emeraldSpawns;
     
-    public MapBase(TeamColor teamColor, Coordinate defenderSpawn, Coordinate attackerSpawn, List<Coordinate> emeraldSpawns)
+    public Coordinate objective;
+    
+    public MapBase(TeamColor teamColor, Coordinate defenderSpawn, Coordinate attackerSpawn, List<Coordinate> emeraldSpawns, Coordinate objective)
     {
         this.teamColor = teamColor;
         this.defenderSpawn = defenderSpawn;
         this.attackerSpawn = attackerSpawn;
         this.emeraldSpawns = emeraldSpawns;
+        
+        this.objective = objective;
     }
     
     // Emerald spawn should be located here, because you don't want

@@ -65,8 +65,10 @@ public class Map
                 Coordinate spawnCoord = new Coordinate((String) spawn);
                 emeraldSpawns.add(spawnCoord);
             }
-            
-            MapBase mapBase = new MapBase(teamColor, defenderSpawn, attackerSpawn, emeraldSpawns);
+    
+            Coordinate objective = new Coordinate((String) baseSubMap.get("objective"));
+    
+            MapBase mapBase = new MapBase(teamColor, defenderSpawn, attackerSpawn, emeraldSpawns, objective);
             bases.add(mapBase);
         }
         

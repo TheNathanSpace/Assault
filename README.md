@@ -1,10 +1,7 @@
 ## Todo
 
-- Swapping attacking teams
 - Team buff shop
 - Emeralds
-- Spawn items
-- Tools (stay with you on death, only buy once)
 
 ## Roadmap
 
@@ -45,6 +42,9 @@
         - Special map-specific items
         - Some items take coins, more powerful ones take emeralds
 - Ending build stage
+- Tools (stay with you on death, only buy once)
+- Spawn items
+- Swapping attacking teams
 
 ---
 

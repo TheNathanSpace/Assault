@@ -7,18 +7,13 @@ import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
-import com.thekingelessar.assault.game.timertasks.TaskAttackTimer;
-import com.thekingelessar.assault.game.timertasks.TaskCountdownBuilding;
-import com.thekingelessar.assault.game.timertasks.TaskCountdownGameStart;
-import com.thekingelessar.assault.game.timertasks.TaskGiveCoins;
+import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
@@ -45,11 +40,13 @@ public class GameInstance
     public TaskCountdownGameStart taskCountdownGameStart;
     public TaskCountdownBuilding taskCountdownBuilding;
     public TaskAttackTimer taskAttackTimer;
+    public TaskCountdownSwapAttackers taskCountdownSwapAttackers;
     
     public HashMap<TeamColor, Integer> attackTimers = new HashMap<>();
     public TeamColor attackingTeam;
     
     public int buildingSecondsLeft;
+    public int teamsGone = 0;
     
     public TaskGiveCoins taskGiveCoins;
     
@@ -57,6 +54,11 @@ public class GameInstance
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
+        if (!mapName.startsWith("map_"))
+        {
+            mapName = "map_" + mapName;
+        }
+        
         this.gameMap = Assault.maps.get(mapName);
         this.gameID = mapName + "_" + gameUUID.toString();
         
@@ -152,7 +154,7 @@ public class GameInstance
         return null;
     }
     
-    public void startBuilding()
+    public void startBuildMode()
     {
         createTeams();
         
@@ -230,17 +232,25 @@ public class GameInstance
             {
                 PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
                 player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
-    
+                
                 PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
             }
         }
+        
+        Location objectiveLocation = this.getDefendingTeam().mapBase.objective.toLocation(this.gameWorld);
+        objectiveLocation.add(0, 0.5, 0);
+        ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+        
+        this.gameWorld.dropItem(objectiveLocation, objectiveItem);
     }
     
     public void swapAttackingTeams()
     {
+        teamsGone++;
+        
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
-    
+        
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
         
@@ -260,6 +270,13 @@ public class GameInstance
         {
             for (Player player : gameTeam.getPlayers())
             {
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
+                gamePlayer.playerBank.coins = 0;
+                gamePlayer.playerBank.gamerPoints = 0;
+                
+                player.getInventory().clear();
+                gamePlayer.swapReset();
+                
                 PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
                 player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
             }
@@ -296,15 +313,21 @@ public class GameInstance
         }
     }
     
-    public static GameInstance getPlayerGameInstance(Player player)
+    public GameTeam getWinningTeam()
     {
-        for (GameInstance gameInstance : Assault.gameInstances)
+        
+        double lowestTime = Integer.MAX_VALUE;
+        GameTeam lowestTeam = null;
+        
+        for (GameTeam gameTeam : this.teams.values())
         {
-            if (gameInstance.getPlayerTeam(player) != null)
+            if (gameTeam.finalAttackingTime < lowestTime)
             {
-                return gameInstance;
+                lowestTeam = gameTeam;
+                lowestTime = gameTeam.finalAttackingTime;
             }
         }
+        
         return null;
     }
     
@@ -317,9 +340,21 @@ public class GameInstance
     {
         for (GameTeam gameTeam : this.teams.values())
         {
-            if (gameTeam.color.equals(this.attackingTeam))
+            if (!gameTeam.color.equals(this.attackingTeam))
             {
                 return gameTeam;
+            }
+        }
+        return null;
+    }
+    
+    public static GameInstance getPlayerGameInstance(Player player)
+    {
+        for (GameInstance gameInstance : Assault.gameInstances)
+        {
+            if (gameInstance.getPlayerTeam(player) != null)
+            {
+                return gameInstance;
             }
         }
         return null;

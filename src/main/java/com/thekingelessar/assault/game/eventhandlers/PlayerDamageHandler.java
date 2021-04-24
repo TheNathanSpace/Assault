@@ -2,7 +2,9 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -58,8 +60,11 @@ public class PlayerDamageHandler implements Listener
                 
                 damagedPlayer.teleport(playerGameInstance.gameMap.waitingSpawn.toLocation(playerGameInstance.gameWorld));
                 
-                TaskCountdownRespawn respawnTimer = new TaskCountdownRespawn(60, 0, 20, playerGameInstance, damagedPlayer);
-                respawnTimer.runTaskTimer(Assault.INSTANCE, respawnTimer.startDelay, respawnTimer.tickDelay);
+                GameTeam gameTeam = playerGameInstance.getPlayerTeam(damagedPlayer);
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(damagedPlayer);
+                
+                gamePlayer.taskCountdownRespawn = new TaskCountdownRespawn(60, 0, 20, playerGameInstance, damagedPlayer);
+                gamePlayer.taskCountdownRespawn.runTaskTimer(Assault.INSTANCE, gamePlayer.taskCountdownRespawn.startDelay, gamePlayer.taskCountdownRespawn.tickDelay);
                 
                 entityDamageEvent.setCancelled(true);
             }

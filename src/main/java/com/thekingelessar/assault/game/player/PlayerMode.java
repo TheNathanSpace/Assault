@@ -14,7 +14,9 @@ public enum PlayerMode
     LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false),
     SPECTATOR(GameMode.SPECTATOR, false, false, false, false, true, true),
     ATTACKING(GameMode.SURVIVAL, true, true, true, true, false, false),
-    BUILDING(GameMode.SURVIVAL, true, true, true, false, false, false);
+    BUILDING(GameMode.SURVIVAL, true, true, true, false, false, false),
+    BETWEEN(GameMode.SURVIVAL, false, false, false, false, true, false),
+    HAM(GameMode.CREATIVE, true, true, false, false, true, false);
     
     public GameMode gameMode;
     public boolean canBreakBlocks;

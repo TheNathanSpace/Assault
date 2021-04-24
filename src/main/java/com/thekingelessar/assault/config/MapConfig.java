@@ -24,18 +24,18 @@ public class MapConfig
         
         map = "maps/" + map;
         
-        File playerDataFileObject = new File(Assault.INSTANCE.getDataFolder(), map);
+        File mapFileObject = new File(Assault.INSTANCE.getDataFolder(), map);
         
-        if (!playerDataFileObject.exists())
+        if (!mapFileObject.exists())
         {
-            playerDataFileObject.getParentFile().mkdirs();
+            mapFileObject.getParentFile().mkdirs();
             Assault.INSTANCE.saveResource(map, false);
         }
         
         YamlConfiguration configuration = new YamlConfiguration();
         try
         {
-            configuration.load(playerDataFileObject);
+            configuration.load(mapFileObject);
         }
         catch (IOException | InvalidConfigurationException e)
         {

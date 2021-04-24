@@ -6,9 +6,38 @@ import org.bukkit.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Util
 {
+    
+    public static Location getRandomNearby(Location location, double blocks)
+    {
+        int blocks2 = (int) blocks * 100;
+        
+        double newX = (new Random().nextInt(blocks2) + 1) / 100.;
+        if (new Random().nextInt(2) + 1 == 2)
+        {
+            newX = newX * -1;
+        }
+        newX += location.getX();
+        
+        double newY = (new Random().nextInt(blocks2) + 1) / 100.;
+        if (new Random().nextInt(2) + 1 == 2)
+        {
+            newY = newY * -1;
+        }
+        newY += location.getY();
+        
+        double newZ = (new Random().nextInt(blocks2) + 1) / 100.;
+        if (new Random().nextInt(2) + 1 == 2)
+        {
+            newZ = newZ * -1;
+        }
+        newZ += location.getZ();
+        
+        return new Location(location.getWorld(), newX, newY, newZ);
+    }
     
     // From https://bukkit.org/threads/get-blocks-between-two-locations.262499/
     public static List<Block> selectBoundingBox(Location loc1, Location loc2, World w)
@@ -76,7 +105,8 @@ public class Util
         return blocks;
     }
     
-    public static String secondsToMinutes(int secondsRaw) {
+    public static String secondsToMinutes(int secondsRaw)
+    {
         int minute = (int) secondsRaw / 60;
         int seconds = secondsRaw % 60;
         

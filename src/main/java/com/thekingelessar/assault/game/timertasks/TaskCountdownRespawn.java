@@ -61,8 +61,11 @@ public class TaskCountdownRespawn extends BukkitRunnable
     {
         title.clearTitle(player);
         
-        this.cancel();
         GamePlayer gamePlayer = gameInstance.getPlayerTeam(player).getGamePlayer(player);
         gamePlayer.respawn();
+        
+        gamePlayer.taskCountdownRespawn = null;
+        
+        this.cancel();
     }
 }

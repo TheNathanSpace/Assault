@@ -12,11 +12,13 @@ void_level: 0
 bases:
   - RED:
       defender_spawn: -27.5 111 83.5
+      objective: -21.5 111 73.5
       attacker_spawn: -20 106 10
       emerald_spawns:
         - -16.5 106 58.5
   - BLUE:
       defender_spawn: 29 111 83.5
+      objective: 35.5 111 73.5
       attacker_spawn: 36 106 10
       emerald_spawns:
         - 40.5 106 58.5

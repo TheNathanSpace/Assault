@@ -5,6 +5,7 @@ import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
+import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
 import com.thekingelessar.assault.util.Util;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.ChatColor;
@@ -23,6 +24,8 @@ public class GamePlayer
     public PlayerBank playerBank;
     public FastBoard scoreboard;
     
+    public TaskCountdownRespawn taskCountdownRespawn;
+    
     public List<ItemStack> spawnItems = new ArrayList<>();
     public List<ItemStack> spawnArmor = new ArrayList<>();
     
@@ -32,6 +35,18 @@ public class GamePlayer
         this.gameInstance = gameInstance;
         this.playerBank = new PlayerBank(0, 0);
         this.scoreboard = new FastBoard(player);
+        
+        spawnArmor.add(new ItemStack(Material.LEATHER_HELMET));
+        spawnArmor.add(new ItemStack(Material.LEATHER_CHESTPLATE));
+        spawnArmor.add(new ItemStack(Material.LEATHER_LEGGINGS));
+        spawnArmor.add(new ItemStack(Material.LEATHER_BOOTS));
+        spawnItems.add(new ItemStack(Material.WOOD_SWORD));
+    }
+    
+    public void swapReset()
+    {
+        spawnItems = new ArrayList<>();
+        spawnArmor = new ArrayList<>();
         
         spawnArmor.add(new ItemStack(Material.LEATHER_HELMET));
         spawnArmor.add(new ItemStack(Material.LEATHER_CHESTPLATE));
@@ -84,8 +99,8 @@ public class GamePlayer
         }
         else
         {
-            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + Util.secondsToMinutes(gameInstance.teams.get(TeamColor.BLUE).displaySeconds));
-            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + Util.secondsToMinutes(gameInstance.teams.get(TeamColor.RED).displaySeconds));
+            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.BLUE).displaySeconds));
+            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.RED).displaySeconds));
         }
         
         lines.add("");

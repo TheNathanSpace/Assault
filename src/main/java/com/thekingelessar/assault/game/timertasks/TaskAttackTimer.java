@@ -33,18 +33,22 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        Integer attackingTime = gameInstance.getAttackingTeam().displaySeconds;
-        attackingTime++;
+        double attackingTime = gameInstance.getAttackingTeam().displaySeconds;
+        attackingTime = attackingTime + 1.;
         
         gameInstance.teams.get(gameInstance.attackingTeam).displaySeconds = attackingTime;
         
         gameInstance.updateScoreboards();
     }
     
-    public void finishTimer()
-    {
+    public void stopTimer() {
         this.gameInstance.taskAttackTimer = null;
         
+        long nanosecondsTaken = this.gameInstance.getAttackingTeam().startAttackingTime - System.nanoTime();
+        this.gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+        this.gameInstance.getAttackingTeam().displaySeconds = (Math.round(gameInstance.getAttackingTeam().finalAttackingTime * 100d) / 100d);
+    
         this.cancel();
     }
+    
 }
