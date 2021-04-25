@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
 
+// From https://gist.github.com/JorelAli/8e60a30ca133769c4ca1
 public class FireworkUtils
 {
     

@@ -41,6 +41,7 @@ public class GameInstance
     public TaskCountdownBuilding taskCountdownBuilding;
     public TaskAttackTimer taskAttackTimer;
     public TaskCountdownSwapAttackers taskCountdownSwapAttackers;
+    public TaskCountdownGameEnd taskCountdownGameEnd;
     
     public HashMap<TeamColor, Integer> attackTimers = new HashMap<>();
     public TeamColor attackingTeam;
@@ -279,6 +280,20 @@ public class GameInstance
                 
                 PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
                 player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
+            }
+        }
+    }
+    
+    public void endGame()
+    {
+        WorldManager.closeWorld(this.gameWorld);
+        List<GameInstance> gameInstances = Assault.gameInstances;
+        for (int i = 0; i < gameInstances.size(); i++)
+        {
+            GameInstance gameInstance = gameInstances.get(i);
+            if (gameInstance.equals(this))
+            {
+                GameInstance removed = Assault.gameInstances.remove(i);
             }
         }
     }
