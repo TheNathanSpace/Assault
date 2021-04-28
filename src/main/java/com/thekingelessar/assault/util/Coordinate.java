@@ -12,10 +12,16 @@ public class Coordinate
     public double y;
     public double z;
     
-    public Coordinate(Location location) {
+    public Double yaw;
+    public Double pitch;
+    
+    public Coordinate(Location location)
+    {
         this.x = location.getX();
         this.y = location.getY();
         this.z = location.getZ();
+        this.yaw = (double) location.getYaw();
+        this.pitch = (double) location.getPitch();
     }
     
     public Coordinate(double x, double y, double z)
@@ -27,7 +33,7 @@ public class Coordinate
     
     public Coordinate(String coordinates)
     {
-        Pattern pattern = Pattern.compile("^ *(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*)");
+        Pattern pattern = Pattern.compile("^ *(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*) *(-?[0-9]+.?[0-9]*)? ?(-?[0-9]+.?[0-9]*)?");
         Matcher matchedPattern = pattern.matcher(coordinates);
         
         if (matchedPattern.find())
@@ -64,32 +70,39 @@ public class Coordinate
                 exception.printStackTrace();
                 return;
             }
+            
+            try
+            {
+                String yaw = matchedPattern.group(4);
+                this.yaw = Double.parseDouble(yaw);
+            }
+            catch (IllegalStateException | IndexOutOfBoundsException | NumberFormatException exception)
+            {
+                exception.printStackTrace();
+                return;
+            }
+            
+            try
+            {
+                String pitch = matchedPattern.group(5);
+                this.pitch = Double.parseDouble(pitch);
+            }
+            catch (IllegalStateException | IndexOutOfBoundsException | NumberFormatException exception)
+            {
+                exception.printStackTrace();
+                return;
+            }
         }
-    }
-    
-    public Location toLocation(World world, Float yaw, Float pitch)
-    {
-        if (yaw != null && pitch != null)
-        {
-            return new Location(world, this.x, this.y, this.z, yaw, pitch);
-        }
-        
-        if (yaw == null && pitch != null)
-        {
-            return new Location(world, this.x, this.y, this.z, 0, pitch);
-        }
-        
-        if (yaw != null && pitch == null)
-        {
-            return new Location(world, this.x, this.y, this.z, yaw, 0);
-        }
-        
-        return new Location(world, this.x, this.y, this.z);
     }
     
     public Location toLocation(World world)
     {
-        return new Location(world, this.x, this.y, this.z);
+        if (yaw == null || pitch == null)
+        {
+            return new Location(world, this.x, this.y, this.z);
+        }
+        
+        return new Location(world, this.x, this.y, this.z, this.yaw.floatValue(), this.pitch.floatValue());
     }
     
     
@@ -98,6 +111,5 @@ public class Coordinate
     {
         return this.x + " " + this.y + " " + this.z;
     }
-    
     
 }

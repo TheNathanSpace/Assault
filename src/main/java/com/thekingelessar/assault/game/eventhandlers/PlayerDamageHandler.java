@@ -49,10 +49,13 @@ public class PlayerDamageHandler implements Listener
                 PlayerInventory inventory = damagedPlayer.getInventory();
                 for (ItemStack itemStack : inventory.getContents())
                 {
-                    if (dropItems.contains(itemStack.getType()))
+                    if (itemStack != null)
                     {
-                        Location location = damagedPlayer.getLocation();
-                        location.getWorld().dropItemNaturally(location, itemStack);
+                        if (dropItems.contains(itemStack.getType()))
+                        {
+                            Location location = damagedPlayer.getLocation();
+                            location.getWorld().dropItemNaturally(location, itemStack);
+                        }
                     }
                 }
                 

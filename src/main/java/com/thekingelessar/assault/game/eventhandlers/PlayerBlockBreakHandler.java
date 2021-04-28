@@ -3,7 +3,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.util.Coordinate;
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,39 +15,47 @@ public class PlayerBlockBreakHandler implements Listener
     public void onBlockBreak(BlockBreakEvent blockBreakEvent)
     {
         Player player = blockBreakEvent.getPlayer();
-        
-        PlayerMode playerMode = PlayerMode.getPlayerMode(player);
-        
-        if (playerMode != null)
-        {
-            if (!playerMode.canBreakBlocks)
-            {
-                blockBreakEvent.setCancelled(true);
-            }
-        }
-        
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         
         if (gameInstance != null)
         {
-            Coordinate placedCoord = new Coordinate(blockBreakEvent.getBlock().getLocation());
+            PlayerMode playerMode = PlayerMode.getPlayerMode(player);
             
-            if (gameInstance.placedBlocks.contains(placedCoord))
+            if (playerMode != null)
             {
-                gameInstance.placedBlocks.remove(placedCoord);
-            }
-            else if (!gameInstance.gameMap.breakableBlocks.contains(blockBreakEvent.getBlock().getType()))
-            {
-                blockBreakEvent.setCancelled(true);
+                if (!playerMode.canBreakBlocks)
+                {
+                    blockBreakEvent.setCancelled(true);
+                    return;
+                }
             }
             
-//            for (Material block : gameInstance.gameMap.breakableBlocks)
-//            {
-//                if (block.equals(blockBreakEvent.getBlock().getType()))
-//                {
-//                    blockBreakEvent.setCancelled(false);
-//                }
-//            }
+            blockBreakEvent.setCancelled(true);
+            
+            Location brokenLocation = blockBreakEvent.getBlock().getLocation();
+            Coordinate brokenCoordinate = new Coordinate(brokenLocation.getBlockX(), brokenLocation.getBlockY(), brokenLocation.getBlockZ());
+            
+            for (Coordinate placedCoord : gameInstance.placedBlocks)
+            {
+                if (placedCoord.x == brokenCoordinate.x && placedCoord.y == brokenCoordinate.y && placedCoord.z == brokenCoordinate.z)
+                {
+                    gameInstance.placedBlocks.remove(brokenCoordinate);
+                    blockBreakEvent.setCancelled(false);
+                }
+            }
+            
+            if (gameInstance.gameMap.breakableBlocks.contains(blockBreakEvent.getBlock().getType()))
+            {
+                blockBreakEvent.setCancelled(false);
+            }
+            
+            //            for (Material block : gameInstance.gameMap.breakableBlocks)
+            //            {
+            //                if (block.equals(blockBreakEvent.getBlock().getType()))
+            //                {
+            //                    blockBreakEvent.setCancelled(false);
+            //                }
+            //            }
             
         }
     }

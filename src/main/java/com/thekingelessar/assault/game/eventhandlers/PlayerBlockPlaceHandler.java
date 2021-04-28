@@ -27,13 +27,17 @@ public class PlayerBlockPlaceHandler implements Listener
             if (!playerMode.canPlaceBlocks)
             {
                 blockPlaceEvent.setCancelled(true);
+                return;
             }
         }
         
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         if (gameInstance != null)
         {
-            gameInstance.placedBlocks.add(new Coordinate(blockPlaceEvent.getBlock().getLocation()));
+            Location placedLocation = blockPlaceEvent.getBlock().getLocation();
+            Coordinate placedCoordinate = new Coordinate(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());
+            
+            gameInstance.placedBlocks.add(placedCoordinate);
             
 //            blockPlaceEvent.setCancelled(true);
 //

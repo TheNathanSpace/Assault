@@ -1,7 +1,15 @@
 ## Todo
 
-- Team buff shop
-- Emeralds
+- Transportation out of base for defenders
+- Emerald spawning
+
+## Bugs
+
+- When swapping attacking teams, the attacking/defending teams aren't correct in gameInstance. This impacts the timers
+  among other things.
+- Enemies are able to attack each other during the Building stage.
+- The Saloon map bases aren't self-contained with barrier blocks, allowing people to move between them if they build
+  outside the map.
 
 ## Roadmap
 
@@ -45,6 +53,10 @@
 - Tools (stay with you on death, only buy once)
 - Spawn items
 - Swapping attacking teams
+- Team buff shop
+- Indication if team has the buff
+- Kill sound effects
+- Yaw/pitch values in spawns
 
 ---
 

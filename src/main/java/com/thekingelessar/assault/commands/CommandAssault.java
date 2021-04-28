@@ -19,6 +19,17 @@ public class CommandAssault implements CommandExecutor
         if (args == null || args.length == 0) return false;
         switch (args[0])
         {
+            case "attack":
+                if (sender instanceof Player)
+                {
+                    Player senderPlayer = (Player) sender;
+                    GameInstance testInstance = GameInstance.getPlayerGameInstance(senderPlayer);
+                    if (testInstance != null)
+                    {
+                        testInstance.taskCountdownBuilding.ticksLeft = 60;
+                    }
+                }
+                break;
             case "start":
                 if (sender instanceof Player)
                 {
@@ -27,16 +38,6 @@ public class CommandAssault implements CommandExecutor
                     testInstance.startWorld();
                     testInstance.sendPlayersToWorld();
                     Assault.gameInstances.add(testInstance);
-                }
-                break;
-            
-            case "attack":
-                if (sender instanceof Player)
-                {
-                    for (GameInstance gameInstance : Assault.gameInstances)
-                    {
-                        gameInstance.startAttackMode();
-                    }
                 }
                 break;
             
@@ -64,7 +65,7 @@ public class CommandAssault implements CommandExecutor
                     if (gameInstance != null)
                     {
                         GameTeam team = gameInstance.getPlayerTeam(player);
-    
+                        
                         InventoryView inventoryView = null;
                         
                         switch (args[1])
@@ -74,6 +75,9 @@ public class CommandAssault implements CommandExecutor
                                 break;
                             case "attack":
                                 inventoryView = player.openInventory(team.shopAttack.inventory);
+                                break;
+                            case "buff":
+                                inventoryView = player.openInventory(team.shopTeamBuffs.inventory);
                                 break;
                         }
                         

@@ -3,6 +3,8 @@ package com.thekingelessar.assault.game.team;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
+import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
+import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import org.bukkit.Bukkit;
@@ -30,6 +32,9 @@ public class GameTeam
     
     public ShopBuilding shopBuilding;
     public ShopAttack shopAttack;
+    public ShopTeamBuffs shopTeamBuffs;
+    
+    public List<IBuff> buffList = new ArrayList<>();
     
     public double displaySeconds = 0;
     public long startAttackingTime = 0; // in nanoseconds
@@ -59,6 +64,14 @@ public class GameTeam
         teamScoreboard.setAllowFriendlyFire(false);
         teamScoreboard.setCanSeeFriendlyInvisibles(true);
         teamScoreboard.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
+    }
+    
+    public void doBuffs()
+    {
+        for (IBuff buff : this.buffList)
+        {
+            buff.doEffect();
+        }
     }
     
     public void addMember(Player player)
@@ -106,6 +119,7 @@ public class GameTeam
     
     public void createAttackShop()
     {
+        this.shopTeamBuffs = new ShopTeamBuffs(this, null);
         this.shopAttack = new ShopAttack(this.color, null);
     }
     

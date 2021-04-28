@@ -110,6 +110,22 @@ public class Util
         int minute = (int) secondsRaw / 60;
         int seconds = secondsRaw % 60;
         
-        return String.format("%d:%d", minute, seconds);
+        String stringSeconds = Integer.toString(seconds);
+        if (seconds == 0)
+        {
+            stringSeconds = "00";
+        }
+        else if (seconds < 10)
+        {
+            stringSeconds = "0" + stringSeconds;
+        }
+        
+        return String.format("%d:%s", minute, stringSeconds);
+    }
+    
+    public static double round(double value, int precision)
+    {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
     }
 }

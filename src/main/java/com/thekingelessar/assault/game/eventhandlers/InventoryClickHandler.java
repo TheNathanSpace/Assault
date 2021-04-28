@@ -2,8 +2,10 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.ShopItem;
+import com.thekingelessar.assault.game.inventory.TeamBuffItem;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
+import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.DyeColor;
@@ -49,6 +51,41 @@ public class InventoryClickHandler implements Listener
             ShopAttack shop = playerTeam.shopAttack;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
+        else if (playerTeam.shopTeamBuffs != null && inventoryOpen.equals(playerTeam.shopTeamBuffs.inventory))
+        {
+            ShopTeamBuffs shop = playerTeam.shopTeamBuffs;
+            TeamBuffItem clickedBuff = TeamBuffItem.getShopItem(shop, itemClicked);
+            
+            if (clickedBuff == null)
+            {
+                return;
+            }
+            
+            if (clickedBuff.purchased)
+            {
+                player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                inventoryClickEvent.setCancelled(true);
+                return;
+            }
+            
+            boolean canPurchase = gamePlayer.purchaseItem(clickedBuff.cost, clickedBuff.currency);
+            
+            if (canPurchase)
+            {
+                playerTeam.buffList.add(clickedBuff.buff);
+                
+                gamePlayer.updateScoreboard();
+                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+                
+                clickedBuff.purchase(playerTeam.shopTeamBuffs.inventory, inventoryClickEvent.getSlot());
+                
+                inventoryClickEvent.setCancelled(true);
+                return;
+            }
+            
+            inventoryClickEvent.setCancelled(true);
+            return;
+        }
         
         if (shopItemClicked == null)
         {
@@ -70,16 +107,20 @@ public class InventoryClickHandler implements Listener
         
         for (ItemStack itemStack : player.getInventory().getContents())
         {
-            if (toolsList.contains(itemStack.getType()))
+            if (itemStack != null)
             {
-                player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-                inventoryClickEvent.setCancelled(true);
-                return;
+                if (toolsList.contains(itemStack.getType()) && shopItemClicked.realItemStack.getType().equals(itemStack.getType()))
+                {
+                    player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                    inventoryClickEvent.setCancelled(true);
+                    return;
+                }
             }
         }
         
         if (canPurchase)
         {
+            
             ItemStack givingItemStack = shopItemClicked.realItemStack.clone();
             
             List<Material> durabilityList = new ArrayList<>();
@@ -94,7 +135,10 @@ public class InventoryClickHandler implements Listener
             
             player.getInventory().addItem(givingItemStack);
             
-            gamePlayer.addSpawnItem(givingItemStack);
+            if (toolsList.contains(givingItemStack.getType()) && !(playerTeam.shopTeamBuffs != null && inventoryOpen.equals(playerTeam.shopTeamBuffs.inventory)))
+            {
+                gamePlayer.addSpawnItem(givingItemStack);
+            }
             
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
             

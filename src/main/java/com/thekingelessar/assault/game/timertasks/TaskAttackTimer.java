@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.util.Title;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class TaskAttackTimer extends BukkitRunnable
@@ -41,13 +42,16 @@ public class TaskAttackTimer extends BukkitRunnable
         gameInstance.updateScoreboards();
     }
     
-    public void stopTimer() {
+    public void stopTimer()
+    {
         this.gameInstance.taskAttackTimer = null;
+        this.gameInstance.taskGiveCoins.cancel();
+        this.gameInstance.taskGiveCoins = null;
         
-        long nanosecondsTaken = this.gameInstance.getAttackingTeam().startAttackingTime - System.nanoTime();
+        long nanosecondsTaken = System.nanoTime() - this.gameInstance.getAttackingTeam().startAttackingTime;
         this.gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
-        this.gameInstance.getAttackingTeam().displaySeconds = (Math.round(gameInstance.getAttackingTeam().finalAttackingTime * 100d) / 100d);
-    
+        this.gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
+        
         this.cancel();
     }
     

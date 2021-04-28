@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.team;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
 public enum TeamColor
@@ -28,13 +29,23 @@ public enum TeamColor
         this.chatColor = color;
     }
     
-    public String getFormattedName(boolean lower)
+    public String getFormattedName(boolean lower, boolean capitalized, ChatColor formatting)
     {
         String fixedName = this.toString().replace("_", " ");
         
         if (lower)
         {
             fixedName = fixedName.toLowerCase();
+        }
+        
+        if (capitalized)
+        {
+            fixedName = StringUtils.capitalize(fixedName);
+        }
+        
+        if (formatting != null)
+        {
+            return this.chatColor.toString() + formatting + fixedName;
         }
         
         return this.chatColor + fixedName;

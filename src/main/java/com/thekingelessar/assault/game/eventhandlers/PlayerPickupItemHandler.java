@@ -2,12 +2,15 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownGameEnd;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownSwapAttackers;
+import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
+import com.thekingelessar.assault.util.Util;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+
+import java.util.List;
 
 public class PlayerPickupItemHandler implements Listener
 {
@@ -30,10 +35,28 @@ public class PlayerPickupItemHandler implements Listener
             if (gameInstance != null)
             {
                 GameTeam gameTeam = gameInstance.getPlayerTeam(player);
-                if (!gameInstance.getAttackingTeam().equals(gameTeam))
+                
+                if (gameInstance.gameStage.equals(GameStage.BUILDING_BASE) || !gameInstance.getAttackingTeam().equals(gameTeam))
                 {
                     playerPickupItemEvent.setCancelled(true);
                     return;
+                }
+                
+                if (gameInstance.taskAttackTimer == null)
+                {
+                    playerPickupItemEvent.setCancelled(true);
+                    return;
+                }
+                
+                gameInstance.taskAttackTimer.stopTimer();
+                
+                List<Player> winners = gameInstance.getAttackingTeam().getPlayers();
+                for (Player winPlayer : winners)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        FireworkUtils.spawnRandomFirework(winPlayer.getLocation(), gameInstance.getAttackingTeam().color);
+                    }
                 }
                 
                 for (Player currentPlayer : gameInstance.getPlayers())
@@ -51,13 +74,13 @@ public class PlayerPickupItemHandler implements Listener
                 
                 if (gameInstance.teamsGone == 1)
                 {
-                    long nanosecondsTaken = gameInstance.getAttackingTeam().startAttackingTime - System.nanoTime();
+                    long nanosecondsTaken = System.nanoTime() - gameInstance.getAttackingTeam().startAttackingTime;
                     gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
-                    gameInstance.getAttackingTeam().displaySeconds = (Math.round(gameInstance.getAttackingTeam().finalAttackingTime * 100d) / 100d);
+                    gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
                     
                     gameInstance.updateScoreboards();
                     
-                    String mainTitle = StringUtils.capitalize(gameInstance.getWinningTeam().color.getFormattedName(true)) + ChatColor.WHITE + " team wins!";
+                    String mainTitle = gameInstance.getWinningTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " team wins!";
                     Title title = new Title(mainTitle, ChatColor.WHITE + "Time: " + ChatColor.LIGHT_PURPLE + gameInstance.getWinningTeam().displaySeconds + ChatColor.WHITE + " seconds", 0, 6, 1);
                     
                     for (Player currentPlayer : gameInstance.gameWorld.getPlayers())
@@ -65,7 +88,7 @@ public class PlayerPickupItemHandler implements Listener
                         PlayerMode playerMode = PlayerMode.setPlayerMode(currentPlayer, PlayerMode.HAM, gameInstance);
                         title.send(currentPlayer);
                     }
-    
+                    
                     gameInstance.taskCountdownGameEnd = new TaskCountdownGameEnd(240, 20, 20, gameInstance);
                     gameInstance.taskCountdownGameEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownGameEnd.startDelay, gameInstance.taskCountdownGameEnd.tickDelay);
                 }
@@ -73,7 +96,7 @@ public class PlayerPickupItemHandler implements Listener
                 {
                     gameInstance.updateScoreboards();
                     
-                    gameInstance.taskCountdownSwapAttackers = new TaskCountdownSwapAttackers(200, 20, 20, gameInstance);
+                    gameInstance.taskCountdownSwapAttackers = new TaskCountdownSwapAttackers(200, 0, 20, gameInstance);
                     gameInstance.taskCountdownSwapAttackers.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownSwapAttackers.startDelay, gameInstance.taskCountdownSwapAttackers.tickDelay);
                 }
             }

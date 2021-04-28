@@ -30,6 +30,7 @@ public class WorldManager
         
         for (Player player : world.getPlayers())
         {
+            player.getInventory().clear();
             player.teleport(new Location(Bukkit.getWorld(lobbyWorld), 0, 70, 0));
         }
         

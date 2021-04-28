@@ -36,7 +36,7 @@ public class ShopBuilding implements IShop
             airSlots.add(i);
         }
         
-        inventory = Bukkit.createInventory(null, 27, ChatColor.GRAY + "Shop");
+        inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "Shop");
         
         constructShopItem(new ItemStack(Material.WOOL, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Wool", 4, Currency.COINS, false);
         constructShopItem(new ItemStack(Material.STAINED_CLAY, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Clay", 16, Currency.COINS, false);

@@ -65,9 +65,9 @@ public class Map
                 Coordinate spawnCoord = new Coordinate((String) spawn);
                 emeraldSpawns.add(spawnCoord);
             }
-    
+            
             Coordinate objective = new Coordinate((String) baseSubMap.get("objective"));
-    
+            
             MapBase mapBase = new MapBase(teamColor, defenderSpawn, attackerSpawn, emeraldSpawns, objective);
             bases.add(mapBase);
         }
@@ -109,27 +109,24 @@ public class Map
         }
     }
     
-    public Coordinate getSpawn(GameTeam team, TeamStage teamStage)
+    public Coordinate getSpawn(GameTeam playerTeam, TeamStage playerTeamStage)
     {
-        TeamColor teamColor = team.color;
-        
-        if (teamStage == null)
+        if (playerTeamStage == null)
         {
-            teamStage = team.teamStage;
+            playerTeamStage = playerTeam.teamStage;
         }
         
-        for (MapBase base : bases)
+        if (playerTeamStage.equals(TeamStage.ATTACKING))
         {
-            if (teamStage.equals(TeamStage.DEFENDING))
-            {
-                if (base.teamColor.equals(teamColor)) return base.defenderSpawn;
-            }
-            
-            return base.attackerSpawn;
+            return playerTeam.gameInstance.getDefendingTeam().mapBase.attackerSpawn;
+        }
+        
+        if (playerTeamStage.equals(TeamStage.DEFENDING))
+        {
+            return playerTeam.mapBase.defenderSpawn;
         }
         
         return null;
-        
     }
     
     public void clearWaitingPlatform(World world)

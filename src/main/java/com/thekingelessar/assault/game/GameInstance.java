@@ -12,6 +12,7 @@ import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.*;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
@@ -37,21 +38,23 @@ public class GameInstance
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
+    public TaskTickTimer taskTickTimer;
     public TaskCountdownGameStart taskCountdownGameStart;
     public TaskCountdownBuilding taskCountdownBuilding;
     public TaskAttackTimer taskAttackTimer;
     public TaskCountdownSwapAttackers taskCountdownSwapAttackers;
     public TaskCountdownGameEnd taskCountdownGameEnd;
     
-    public HashMap<TeamColor, Integer> attackTimers = new HashMap<>();
     public TeamColor attackingTeam;
     
-    public int buildingSecondsLeft;
+    public int buildingSecondsLeft = 180;
     public int teamsGone = 0;
     
     public TaskGiveCoins taskGiveCoins;
     
     public List<Coordinate> placedBlocks = new ArrayList<>();
+    
+    public List<Item> guidingObjectives = new ArrayList<>();
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
@@ -161,20 +164,26 @@ public class GameInstance
         
         this.gameStage = GameStage.BUILDING_BASE;
         
-        for (java.util.Map.Entry<TeamColor, GameTeam> team : teams.entrySet())
+        for (GameTeam team : teams.values())
         {
             
-            for (Player player : team.getValue().getPlayers())
+            Location objectiveLocation = team.mapBase.objective.toLocation(this.gameWorld);
+            objectiveLocation.add(0, 0.5, 0);
+            ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+            
+            this.guidingObjectives.add(this.gameWorld.dropItem(objectiveLocation, objectiveItem));
+            
+            for (Player player : team.getPlayers())
             {
-                team.getValue().getGamePlayer(player).playerBank.coins += 100;
+                GamePlayer gamePlayer = team.getGamePlayer(player);
+                gamePlayer.playerBank.coins += 100;
                 
                 try
                 {
                     GameTeam gameTeam = getPlayerTeam(player);
-                    player.teleport(gameTeam.mapBase.defenderSpawn.toLocation(this.gameWorld, 180f, 0f));
-                    // todo: add facing rotation for spawns so you can customize them
+                    gamePlayer.respawn(PlayerMode.BUILDING);
                     
-                    Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false) + ChatColor.WHITE + " team!", "Begin building your defenses!");
+                    Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
                     title.clearTitle(player);
                     
                     title.send(player);
@@ -188,7 +197,7 @@ public class GameInstance
                 }
             }
             
-            team.getValue().createBuildingShop();
+            team.createBuildingShop();
         }
         
         this.updateScoreboards();
@@ -202,19 +211,13 @@ public class GameInstance
     
     public void startAttackMode()
     {
-        taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
-        taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
-        
-        taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
-        taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
-        
-        for (GameTeam gameTeam : teams.values())
+        for (Item item : this.guidingObjectives)
         {
-            gameTeam.displaySeconds = 0;
-            gameTeam.createAttackShop();
+            item.remove();
         }
         
-        this.restoreHealth();
+        taskTickTimer = new TaskTickTimer(0, 1, this);
+        taskTickTimer.runTaskTimer(Assault.INSTANCE, taskTickTimer.startDelay, taskTickTimer.tickDelay);
         
         this.gameStage = GameStage.ATTACK;
         
@@ -225,45 +228,70 @@ public class GameInstance
         this.teams.get(this.attackingTeam).teamStage = TeamStage.ATTACKING;
         this.teams.get(randomList.get(1)).teamStage = TeamStage.DEFENDING;
         
-        this.getAttackingTeam().startAttackingTime = System.nanoTime();
-        
         for (GameTeam gameTeam : teams.values())
         {
-            for (Player player : gameTeam.getPlayers())
-            {
-                PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
-                player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
-                
-                PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
-            }
+            gameTeam.displaySeconds = 0;
         }
         
-        Location objectiveLocation = this.getDefendingTeam().mapBase.objective.toLocation(this.gameWorld);
-        objectiveLocation.add(0, 0.5, 0);
-        ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
-        
-        this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+        startRound();
     }
     
     public void swapAttackingTeams()
     {
         teamsGone++;
         
+        for (GameTeam gameTeam : teams.values())
+        {
+            gameTeam.buffList.clear();
+        }
+        
+        TeamColor oldDefenders = this.getDefendingTeam().color;
+        this.teams.get(this.attackingTeam).teamStage = TeamStage.DEFENDING;
+        this.attackingTeam = oldDefenders;
+        this.getDefendingTeam().teamStage = TeamStage.ATTACKING;
+        
+        startRound();
+    }
+    
+    public void startRound()
+    {
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
+        
+        if (taskAttackTimer == null)
+        {
+            System.out.println("task attack is NULL");
+        }
         
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
         
         for (GameTeam gameTeam : teams.values())
         {
+            switch (gameTeam.teamStage)
+            {
+                case DEFENDING:
+                    for (Player player : gameTeam.getPlayers())
+                    {
+                        Title title = new Title(gameTeam.color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.RESET + " is DEFENDING!", "Defend the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " with your life!");
+                        title.clearTitle(player);
+                        title.send(player);
+                    }
+                    break;
+                case ATTACKING:
+                    for (Player player : gameTeam.getPlayers())
+                    {
+                        Title title = new Title(gameTeam.color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.RESET + " is ATTACKING!", "Get to the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " as fast as you can!");
+                        title.clearTitle(player);
+                        title.send(player);
+                    }
+                    break;
+            }
+            
             gameTeam.createAttackShop();
         }
         
         this.restoreHealth();
-        
-        this.teams.get(this.attackingTeam).teamStage = TeamStage.DEFENDING;
-        this.getDefendingTeam().teamStage = TeamStage.ATTACKING;
         
         this.getAttackingTeam().startAttackingTime = System.nanoTime();
         
@@ -279,9 +307,15 @@ public class GameInstance
                 gamePlayer.swapReset();
                 
                 PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
-                player.teleport(this.gameMap.getSpawn(gameTeam, null).toLocation(this.gameWorld));
+                gameTeam.getGamePlayer(player).respawn(mode);
             }
         }
+        
+        Location objectiveLocation = this.getDefendingTeam().mapBase.objective.toLocation(this.gameWorld);
+        objectiveLocation.add(0, 0.5, 0);
+        ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+        
+        this.gameWorld.dropItem(objectiveLocation, objectiveItem);
     }
     
     public void endGame()
@@ -317,6 +351,14 @@ public class GameInstance
         }
     }
     
+    public void doBuffs()
+    {
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            gameTeam.doBuffs();
+        }
+    }
+    
     public void updateScoreboards()
     {
         for (GameTeam gameTeam : this.teams.values())
@@ -330,7 +372,6 @@ public class GameInstance
     
     public GameTeam getWinningTeam()
     {
-        
         double lowestTime = Integer.MAX_VALUE;
         GameTeam lowestTeam = null;
         
