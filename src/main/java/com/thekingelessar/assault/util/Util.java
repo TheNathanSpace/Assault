@@ -105,12 +105,22 @@ public class Util
         return blocks;
     }
     
-    public static String secondsToMinutes(int secondsRaw)
+    public static String secondsToMinutes(double secondsRaw, boolean trim)
     {
         int minute = (int) secondsRaw / 60;
-        int seconds = secondsRaw % 60;
+        double seconds = round(secondsRaw % 60, 2);
         
-        String stringSeconds = Integer.toString(seconds);
+        String stringSeconds;
+        
+        if (trim)
+        {
+            stringSeconds = Integer.toString((int) seconds);
+        }
+        else
+        {
+            stringSeconds = Double.toString(seconds);
+        }
+        
         if (seconds == 0)
         {
             stringSeconds = "00";
@@ -120,7 +130,14 @@ public class Util
             stringSeconds = "0" + stringSeconds;
         }
         
-        return String.format("%d:%s", minute, stringSeconds);
+        if (minute == 0 && !trim)
+        {
+            return stringSeconds;
+        }
+        else
+        {
+            return String.format("%d:%s", minute, stringSeconds);
+        }
     }
     
     public static double round(double value, int precision)

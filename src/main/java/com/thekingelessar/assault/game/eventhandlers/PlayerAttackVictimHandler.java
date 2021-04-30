@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
@@ -33,6 +34,12 @@ public class PlayerAttackVictimHandler implements Listener
             if (entityAttackEvent.getEntity() instanceof Player)
             {
                 Player victim = (Player) entityAttackEvent.getEntity();
+                
+                if (victim.getWorld().equals(Assault.lobbyWorld))
+                {
+                    entityAttackEvent.setCancelled(true);
+                }
+                
                 PlayerMode victimMode = PlayerMode.getPlayerMode(victim);
                 
                 if (victimMode != null)
@@ -58,7 +65,7 @@ public class PlayerAttackVictimHandler implements Listener
                         {
                             GamePlayer gamePlayer = gameTeam.getGamePlayer(attacker);
                             
-                            gamePlayer.playerBank.gamerPoints += 1;
+                            gameTeam.gamerPoints += 1;
                             
                             GamePlayer victimPlayer = gameInstance.getPlayerTeam(victim).getGamePlayer(victim);
                             gamePlayer.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));

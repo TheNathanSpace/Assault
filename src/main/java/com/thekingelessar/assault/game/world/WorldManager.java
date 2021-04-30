@@ -1,8 +1,8 @@
 package com.thekingelessar.assault.game.world;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.thekingelessar.assault.Assault.lobbyWorld;
+import static com.thekingelessar.assault.Assault.mainConfig;
 
 public class WorldManager
 {
@@ -23,15 +24,14 @@ public class WorldManager
     public static void closeWorld(World world)
     {
         // Teleport players out
-        if (Bukkit.getWorld(lobbyWorld) == null)
+        if (lobbyWorld == null)
         {
-            createWorldFromMap(lobbyWorld, true, "lobby");
+            createWorldFromMap(mainConfig.getString("lobby_world"), true, "lobby");
         }
         
         for (Player player : world.getPlayers())
         {
-            player.getInventory().clear();
-            player.teleport(new Location(Bukkit.getWorld(lobbyWorld), 0, 70, 0));
+            LobbyUtil.joinLobby(player);
         }
         
         // Close server world

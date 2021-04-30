@@ -1,6 +1,6 @@
 world_name: saloon
 
-waiting_spawn: 0.5. 128. 45.5
+waiting_spawn: 0.5 128. 45.5
 waiting_platform_bounding_box:
   - 3. 129. 42.
   - -3. 126. 48.
@@ -12,13 +12,13 @@ void_level: 0
 bases:
   - RED:
       defender_spawn: -27.5 111. 83.5 -180. 0.
-      objective: -21.5 111. 73.5
+      objective: -21.5 111.5 73.5
       attacker_spawn: -20. 106. 10. 0. 0.
       emerald_spawns:
         - -16.5 106. 58.5
   - BLUE:
       defender_spawn: 29. 111. 83.5 -180. 0.
-      objective: 35.5 111. 73.5
+      objective: 35.5 111.5 73.5
       attacker_spawn: 36. 106. 10. 0. 0.
       emerald_spawns:
         - 40.5 106. 58.5

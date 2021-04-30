@@ -33,7 +33,7 @@ public class GamePlayer
     {
         this.player = player;
         this.gameInstance = gameInstance;
-        this.playerBank = new PlayerBank(0, 0);
+        this.playerBank = new PlayerBank(0);
         this.scoreboard = new FastBoard(player);
         
         spawnArmor.add(new ItemStack(Material.LEATHER_BOOTS));
@@ -95,20 +95,20 @@ public class GamePlayer
         
         lines.add("");
         
-        if (gameInstance.gameStage.equals(GameStage.BUILDING_BASE))
+        if (gameInstance.gameStage.equals(GameStage.BUILDING))
         {
-            lines.add(ChatColor.WHITE.toString() + ChatColor.BOLD + "Building time: " + ChatColor.RESET + Util.secondsToMinutes(gameInstance.buildingSecondsLeft));
+            lines.add(ChatColor.WHITE.toString() + ChatColor.BOLD + "Building time: " + ChatColor.RESET + Util.secondsToMinutes(gameInstance.buildingSecondsLeft, true));
         }
         else
         {
-            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.BLUE).displaySeconds));
-            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.RED).displaySeconds));
+            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.BLUE).displaySeconds, true));
+            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.RED).displaySeconds, true));
         }
         
         lines.add("");
         
         lines.add(ChatColor.GOLD.toString() + ChatColor.BOLD + "Coins" + ChatColor.RESET + ": " + playerBank.coins);
-        lines.add(ChatColor.AQUA.toString() + ChatColor.BOLD + "Epic gamer points" + ChatColor.RESET + ": " + playerBank.gamerPoints);
+        lines.add(ChatColor.AQUA.toString() + ChatColor.BOLD + "Epic gamer points" + ChatColor.RESET + ": " + gameInstance.getPlayerTeam(player).gamerPoints);
         
         lines.add("");
         
@@ -178,9 +178,11 @@ public class GamePlayer
                 
                 break;
             case GAMER_POINTS:
-                if (cost <= playerBank.gamerPoints)
+                GameTeam gameTeam = gameInstance.getPlayerTeam(player);
+                
+                if (cost <= gameTeam.gamerPoints)
                 {
-                    playerBank.gamerPoints -= cost;
+                    gameTeam.gamerPoints -= cost;
                     return true;
                 }
                 hasEnough = false;

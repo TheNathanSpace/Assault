@@ -71,26 +71,29 @@ public class Coordinate
                 return;
             }
             
-            try
+            if (matchedPattern.group(4) != null)
             {
-                String yaw = matchedPattern.group(4);
-                this.yaw = Double.parseDouble(yaw);
-            }
-            catch (IllegalStateException | IndexOutOfBoundsException | NumberFormatException exception)
-            {
-                exception.printStackTrace();
-                return;
-            }
-            
-            try
-            {
-                String pitch = matchedPattern.group(5);
-                this.pitch = Double.parseDouble(pitch);
-            }
-            catch (IllegalStateException | IndexOutOfBoundsException | NumberFormatException exception)
-            {
-                exception.printStackTrace();
-                return;
+                try
+                {
+                    String yaw = matchedPattern.group(4);
+                    this.yaw = Double.parseDouble(yaw);
+                }
+                catch (IllegalStateException | IndexOutOfBoundsException | NumberFormatException exception)
+                {
+                    exception.printStackTrace();
+                    return;
+                }
+                
+                try
+                {
+                    String pitch = matchedPattern.group(5);
+                    this.pitch = Double.parseDouble(pitch);
+                }
+                catch (IllegalStateException | IndexOutOfBoundsException | NumberFormatException exception)
+                {
+                    exception.printStackTrace();
+                    return;
+                }
             }
         }
     }

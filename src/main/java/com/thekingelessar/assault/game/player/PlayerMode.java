@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.player;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -11,12 +12,12 @@ import java.util.HashMap;
 
 public enum PlayerMode
 {
-    LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false),
-    SPECTATOR(GameMode.SPECTATOR, false, false, false, false, true, true),
-    ATTACKING(GameMode.SURVIVAL, true, true, true, true, false, false),
-    BUILDING(GameMode.SURVIVAL, true, true, true, false, false, false),
-    BETWEEN(GameMode.SURVIVAL, false, false, false, false, true, false),
-    HAM(GameMode.CREATIVE, true, true, false, false, true, false);
+    LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false, true),
+    SPECTATOR(GameMode.SPECTATOR, false, false, false, false, true, true, false),
+    ATTACKING(GameMode.SURVIVAL, true, true, true, true, false, false, true),
+    BUILDING(GameMode.SURVIVAL, true, true, true, false, false, false, true),
+    BETWEEN(GameMode.SURVIVAL, false, false, false, false, true, false, false),
+    HAM(GameMode.CREATIVE, true, true, false, false, true, false, true);
     
     public GameMode gameMode;
     public boolean canBreakBlocks;
@@ -27,7 +28,9 @@ public enum PlayerMode
     public boolean canFly;
     public boolean isInvisible;
     
-    PlayerMode(GameMode gameMode, boolean canBreakBlocks, boolean canPlaceBlocks, boolean canBeDamaged, boolean canDamage, boolean canFly, boolean isInvisible)
+    public boolean canDropItems;
+    
+    PlayerMode(GameMode gameMode, boolean canBreakBlocks, boolean canPlaceBlocks, boolean canBeDamaged, boolean canDamage, boolean canFly, boolean isInvisible, boolean canDropItems)
     {
         this.gameMode = gameMode;
         this.canBreakBlocks = canBreakBlocks;
@@ -37,6 +40,8 @@ public enum PlayerMode
         
         this.canFly = canFly;
         this.isInvisible = isInvisible;
+        
+        this.canDropItems = canDropItems;
     }
     
     public static PlayerMode setPlayerMode(Player player, PlayerMode playerMode, GameInstance gameInstance)
@@ -53,9 +58,9 @@ public enum PlayerMode
         {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
-    
+        
         gameInstance.playerModes.put(player, playerMode);
-    
+        
         return playerMode;
     }
     
@@ -73,5 +78,23 @@ public enum PlayerMode
         }
         
         return null;
+    }
+    
+    public static PlayerMode getTeamMode(GameTeam gameTeam)
+    {
+        switch (gameTeam.gameInstance.gameStage)
+        {
+            case BUILDING:
+                return PlayerMode.BUILDING;
+            
+            case ATTACKING:
+                return PlayerMode.ATTACKING;
+            
+            case FINISHED:
+                return PlayerMode.HAM;
+            
+            default:
+                return null;
+        }
     }
 }

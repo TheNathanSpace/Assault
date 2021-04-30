@@ -9,16 +9,21 @@ public class RegisterHandlers
     {
         Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new ItemDespawnHandler(), Assault.INSTANCE);
-    
+        
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerAttackVictimHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBlockBreakHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBlockPlaceHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerFoodLevelChange(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerItemDropHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoinServerHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerLeaveServerHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMoveHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerMoveWorldHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerPickupItemHandler(), Assault.INSTANCE);
-    
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerRightClickHandler(), Assault.INSTANCE);
+        
         Bukkit.getServer().getPluginManager().registerEvents(new VanillaWorldHandler(), Assault.INSTANCE);
-    
+        
     }
 }

@@ -7,7 +7,7 @@ import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
-import org.bukkit.Bukkit;
+import com.thekingelessar.assault.game.player.PlayerMode;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.NameTagVisibility;
@@ -15,7 +15,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class GameTeam
 {
@@ -33,6 +32,8 @@ public class GameTeam
     public ShopBuilding shopBuilding;
     public ShopAttack shopAttack;
     public ShopTeamBuffs shopTeamBuffs;
+    
+    public int gamerPoints = 0;
     
     public List<IBuff> buffList = new ArrayList<>();
     
@@ -82,6 +83,8 @@ public class GameTeam
         
         player.setDisplayName(this.color.chatColor + player.getName() + ChatColor.RESET);
         player.setPlayerListName(player.getDisplayName() + ChatColor.RESET);
+        
+        gamePlayer.respawn(PlayerMode.getTeamMode(this));
     }
     
     public void addMembers(List<Player> players)
@@ -92,12 +95,16 @@ public class GameTeam
         }
     }
     
-    public void removeMember(UUID uuid)
+    public void removeMember(Player player)
     {
-        Player member = Bukkit.getPlayer(uuid);
+        members.remove(this.getGamePlayer(player));
+        teamScoreboard.removePlayer(player);
         
-        members.remove(uuid);
-        teamScoreboard.removePlayer(member);
+        if (members.size() == 0)
+        {
+            
+            // todo: alert that last player left but someone might still join
+        }
     }
     
     public List<Player> getPlayers()
@@ -119,7 +126,11 @@ public class GameTeam
     
     public void createAttackShop()
     {
-        this.shopTeamBuffs = new ShopTeamBuffs(this, null);
+        if (this.teamStage.equals(TeamStage.ATTACKING))
+        {
+            this.shopTeamBuffs = new ShopTeamBuffs(this, null);
+        }
+        
         this.shopAttack = new ShopAttack(this.color, null);
     }
     

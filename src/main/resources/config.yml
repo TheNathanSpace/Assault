@@ -1,4 +1,4 @@
-lobby_world: lobby_world_balloon
+lobby_world: lobby_world
 
 # References maps in the maps/ directory.
 # Map files should be in the form map_[name].yml.

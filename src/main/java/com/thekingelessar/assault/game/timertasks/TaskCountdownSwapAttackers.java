@@ -52,7 +52,7 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
             title.clearTitle(player);
         }
         
-        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
+        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2), false);
         
         title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         

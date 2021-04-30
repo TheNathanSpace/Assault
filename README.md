@@ -2,14 +2,14 @@
 
 - Transportation out of base for defenders
 - Emerald spawning
+- Time of day
 
 ## Bugs
 
-- When swapping attacking teams, the attacking/defending teams aren't correct in gameInstance. This impacts the timers
-  among other things.
 - Enemies are able to attack each other during the Building stage.
 - The Saloon map bases aren't self-contained with barrier blocks, allowing people to move between them if they build
   outside the map.
+- Nether stars still not always spawning in the same spot
 
 ## Roadmap
 
@@ -57,6 +57,8 @@
 - Indication if team has the buff
 - Kill sound effects
 - Yaw/pitch values in spawns
+- Teams forfeit countdown when last player leaves
+- Add player to instance while balancing it
 
 ---
 
@@ -70,8 +72,8 @@
 5. The countdown starts
 6. Teams are split, and sent to their defending base in build mode.
 7. Once building time is up, the attackers start.
-8. Once time is up or the objective is reached, the teams switch sides.
-9. Once time is up or the objective is reached, the winner is decided, and everything goes bog wild.
+8. Once time is up, or the objective is reached, the teams switch sides.
+9. Once time is up, or the objective is reached, the winner is decided, and everything goes bog wild.
 
 ---
 

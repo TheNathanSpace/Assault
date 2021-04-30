@@ -10,7 +10,9 @@ import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Coordinate;
+import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -46,6 +48,8 @@ public class GameInstance
     public TaskCountdownGameEnd taskCountdownGameEnd;
     
     public TeamColor attackingTeam;
+    
+    public GameTeam overrideWinners = null;
     
     public int buildingSecondsLeft = 180;
     public int teamsGone = 0;
@@ -85,8 +89,11 @@ public class GameInstance
     
     public void sendPlayersToWorld()
     {
+        this.gameStage = GameStage.PREGAME;
+        
         for (Player player : players)
         {
+            player.getInventory().clear();
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
         }
@@ -158,11 +165,80 @@ public class GameInstance
         return null;
     }
     
+    public PlayerMode getPlayerMode(Player player)
+    {
+        return this.playerModes.get(player);
+    }
+    
+    public void alertLastEnemyLeft(TeamStage remainingTeam)
+    {
+        if (remainingTeam.equals(TeamStage.ATTACKING))
+        {
+            for (Player player : this.getPlayers())
+            {
+                Title title = new Title("Nobody is left on the " + this.getDefendingTeam().color.chatColor + "defending" + ChatColor.RESET + " team!", "Someone may rejoin, so keep going!", 0, 5, 1);
+                title.clearTitle(player);
+                title.send(player);
+                
+                // todo: if this happens in the first round, end it
+            }
+        }
+        else
+        {
+            // lots copied from declareWinners()
+            this.overrideWinners = this.getDefendingTeam();
+            
+            this.finishRound(this.getDefendingTeam());
+            
+            for (Player player : this.getPlayers())
+            {
+                PlayerMode playerMode = PlayerMode.setPlayerMode(player, PlayerMode.HAM, this);
+                
+                String mainTitle = this.getDefendingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " team wins!";
+                Title title = new Title(mainTitle, "All of the " + this.getAttackingTeam().color.chatColor + "attackers" + ChatColor.RESET + " left!", 0, 6, 1);
+                title.clearTitle(player);
+                title.send(player);
+            }
+            
+            long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
+            this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+            this.getAttackingTeam().displaySeconds = Util.round(this.getAttackingTeam().finalAttackingTime, 2);
+            
+            this.updateScoreboards();
+            
+            this.taskCountdownGameEnd = new TaskCountdownGameEnd(240, 20, 20, this);
+            this.taskCountdownGameEnd.runTaskTimer(Assault.INSTANCE, this.taskCountdownGameEnd.startDelay, this.taskCountdownGameEnd.tickDelay);
+        }
+    }
+    
+    public void endPrematurely()
+    {
+        GameTeam remainingTeam = null;
+        GameTeam disconnectedTeam = null;
+        
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.getPlayers().size() > 0)
+            {
+                remainingTeam = gameTeam;
+                continue;
+            }
+            
+            disconnectedTeam = gameTeam;
+        }
+        
+        this.overrideWinners = remainingTeam;
+        
+        String subtitle = "The " + disconnectedTeam.color.chatColor + "enemy team" + ChatColor.RESET + " disconnected!";
+        
+        declareWinners(subtitle);
+    }
+    
     public void startBuildMode()
     {
         createTeams();
         
-        this.gameStage = GameStage.BUILDING_BASE;
+        this.gameStage = GameStage.BUILDING;
         
         for (GameTeam team : teams.values())
         {
@@ -171,7 +247,9 @@ public class GameInstance
             objectiveLocation.add(0, 0.5, 0);
             ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
             
-            this.guidingObjectives.add(this.gameWorld.dropItem(objectiveLocation, objectiveItem));
+            Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+            guidingItem.teleport(objectiveLocation);
+            this.guidingObjectives.add(guidingItem);
             
             for (Player player : team.getPlayers())
             {
@@ -219,7 +297,7 @@ public class GameInstance
         taskTickTimer = new TaskTickTimer(0, 1, this);
         taskTickTimer.runTaskTimer(Assault.INSTANCE, taskTickTimer.startDelay, taskTickTimer.tickDelay);
         
-        this.gameStage = GameStage.ATTACK;
+        this.gameStage = GameStage.ATTACKING;
         
         List<TeamColor> randomList = new ArrayList<>(teams.keySet());
         Collections.shuffle(randomList);
@@ -248,7 +326,7 @@ public class GameInstance
         TeamColor oldDefenders = this.getDefendingTeam().color;
         this.teams.get(this.attackingTeam).teamStage = TeamStage.DEFENDING;
         this.attackingTeam = oldDefenders;
-        this.getDefendingTeam().teamStage = TeamStage.ATTACKING;
+        this.getAttackingTeam().teamStage = TeamStage.ATTACKING;
         
         startRound();
     }
@@ -257,11 +335,6 @@ public class GameInstance
     {
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
-        
-        if (taskAttackTimer == null)
-        {
-            System.out.println("task attack is NULL");
-        }
         
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
@@ -273,7 +346,7 @@ public class GameInstance
                 case DEFENDING:
                     for (Player player : gameTeam.getPlayers())
                     {
-                        Title title = new Title(gameTeam.color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.RESET + " is DEFENDING!", "Defend the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " with your life!");
+                        Title title = new Title(gameTeam.color.chatColor + ChatColor.BOLD.toString() + "You" + ChatColor.RESET + " are DEFENDING!", "Defend the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " with your life!", 0, 4, 1);
                         title.clearTitle(player);
                         title.send(player);
                     }
@@ -281,7 +354,7 @@ public class GameInstance
                 case ATTACKING:
                     for (Player player : gameTeam.getPlayers())
                     {
-                        Title title = new Title(gameTeam.color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.RESET + " is ATTACKING!", "Get to the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " as fast as you can!");
+                        Title title = new Title(gameTeam.color.chatColor + ChatColor.BOLD.toString() + "You" + ChatColor.RESET + " are ATTACKING!", "Get to the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " as fast as you can!", 0, 4, 1);
                         title.clearTitle(player);
                         title.send(player);
                     }
@@ -297,11 +370,12 @@ public class GameInstance
         
         for (GameTeam gameTeam : teams.values())
         {
+            gameTeam.gamerPoints = 0;
+            
             for (Player player : gameTeam.getPlayers())
             {
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 gamePlayer.playerBank.coins = 0;
-                gamePlayer.playerBank.gamerPoints = 0;
                 
                 player.getInventory().clear();
                 gamePlayer.swapReset();
@@ -315,11 +389,78 @@ public class GameInstance
         objectiveLocation.add(0, 0.5, 0);
         ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
         
-        this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+        Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+        objectiveEntity.teleport(objectiveLocation);
+    }
+    
+    public void finishRound(GameTeam fireworkRecipents)
+    {
+        this.taskAttackTimer.stopTimer();
+        
+        List<Player> winners = fireworkRecipents.getPlayers();
+        for (Player winPlayer : winners)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                FireworkUtils.spawnRandomFirework(winPlayer.getLocation(), this.getAttackingTeam().color);
+            }
+        }
+        
+        for (Player currentPlayer : this.getPlayers())
+        {
+            GameTeam theirTeam = this.getPlayerTeam(currentPlayer);
+            GamePlayer gamePlayer = theirTeam.getGamePlayer(currentPlayer);
+            
+            if (gamePlayer.taskCountdownRespawn != null)
+            {
+                gamePlayer.taskCountdownRespawn.finishTimer();
+            }
+            
+            PlayerMode playerMode = PlayerMode.setPlayerMode(currentPlayer, PlayerMode.BETWEEN, this);
+        }
+    }
+    
+    public void declareWinners(String subtitle)
+    {
+        this.gameStage = GameStage.FINISHED;
+        
+        long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
+        this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+        this.getAttackingTeam().displaySeconds = Util.round(this.getAttackingTeam().finalAttackingTime, 2);
+        
+        this.updateScoreboards();
+        
+        if (subtitle == null)
+        {
+            subtitle = "Time: " + ChatColor.LIGHT_PURPLE + Util.secondsToMinutes(Util.round(this.getWinningTeam().finalAttackingTime, 2), false) + ChatColor.WHITE + " seconds";
+        }
+        
+        String mainTitle = this.getWinningTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " team wins!";
+        Title title = new Title(mainTitle, subtitle, 0, 6, 1);
+        
+        for (Player currentPlayer : this.gameWorld.getPlayers())
+        {
+            PlayerMode playerMode = PlayerMode.setPlayerMode(currentPlayer, PlayerMode.HAM, this);
+            title.send(currentPlayer);
+            //     currentPlayer.sendRawMessage("§c§lC§lo§6§ln§lg§e§lr§la§a§lt§lu§9§ll§la§b§lt§li§5§lo§c§ln§ls§6§l! §r§dYour team wins!");
+        }
+        
+        this.taskCountdownGameEnd = new TaskCountdownGameEnd(240, 20, 20, this);
+        this.taskCountdownGameEnd.runTaskTimer(Assault.INSTANCE, this.taskCountdownGameEnd.startDelay, this.taskCountdownGameEnd.tickDelay);
     }
     
     public void endGame()
     {
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            for (Player player : gameTeam.getPlayers())
+            {
+                gameTeam.teamScoreboard.removePlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
+                gamePlayer.scoreboard.delete();
+            }
+        }
+        
         WorldManager.closeWorld(this.gameWorld);
         List<GameInstance> gameInstances = Assault.gameInstances;
         for (int i = 0; i < gameInstances.size(); i++)
@@ -372,6 +513,11 @@ public class GameInstance
     
     public GameTeam getWinningTeam()
     {
+        if (this.overrideWinners != null)
+        {
+            return overrideWinners;
+        }
+        
         double lowestTime = Integer.MAX_VALUE;
         GameTeam lowestTeam = null;
         
@@ -384,7 +530,7 @@ public class GameInstance
             }
         }
         
-        return null;
+        return lowestTeam;
     }
     
     public GameTeam getAttackingTeam()
@@ -402,6 +548,45 @@ public class GameInstance
             }
         }
         return null;
+    }
+    
+    public void removePlayer(Player player)
+    {
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.getPlayers().contains(player))
+            {
+                gameTeam.removeMember(player);
+            }
+        }
+    }
+    
+    public void addPlayer(Player player)
+    {
+        if (this.gameStage.equals(GameStage.PREGAME))
+        {
+            player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
+            PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
+        }
+        
+        GameTeam smallestTeam = null;
+        int smallestNumber = Integer.MAX_VALUE;
+        
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.getPlayers().size() < smallestNumber)
+            {
+                smallestNumber = gameTeam.getPlayers().size();
+                smallestTeam = gameTeam;
+            }
+            else if (gameTeam.getPlayers().size() == smallestNumber)
+            {
+                gameTeam.addMember(player);
+                return;
+            }
+        }
+        
+        smallestTeam.addMember(player);
     }
     
     public static GameInstance getPlayerGameInstance(Player player)

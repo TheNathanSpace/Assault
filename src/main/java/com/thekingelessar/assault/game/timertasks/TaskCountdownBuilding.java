@@ -46,7 +46,7 @@ public class TaskCountdownBuilding extends BukkitRunnable
             return;
         }
         
-        if (ticksLeft < 61)
+        if (ticksLeft < 101)
         {
             List<Player> players = gameInstance.getPlayers();
             for (Player player : players)
@@ -72,15 +72,9 @@ public class TaskCountdownBuilding extends BukkitRunnable
     public void finishTimer()
     {
         this.gameInstance.taskCountdownBuilding = null;
-        this.gameInstance.gameStage = GameStage.ATTACK;
+        this.gameInstance.gameStage = GameStage.ATTACKING;
         
         this.gameInstance.startAttackMode();
-    
-        List<Player> players = gameInstance.getPlayers();
-        for (Player player : players)
-        {
-            title.clearTitle(player);
-        }
     
         this.cancel();
     }

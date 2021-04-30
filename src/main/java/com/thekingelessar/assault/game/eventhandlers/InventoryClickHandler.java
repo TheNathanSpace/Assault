@@ -7,7 +7,9 @@ import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
