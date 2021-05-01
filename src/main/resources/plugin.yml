@@ -2,6 +2,7 @@ name: ${project.name}
 main: com.thekingelessar.assault.Assault
 version: ${project.version}
 author: TheKingElessar
+softdepend: [HolographicDisplays]
 commands:
   assault:
     description: Utility commands.

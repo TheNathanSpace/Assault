@@ -8,15 +8,23 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 public class PlayerBlockPlaceHandler implements Listener
 {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent blockPlaceEvent)
     {
+        if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() > 88 || blockPlaceEvent.getBlockPlaced().getLocation().getZ() < 2)
+        {
+            blockPlaceEvent.setCancelled(true);
+        }
+        
         Player player = blockPlaceEvent.getPlayer();
         
         PlayerMode playerMode = PlayerMode.getPlayerMode(player);
@@ -39,21 +47,23 @@ public class PlayerBlockPlaceHandler implements Listener
             
             gameInstance.placedBlocks.add(placedCoordinate);
             
-//            blockPlaceEvent.setCancelled(true);
-//
-//            for (Material block : gameInstance.gameMap.placeableBlocks)
-//            {
-//                if (block.equals(blockPlaceEvent.getBlock().getType()))
-//                {
-//                    blockPlaceEvent.setCancelled(false);
-//                }
-//            }
-            
             if (blockPlaceEvent.getBlock().getType().equals(Material.TNT))
             {
-                Block placedBlock = blockPlaceEvent.getBlock();
-                Location location = new Location(placedBlock.getWorld(), placedBlock.getX() - .5, placedBlock.getY() - .5, placedBlock.getZ() - .5);
-                player.getWorld().spawnEntity(location, EntityType.PRIMED_TNT);
+                Block placedBlock = blockPlaceEvent.getBlockPlaced();
+                Location location = new Location(placedBlock.getWorld(), placedBlock.getX() + .5, placedBlock.getY() + .1, placedBlock.getZ() + .5);
+                
+                TNTPrimed tntPrimed = (TNTPrimed) player.getWorld().spawnEntity(location, EntityType.PRIMED_TNT);
+                Vector vector = tntPrimed.getVelocity();
+                vector.setX(0);
+                vector.setY(.25);
+                vector.setZ(0);
+                tntPrimed.setVelocity(vector);
+                
+                blockPlaceEvent.setCancelled(true);
+                
+                ItemStack tntItem = blockPlaceEvent.getItemInHand();
+                tntItem.setAmount(tntItem.getAmount() - 1);
+                player.getInventory().setItemInHand(tntItem);
             }
         }
     }

@@ -5,6 +5,9 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.util.Util;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,6 +43,31 @@ public class PlayerAttackVictimHandler implements Listener
                     entityAttackEvent.setCancelled(true);
                 }
                 
+                GameInstance gameInstance = GameInstance.getPlayerGameInstance(attacker);
+                if (gameInstance != null)
+                {
+                    Location location = victim.getLocation().clone().subtract(0, 1, 0);
+                    if (location.getBlock().getType().equals(Material.DIAMOND_BLOCK))
+                    {
+                        entityAttackEvent.setCancelled(true);
+                        return;
+                    }
+                    
+                    GameTeam gameTeam = gameInstance.getPlayerTeam(victim);
+                    
+                    if (gameTeam != null)
+                    {
+                        if (Util.isOnCarpet(victim))
+                        {
+                            if (Util.getCarpetColor(victim).contains(gameTeam.color))
+                            {
+                                entityAttackEvent.setCancelled(true);
+                                return;
+                            }
+                        }
+                    }
+                }
+                
                 PlayerMode victimMode = PlayerMode.getPlayerMode(victim);
                 
                 if (victimMode != null)
@@ -53,7 +81,6 @@ public class PlayerAttackVictimHandler implements Listener
                 
                 if (victim.getHealth() - entityAttackEvent.getDamage() < 1)
                 {
-                    GameInstance gameInstance = GameInstance.getPlayerGameInstance(attacker);
                     if (gameInstance != null)
                     {
                         

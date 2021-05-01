@@ -1,5 +1,8 @@
 package com.thekingelessar.assault.game;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.player.GamePlayer;
@@ -19,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -47,6 +51,10 @@ public class GameInstance
     public TaskCountdownSwapAttackers taskCountdownSwapAttackers;
     public TaskCountdownGameEnd taskCountdownGameEnd;
     
+    public TaskEmeraldSpawnTimer emeraldSpawnTimer;
+    public Hologram emeraldSpawnHologram;
+    public TextLine line2;
+    
     public TeamColor attackingTeam;
     
     public GameTeam overrideWinners = null;
@@ -58,7 +66,8 @@ public class GameInstance
     
     public List<Coordinate> placedBlocks = new ArrayList<>();
     
-    public List<Item> guidingObjectives = new ArrayList<>();
+    public HashMap<GameTeam, Item> guidingObjectives = new HashMap<>();
+    public HashMap<GameTeam, Item> currentObjective = new HashMap<>();
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
@@ -73,7 +82,7 @@ public class GameInstance
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         teamScoreboard = manager.getNewScoreboard();
         
-        this.players = players;
+        this.players = new ArrayList<>(players);
         this.spectators = spectators;
     }
     
@@ -141,22 +150,28 @@ public class GameInstance
             teamLists.add(players);
         }
         
-        for (java.util.Map.Entry<TeamColor, GameTeam> entry : teams.entrySet())
+        for (GameTeam gameTeam : teams.values())
         {
-            entry.getValue().addMembers(teamLists.remove(0));
+            gameTeam.addMembers(teamLists.remove(0));
+        }
+        
+        for (Player player : this.getPlayers())
+        {
+            GamePlayer gamePlayer = this.getPlayerTeam(player).getGamePlayer(player);
+            gamePlayer.swapReset();
         }
     }
     
     public GameTeam getPlayerTeam(Player player)
     {
-        for (java.util.Map.Entry<TeamColor, GameTeam> team : teams.entrySet())
+        for (GameTeam gameTeam : teams.values())
         {
             
-            for (Player teamPlayer : team.getValue().getPlayers())
+            for (Player teamPlayer : gameTeam.getPlayers())
             {
                 if (teamPlayer.equals(player))
                 {
-                    return team.getValue();
+                    return gameTeam;
                 }
             }
             
@@ -236,9 +251,9 @@ public class GameInstance
     
     public void startBuildMode()
     {
-        createTeams();
-        
         this.gameStage = GameStage.BUILDING;
+        
+        createTeams();
         
         for (GameTeam team : teams.values())
         {
@@ -248,8 +263,15 @@ public class GameInstance
             ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
             
             Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+            
+            Vector velocity = guidingItem.getVelocity();
+            velocity.setX(0);
+            velocity.setY(0);
+            velocity.setZ(0);
+            guidingItem.setVelocity(velocity);
+            
             guidingItem.teleport(objectiveLocation);
-            this.guidingObjectives.add(guidingItem);
+            this.guidingObjectives.put(team, guidingItem);
             
             for (Player player : team.getPlayers())
             {
@@ -289,7 +311,7 @@ public class GameInstance
     
     public void startAttackMode()
     {
-        for (Item item : this.guidingObjectives)
+        for (Item item : this.guidingObjectives.values())
         {
             item.remove();
         }
@@ -338,6 +360,19 @@ public class GameInstance
         
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
+        
+        emeraldSpawnTimer = new TaskEmeraldSpawnTimer(0, 0, 1, this, 20);
+        emeraldSpawnTimer.runTaskTimer(Assault.INSTANCE, emeraldSpawnTimer.startDelay, emeraldSpawnTimer.tickDelay);
+        
+        if (Assault.useHolographicDisplays)
+        {
+            Location hologramLocation = this.getDefendingTeam().mapBase.emeraldSpawns.get(0).toLocation(this.gameWorld);
+            hologramLocation.setY(hologramLocation.getY() + 3.5);
+            
+            emeraldSpawnHologram = HologramsAPI.createHologram(Assault.INSTANCE, hologramLocation);
+            TextLine line1 = emeraldSpawnHologram.appendTextLine("§a§lEmerald Spawn");
+            line2 = emeraldSpawnHologram.appendTextLine("§rSpawning in §d%s§r seconds!");
+        }
         
         for (GameTeam gameTeam : teams.values())
         {
@@ -390,12 +425,22 @@ public class GameInstance
         ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
         
         Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+        
+        Vector velocity = objectiveEntity.getVelocity();
+        velocity.setX(0);
+        velocity.setY(0);
+        velocity.setZ(0);
+        objectiveEntity.setVelocity(velocity);
+        
         objectiveEntity.teleport(objectiveLocation);
+        
+        this.currentObjective.put(getDefendingTeam(), objectiveEntity);
     }
     
     public void finishRound(GameTeam fireworkRecipents)
     {
         this.taskAttackTimer.stopTimer();
+        this.emeraldSpawnTimer.stopTimer();
         
         List<Player> winners = fireworkRecipents.getPlayers();
         for (Player winPlayer : winners)

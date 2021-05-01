@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,23 +36,37 @@ public class GamePlayer
         this.gameInstance = gameInstance;
         this.playerBank = new PlayerBank(0);
         this.scoreboard = new FastBoard(player);
-        
-        spawnArmor.add(new ItemStack(Material.LEATHER_BOOTS));
-        spawnArmor.add(new ItemStack(Material.LEATHER_LEGGINGS));
-        spawnArmor.add(new ItemStack(Material.LEATHER_CHESTPLATE));
-        spawnArmor.add(new ItemStack(Material.LEATHER_HELMET));
-        spawnItems.add(new ItemStack(Material.WOOD_SWORD));
     }
     
     public void swapReset()
     {
         spawnItems = new ArrayList<>();
         spawnArmor = new ArrayList<>();
+    
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+        LeatherArmorMeta bootsMeta = (LeatherArmorMeta) boots.getItemMeta();
+        bootsMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
+        boots.setItemMeta(bootsMeta);
+        spawnArmor.add(boots);
+    
+        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+        LeatherArmorMeta leggingsMeta = (LeatherArmorMeta) leggings.getItemMeta();
+        leggingsMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
+        leggings.setItemMeta(leggingsMeta);
+        spawnArmor.add(leggings);
+    
+        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta chestplateMeta = (LeatherArmorMeta) chestplate.getItemMeta();
+        chestplateMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
+        chestplate.setItemMeta(chestplateMeta);
+        spawnArmor.add(chestplate);
+    
+        ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+        LeatherArmorMeta helmetMeta = (LeatherArmorMeta) helmet.getItemMeta();
+        helmetMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
+        helmet.setItemMeta(helmetMeta);
+        spawnArmor.add(helmet);
         
-        spawnArmor.add(new ItemStack(Material.LEATHER_BOOTS));
-        spawnArmor.add(new ItemStack(Material.LEATHER_LEGGINGS));
-        spawnArmor.add(new ItemStack(Material.LEATHER_CHESTPLATE));
-        spawnArmor.add(new ItemStack(Material.LEATHER_HELMET));
         spawnItems.add(new ItemStack(Material.WOOD_SWORD));
     }
     
@@ -79,7 +94,10 @@ public class GamePlayer
         
         for (ItemStack itemStack : spawnItems)
         {
-            player.getInventory().addItem(itemStack);
+            if (!player.getInventory().contains(itemStack))
+            {
+                player.getInventory().addItem(itemStack);
+            }
         }
     }
     
@@ -108,7 +126,7 @@ public class GamePlayer
         lines.add("");
         
         lines.add(ChatColor.GOLD.toString() + ChatColor.BOLD + "Coins" + ChatColor.RESET + ": " + playerBank.coins);
-        lines.add(ChatColor.AQUA.toString() + ChatColor.BOLD + "Epic gamer points" + ChatColor.RESET + ": " + gameInstance.getPlayerTeam(player).gamerPoints);
+        lines.add(ChatColor.AQUA.toString() + ChatColor.BOLD + "Team Gamer Points" + ChatColor.RESET + ": " + gameInstance.getPlayerTeam(player).gamerPoints);
         
         lines.add("");
         
@@ -148,25 +166,34 @@ public class GamePlayer
                 int spentEmeralds = 0;
                 if (emeraldCount >= cost)
                 {
-                    for (ItemStack itemStack : inventoryContents)
+                    for (int i = 0; i < inventoryContents.length; i++)
                     {
+                        ItemStack itemStack = inventoryContents[i];
+                        if (itemStack == null)
+                        {
+                            continue;
+                        }
+                        
                         int remainingCost = cost - spentEmeralds;
                         if (itemStack.getType().equals(Material.EMERALD))
                         {
                             if (itemStack.getAmount() == remainingCost)
                             {
                                 itemStack.setAmount(0);
+                                player.getInventory().setItem(i, itemStack);
                                 return true;
                             }
                             else if (itemStack.getAmount() > remainingCost)
                             {
                                 itemStack.setAmount(itemStack.getAmount() - (remainingCost));
+                                player.getInventory().setItem(i, itemStack);
                                 return true;
                             }
                             else if (itemStack.getAmount() < remainingCost)
                             {
                                 spentEmeralds += itemStack.getAmount();
                                 itemStack.setAmount(0);
+                                player.getInventory().setItem(i, itemStack);
                             }
                         }
                     }

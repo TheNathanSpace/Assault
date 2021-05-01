@@ -1,8 +1,12 @@
 package com.thekingelessar.assault.util;
 
+import com.thekingelessar.assault.game.team.TeamColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,5 +148,31 @@ public class Util
     {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
+    }
+    
+    public static boolean isOnCarpet(Player player)
+    {
+        Block block = player.getLocation().getBlock();
+        return block.getType().equals(Material.CARPET);
+    }
+    
+    public static boolean isOnCarpet(Location location)
+    {
+        Block block = location.getBlock();
+        return block.getType().equals(Material.CARPET);
+    }
+    
+    public static List<TeamColor> getCarpetColor(Player player)
+    {
+        Block block = player.getLocation().getBlock();
+        MaterialData materialData = block.getState().getData();
+        return TeamColor.findByDataValue(materialData.getData());
+    }
+    
+    public static List<TeamColor> getCarpetColor(Location location)
+    {
+        Block block = location.getBlock();
+        MaterialData materialData = block.getState().getData();
+        return TeamColor.findByDataValue(materialData.getData());
     }
 }

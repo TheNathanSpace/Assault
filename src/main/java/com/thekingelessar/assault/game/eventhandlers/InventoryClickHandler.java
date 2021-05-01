@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.ShopItem;
 import com.thekingelessar.assault.game.inventory.TeamBuffItem;
@@ -7,7 +8,6 @@ import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.player.GamePlayer;
-import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.DyeColor;
@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,7 +32,30 @@ public class InventoryClickHandler implements Listener
         Player player = (Player) inventoryClickEvent.getWhoClicked();
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         
-        if (gameInstance == null) return;
+        if (gameInstance == null)
+        {
+            if (player.getWorld().equals(Assault.lobbyWorld))
+            {
+                ItemStack itemStack = inventoryClickEvent.getCurrentItem();
+                
+                if (itemStack != null)
+                {
+                    if (itemStack.equals(LobbyUtil.joinGameStar))
+                    {
+                        LobbyUtil.joinQueue(player);
+                    }
+                    
+                    if (itemStack.getType().equals(Material.BARRIER))
+                    {
+                        LobbyUtil.leaveQueue(player);
+                    }
+                }
+                
+                inventoryClickEvent.setCancelled(true);
+            }
+            
+            return;
+        }
         
         GamePlayer gamePlayer = gameInstance.getPlayerTeam(player).getGamePlayer(player);
         

@@ -20,12 +20,13 @@ import java.util.List;
 public class Assault extends JavaPlugin
 {
     static public Assault INSTANCE;
+    static public boolean useHolographicDisplays;
     
     static public FileConfiguration mainConfig = null;
     static public World lobbyWorld;
     static public Location lobbySpawn;
     
-    static public String assaultPrefix = "§5§l[§dAssault§5] " + ChatColor.RESET;
+    static public String assaultPrefix = "§5§l[§d§lAssault§5§l] " + ChatColor.RESET;
     
     static public HashMap<String, Map> maps = new HashMap<>();
     
@@ -37,6 +38,8 @@ public class Assault extends JavaPlugin
     public void onEnable()
     {
         INSTANCE = this;
+        
+        useHolographicDisplays = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
         
         this.saveDefaultConfig();
         mainConfig = this.getConfig();

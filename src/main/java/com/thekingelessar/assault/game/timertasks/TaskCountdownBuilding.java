@@ -2,12 +2,17 @@ package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
+import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.Map;
 
 public class TaskCountdownBuilding extends BukkitRunnable
 {
@@ -19,6 +24,8 @@ public class TaskCountdownBuilding extends BukkitRunnable
     public int ticksLeft;
     
     public GameInstance gameInstance;
+    
+    public boolean doneFirst = false;
     
     private Title title = new Title();
     
@@ -40,6 +47,25 @@ public class TaskCountdownBuilding extends BukkitRunnable
     
     public void advanceTimer()
     {
+        if (!doneFirst)
+        {
+            for (Map.Entry<GameTeam, Item> entry : gameInstance.guidingObjectives.entrySet())
+            {
+                
+                Location objectiveLocation = entry.getKey().mapBase.objective.toLocation(gameInstance.gameWorld);
+                objectiveLocation.add(0, 0.5, 0);
+                
+                Vector velocity = entry.getValue().getVelocity();
+                velocity.setX(0);
+                velocity.setY(0);
+                velocity.setZ(0);
+                
+                entry.getValue().teleport(objectiveLocation);
+            }
+            
+            doneFirst = true;
+        }
+        
         if (ticksLeft < 20)
         {
             finishTimer();
@@ -75,7 +101,7 @@ public class TaskCountdownBuilding extends BukkitRunnable
         this.gameInstance.gameStage = GameStage.ATTACKING;
         
         this.gameInstance.startAttackMode();
-    
+        
         this.cancel();
     }
 }

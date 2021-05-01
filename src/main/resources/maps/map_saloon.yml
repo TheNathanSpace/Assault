@@ -12,16 +12,16 @@ void_level: 0
 bases:
   - RED:
       defender_spawn: -27.5 111. 83.5 -180. 0.
-      objective: -21.5 111.5 73.5
+      objective: -21.5 111.5 74.5
       attacker_spawn: -20. 106. 10. 0. 0.
       emerald_spawns:
-        - -16.5 106. 58.5
+        - -16.5 106.5 58.5
   - BLUE:
       defender_spawn: 29. 111. 83.5 -180. 0.
-      objective: 35.5 111.5 73.5
+      objective: 35.5 111.5 74.5
       attacker_spawn: 36. 106. 10. 0. 0.
       emerald_spawns:
-        - 40.5 106. 58.5
+        - 40.5 106.5 58.5
 
 # https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
 placeable_blocks:

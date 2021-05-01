@@ -82,6 +82,7 @@ public class GameTeam
         teamScoreboard.addPlayer(player);
         
         player.setDisplayName(this.color.chatColor + player.getName() + ChatColor.RESET);
+        player.setCustomName(player.getDisplayName() + ChatColor.RESET);
         player.setPlayerListName(player.getDisplayName() + ChatColor.RESET);
         
         gamePlayer.respawn(PlayerMode.getTeamMode(this));

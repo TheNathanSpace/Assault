@@ -1,18 +1,16 @@
 package com.thekingelessar.assault.game.timertasks;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.util.Title;
-import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.Coordinate;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class TaskAttackTimer extends BukkitRunnable
+public class TaskEmeraldSpawnTimer extends BukkitRunnable
 {
     public int startTicks;
     
@@ -20,15 +18,20 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public int tickDelay;
     
+    public int secondsBetweenEmeralds;
+    
+    public int currentTicks = 0;
+    
     public GameInstance gameInstance;
     
-    public boolean doneFirst = false;
+    public Item spawnedItem = null;
+    public boolean modSpawned = false;
     
-    private Title title = new Title();
-    
-    public TaskAttackTimer(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
+    public TaskEmeraldSpawnTimer(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance, int secondsBetweenEmeralds)
     {
         this.startTicks = startTicks;
+        
+        this.secondsBetweenEmeralds = secondsBetweenEmeralds;
         
         this.startDelay = startDelay;
         this.tickDelay = tickDelay;
@@ -43,45 +46,64 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (!doneFirst)
+        
+        if (spawnedItem != null && modSpawned)
         {
-            for (Map.Entry<GameTeam, Item> entry : gameInstance.currentObjective.entrySet())
+            modSpawned = false;
+            Location objectiveLocation = gameInstance.getDefendingTeam().mapBase.emeraldSpawns.get(0).toLocation(gameInstance.gameWorld);
+            
+            Vector velocity = spawnedItem.getVelocity();
+            velocity.setX(0);
+            velocity.setY(0);
+            velocity.setZ(0);
+            
+            spawnedItem.teleport(objectiveLocation);
+        }
+        
+        double remainder = currentTicks % 20;
+        
+        if (Assault.useHolographicDisplays)
+        {
+            if (currentTicks != 0 && remainder == 0)
             {
+                int ticksRemoved = 400;
+                int secondsLeft = currentTicks;
+                while (secondsLeft > ticksRemoved)
+                {
+                    secondsLeft -= ticksRemoved;
+                }
                 
-                Location objectiveLocation = entry.getKey().mapBase.objective.toLocation(gameInstance.gameWorld);
-                objectiveLocation.add(0, 0.5, 0);
+                secondsLeft = 20 - secondsLeft / 20;
                 
-                Vector velocity = entry.getValue().getVelocity();
+                gameInstance.line2.setText(String.format("§rSpawning in §d%s§r seconds!", secondsLeft));
+            }
+        }
+        
+        if (currentTicks != 0 && remainder == 0 && (currentTicks / 20) % secondsBetweenEmeralds == 0)
+        {
+            for (Coordinate coordinate : gameInstance.getDefendingTeam().mapBase.emeraldSpawns)
+            {
+                Location location = coordinate.toLocation(gameInstance.gameWorld);
+                this.spawnedItem = gameInstance.gameWorld.dropItem(location, new ItemStack(Material.EMERALD));
+                modSpawned = true;
+                
+                Vector velocity = spawnedItem.getVelocity();
                 velocity.setX(0);
                 velocity.setY(0);
                 velocity.setZ(0);
+                this.spawnedItem.setVelocity(velocity);
                 
-                entry.getValue().teleport(objectiveLocation);
+                spawnedItem.teleport(location);
             }
-            
-            doneFirst = true;
         }
         
-        double attackingTime = gameInstance.getAttackingTeam().displaySeconds;
-        attackingTime = attackingTime + 1.;
-        
-        gameInstance.teams.get(gameInstance.attackingTeam).displaySeconds = attackingTime;
-        
-        gameInstance.updateScoreboards();
+        currentTicks += 1;
     }
     
     public void stopTimer()
     {
-        this.gameInstance.currentObjective = new HashMap<>();
-        
-        this.gameInstance.taskAttackTimer = null;
-        this.gameInstance.taskGiveCoins.cancel();
-        this.gameInstance.taskGiveCoins = null;
-        
-        long nanosecondsTaken = System.nanoTime() - this.gameInstance.getAttackingTeam().startAttackingTime;
-        this.gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
-        this.gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
-        
+        this.gameInstance.emeraldSpawnTimer = null;
+        gameInstance.emeraldSpawnHologram.delete();
         this.cancel();
     }
     

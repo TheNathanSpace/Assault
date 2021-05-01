@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.util.FireworkUtils;
 import org.bukkit.Bukkit;
@@ -52,7 +53,7 @@ public class TaskCountdownGameEnd extends BukkitRunnable
         {
             if (!first)
             {
-                player.sendRawMessage("Congratulations! " + gameInstance.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
+                player.sendRawMessage(Assault.assaultPrefix + "Congratulations! " + gameInstance.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
             }
             
             for (int i = 0; i < 5; i++)

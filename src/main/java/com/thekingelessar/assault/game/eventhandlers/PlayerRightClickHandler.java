@@ -29,6 +29,12 @@ public class PlayerRightClickHandler implements Listener
                 LobbyUtil.leaveQueue(player);
                 return;
             }
+            
+            if (itemStack.getType().equals(Material.BOOK))
+            {
+                LobbyUtil.sendRules(player);
+                return;
+            }
         }
     }
 }

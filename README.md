@@ -1,15 +1,13 @@
 ## Todo
 
-- Transportation out of base for defenders
-- Emerald spawning
-- Time of day
+- Fix leaving game in the middle.
+    - Alert attackers when defense gone.
+    - End game when attackers gone.
+    - End game when builders gone?
+    - Nobody left, delete instance
+- Shop NPCs
 
 ## Bugs
-
-- Enemies are able to attack each other during the Building stage.
-- The Saloon map bases aren't self-contained with barrier blocks, allowing people to move between them if they build
-  outside the map.
-- Nether stars still not always spawning in the same spot
 
 ## Roadmap
 
@@ -59,6 +57,9 @@
 - Yaw/pitch values in spawns
 - Teams forfeit countdown when last player leaves
 - Add player to instance while balancing it
+- Book in hotbar takes you to website
+- Emerald spawning
+- Transportation out of base for defenders
 
 ---
 
