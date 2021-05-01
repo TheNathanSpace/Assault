@@ -30,7 +30,7 @@ public class GameTeam
     public MapBase mapBase;
     
     public ShopBuilding shopBuilding;
-    public ShopAttack shopAttack;
+    public ShopAttack shopAttacking;
     public ShopTeamBuffs shopTeamBuffs;
     
     public int gamerPoints = 0;
@@ -103,8 +103,13 @@ public class GameTeam
         
         if (members.size() == 0)
         {
-            
-            // todo: alert that last player left but someone might still join
+            switch (gameInstance.gameStage)
+            {
+                case BUILDING:
+                case ATTACKING:
+                    gameInstance.alertLastEnemyLeft(gameInstance.getOppositeTeam(this));
+                    break;
+            }
         }
     }
     
@@ -132,7 +137,7 @@ public class GameTeam
             this.shopTeamBuffs = new ShopTeamBuffs(this, null);
         }
         
-        this.shopAttack = new ShopAttack(this.color, null);
+        this.shopAttacking = new ShopAttack(this.color, null);
     }
     
     

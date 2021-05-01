@@ -2,12 +2,13 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,26 +47,19 @@ public class PlayerAttackVictimHandler implements Listener
                 GameInstance gameInstance = GameInstance.getPlayerGameInstance(attacker);
                 if (gameInstance != null)
                 {
-                    Location location = victim.getLocation().clone().subtract(0, 1, 0);
-                    if (location.getBlock().getType().equals(Material.DIAMOND_BLOCK))
+                    Location victimLocation = victim.getLocation();
+                    for (GameTeam gameTeam : gameInstance.teams.values())
                     {
-                        entityAttackEvent.setCancelled(true);
-                        return;
-                    }
-                    
-                    GameTeam gameTeam = gameInstance.getPlayerTeam(victim);
-                    
-                    if (gameTeam != null)
-                    {
-                        if (Util.isOnCarpet(victim))
+                        MapBase mapBase = gameTeam.mapBase;
+                        
+                        if (Util.isInside(victimLocation, mapBase.defenderBoundingBox.get(0).toLocation(gameInstance.gameWorld), mapBase.defenderBoundingBox.get(1).toLocation(gameInstance.gameWorld)))
                         {
-                            if (Util.getCarpetColor(victim).contains(gameTeam.color))
-                            {
-                                entityAttackEvent.setCancelled(true);
-                                return;
-                            }
+                            entityAttackEvent.setCancelled(true);
+                            return;
                         }
                     }
+                    
+                    gameInstance.lastDamagedBy.put(victim, attacker);
                 }
                 
                 PlayerMode victimMode = PlayerMode.getPlayerMode(victim);
@@ -92,7 +86,10 @@ public class PlayerAttackVictimHandler implements Listener
                         {
                             GamePlayer gamePlayer = gameTeam.getGamePlayer(attacker);
                             
-                            gameTeam.gamerPoints += 1;
+                            if (gameTeam.teamStage.equals(TeamStage.ATTACKING))
+                            {
+                                gameTeam.gamerPoints += 1;
+                            }
                             
                             GamePlayer victimPlayer = gameInstance.getPlayerTeam(victim).getGamePlayer(victim);
                             gamePlayer.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));

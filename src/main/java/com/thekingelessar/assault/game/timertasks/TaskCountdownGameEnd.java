@@ -1,17 +1,11 @@
 package com.thekingelessar.assault.game.timertasks;
 
-import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.util.FireworkUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
-
-import static com.thekingelessar.assault.Assault.lobbyWorld;
 
 public class TaskCountdownGameEnd extends BukkitRunnable
 {
@@ -22,8 +16,6 @@ public class TaskCountdownGameEnd extends BukkitRunnable
     public int ticksLeft;
     
     public GameInstance gameInstance;
-    
-    public boolean first = false;
     
     public TaskCountdownGameEnd(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
@@ -51,18 +43,11 @@ public class TaskCountdownGameEnd extends BukkitRunnable
         List<Player> players = gameInstance.getWinningTeam().getPlayers();
         for (Player player : players)
         {
-            if (!first)
-            {
-                player.sendRawMessage(Assault.assaultPrefix + "Congratulations! " + gameInstance.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
-            }
-            
             for (int i = 0; i < 5; i++)
             {
                 FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.getWinningTeam().color);
             }
         }
-        
-        first = true;
         
         ticksLeft = ticksLeft - tickDelay;
     }

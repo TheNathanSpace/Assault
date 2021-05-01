@@ -41,6 +41,15 @@
               <shadedPattern>com.thekingelessar.fastboard</shadedPattern>
             </relocation>
           </relocations>
+          <artifactSet>
+            <excludes>
+              <exclude>net.citizensnpcs</exclude>
+              <exclude>junit:junit</exclude>
+              <exclude>org.hamcrest</exclude>
+              <exclude>net.sf.trove4j</exclude>
+              <exclude>ch.ethz.globis.phtree</exclude>
+            </excludes>
+          </artifactSet>
         </configuration>
       </plugin>
     </plugins>
@@ -58,6 +67,10 @@
       <id>codemc-repo</id>
       <url>https://repo.codemc.io/repository/maven-public/</url>
     </repository>
+    <repository>
+      <id>everything</id>
+      <url>http://repo.citizensnpcs.co/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -71,6 +84,12 @@
       <artifactId>holographicdisplays-api</artifactId>
       <version>2.4.0</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.citizensnpcs</groupId>
+      <artifactId>citizens</artifactId>
+      <version>2.0.27-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <properties>

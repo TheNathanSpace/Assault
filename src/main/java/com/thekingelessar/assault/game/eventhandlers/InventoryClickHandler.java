@@ -71,9 +71,9 @@ public class InventoryClickHandler implements Listener
             ShopBuilding shop = playerTeam.shopBuilding;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
-        else if (playerTeam.shopAttack != null && inventoryOpen.equals(playerTeam.shopAttack.inventory))
+        else if (playerTeam.shopAttacking != null && inventoryOpen.equals(playerTeam.shopAttacking.inventory))
         {
-            ShopAttack shop = playerTeam.shopAttack;
+            ShopAttack shop = playerTeam.shopAttacking;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
         else if (playerTeam.shopTeamBuffs != null && inventoryOpen.equals(playerTeam.shopTeamBuffs.inventory))

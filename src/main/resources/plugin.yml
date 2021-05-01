@@ -3,6 +3,7 @@ main: com.thekingelessar.assault.Assault
 version: ${project.version}
 author: TheKingElessar
 softdepend: [HolographicDisplays]
+depend: [Citizens]
 commands:
   assault:
     description: Utility commands.

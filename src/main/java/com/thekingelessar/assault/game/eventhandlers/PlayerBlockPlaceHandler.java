@@ -1,8 +1,11 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Coordinate;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,6 +26,7 @@ public class PlayerBlockPlaceHandler implements Listener
         if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() > 88 || blockPlaceEvent.getBlockPlaced().getLocation().getZ() < 2)
         {
             blockPlaceEvent.setCancelled(true);
+            return;
         }
         
         Player player = blockPlaceEvent.getPlayer();
@@ -31,7 +35,6 @@ public class PlayerBlockPlaceHandler implements Listener
         
         if (playerMode != null)
         {
-            
             if (!playerMode.canPlaceBlocks)
             {
                 blockPlaceEvent.setCancelled(true);
@@ -43,6 +46,17 @@ public class PlayerBlockPlaceHandler implements Listener
         if (gameInstance != null)
         {
             Location placedLocation = blockPlaceEvent.getBlock().getLocation();
+            
+            for (GameTeam gameTeam : gameInstance.teams.values())
+            {
+                MapBase mapBase = gameTeam.mapBase;
+                if (Util.isInside(placedLocation, mapBase.defenderBoundingBox.get(0).toLocation(gameInstance.gameWorld), mapBase.defenderBoundingBox.get(1).toLocation(gameInstance.gameWorld)))
+                {
+                    blockPlaceEvent.setCancelled(true);
+                    return;
+                }
+            }
+            
             Coordinate placedCoordinate = new Coordinate(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());
             
             gameInstance.placedBlocks.add(placedCoordinate);

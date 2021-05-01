@@ -1,12 +1,5 @@
 ## Todo
 
-- Fix leaving game in the middle.
-    - Alert attackers when defense gone.
-    - End game when attackers gone.
-    - End game when builders gone?
-    - Nobody left, delete instance
-- Shop NPCs
-
 ## Bugs
 
 ## Roadmap
@@ -55,11 +48,13 @@
 - Indication if team has the buff
 - Kill sound effects
 - Yaw/pitch values in spawns
-- Teams forfeit countdown when last player leaves
+- Forfeit when last player leaves
 - Add player to instance while balancing it
 - Book in hotbar takes you to website
 - Emerald spawning
 - Transportation out of base for defenders
+- Stop block placing in spawn area
+- Shop NPCs
 
 ---
 

@@ -74,7 +74,7 @@ public class CommandAssault implements CommandExecutor
                                 inventoryView = player.openInventory(team.shopBuilding.inventory);
                                 break;
                             case "attack":
-                                inventoryView = player.openInventory(team.shopAttack.inventory);
+                                inventoryView = player.openInventory(team.shopAttacking.inventory);
                                 break;
                             case "buff":
                                 inventoryView = player.openInventory(team.shopTeamBuffs.inventory);

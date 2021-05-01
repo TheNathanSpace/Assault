@@ -97,7 +97,7 @@ public class LobbyUtil
     
     public static void sendRules(Player player)
     {
-        String message = Assault.assaultPrefix + ChatColor.BLUE + ChatColor.UNDERLINE + "Click here to open the rules!";
+        String message = Assault.assaultPrefix + ChatColor.BLUE + ChatColor.UNDERLINE + "Click here to open the tutorial!";
         String url = "https://thenathan.space/assault/";
         LobbyUtil.sendMessage(player, message, url);
         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
@@ -108,7 +108,7 @@ public class LobbyUtil
         String command = "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the rules!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://thenathan.space/assault/\"}}]";
         Bukkit.getServer().dispatchCommand(
                 Bukkit.getConsoleSender(),
-                "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the rules!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://thenathan.space/assault/\"}}]");
+                command);
     }
     
     private static ItemStack initStar()
@@ -186,6 +186,7 @@ public class LobbyUtil
     public static void joinLobby(Player player)
     {
         player.teleport(Assault.lobbySpawn);
+        player.setDisplayName(player.getName());
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});

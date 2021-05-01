@@ -57,8 +57,15 @@ public class Map
             HashMap<String, Object> baseSubMap = mappedBase.get(baseTeamString);
             Coordinate defenderSpawn = new Coordinate((String) baseSubMap.get("defender_spawn"));
             Coordinate attackerSpawn = new Coordinate((String) baseSubMap.get("attacker_spawn"));
-            List<Object> emeraldSpawnsObject = (List<Object>) baseSubMap.get("emerald_spawns");
             
+            List<Object> defenderBoundingBoxObject = (List<Object>) baseSubMap.get("defender_bounding_box");
+            List<Coordinate> defenderBoundingBox = new ArrayList<>();
+            for (Object boundingBox : defenderBoundingBoxObject)
+            {
+                defenderBoundingBox.add(new Coordinate((String) boundingBox));
+            }
+            
+            List<Object> emeraldSpawnsObject = (List<Object>) baseSubMap.get("emerald_spawns");
             List<Coordinate> emeraldSpawns = new ArrayList<>();
             for (Object spawn : emeraldSpawnsObject)
             {
@@ -68,7 +75,13 @@ public class Map
             
             Coordinate objective = new Coordinate((String) baseSubMap.get("objective"));
             
-            MapBase mapBase = new MapBase(teamColor, defenderSpawn, attackerSpawn, emeraldSpawns, objective);
+            Coordinate buffShop = new Coordinate((String) baseSubMap.get("attacker_buff_shop"));
+            
+            List<Coordinate> shops = new ArrayList<>();
+            shops.add(new Coordinate((String) baseSubMap.get("defender_shop")));
+            shops.add(new Coordinate((String) baseSubMap.get("attacker_shop")));
+            
+            MapBase mapBase = new MapBase(teamColor, defenderSpawn, defenderBoundingBox, attackerSpawn, emeraldSpawns, objective, shops, buffShop);
             bases.add(mapBase);
         }
         

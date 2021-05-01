@@ -4,7 +4,9 @@ import com.thekingelessar.assault.commands.CommandAssault;
 import com.thekingelessar.assault.config.MapConfig;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
+import com.thekingelessar.assault.game.map.BuffShopTrait;
 import com.thekingelessar.assault.game.map.Map;
+import com.thekingelessar.assault.game.map.ItemShopTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -52,7 +54,10 @@ public class Assault extends JavaPlugin
         this.getCommand("assault").setExecutor(new CommandAssault());
         
         RegisterHandlers.registerHandlers();
-        
+    
+        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));
+        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(BuffShopTrait.class).withName("buffshoptrait"));
+    
         super.onEnable();
     }
     

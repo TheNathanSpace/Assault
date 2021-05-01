@@ -175,4 +175,21 @@ public class Util
         MaterialData materialData = block.getState().getData();
         return TeamColor.findByDataValue(materialData.getData());
     }
+    
+    /*
+     * From https://bukkit.org/threads/how-to-check-if-a-player-is-between-two-areas.78028/#post-1140505
+     * Check if Location testedLocation is within the cuboid with corners l1 and l2.
+     * l1 and l2 can be any two (opposite) corners of the cuboid.
+     */
+    public static boolean isInside(Location testedLocation, Location l1, Location l2)
+    {
+        int x1 = Math.min(l1.getBlockX(), l2.getBlockX());
+        int y1 = Math.min(l1.getBlockY(), l2.getBlockY());
+        int z1 = Math.min(l1.getBlockZ(), l2.getBlockZ());
+        int x2 = Math.max(l1.getBlockX(), l2.getBlockX());
+        int y2 = Math.max(l1.getBlockY(), l2.getBlockY());
+        int z2 = Math.max(l1.getBlockZ(), l2.getBlockZ());
+    
+        return testedLocation.getX() >= x1 && testedLocation.getX() <= x2 && testedLocation.getY() >= y1 && testedLocation.getY() <= y2 && testedLocation.getZ() >= z1 && testedLocation.getZ() <= z2;
+    }
 }

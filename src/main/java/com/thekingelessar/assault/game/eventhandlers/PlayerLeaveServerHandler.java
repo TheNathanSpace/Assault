@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.GameStage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,14 @@ public class PlayerLeaveServerHandler implements Listener
         
         if (gameInstance != null)
         {
-            gameInstance.removePlayer(player);
+            if (gameInstance.gameStage.equals(GameStage.PREGAME))
+            {
+                gameInstance.removePlayerPreGame(player);
+            }
+            else
+            {
+                gameInstance.removePlayer(player);
+            }
         }
     }
 }
