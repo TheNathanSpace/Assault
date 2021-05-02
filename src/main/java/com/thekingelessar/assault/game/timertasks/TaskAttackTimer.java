@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Title;
@@ -43,6 +44,13 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
+        
+        if (gameInstance.getAttackingTeam().displaySeconds == 465)
+        {
+            gameInstance.taskCountdownAttackEnd = new TaskCountdownAttackEnd(280, 0, 20, gameInstance);
+            gameInstance.taskCountdownAttackEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownAttackEnd.startDelay, gameInstance.taskCountdownAttackEnd.tickDelay);
+        }
+        
         if (!doneFirst)
         {
             for (Map.Entry<GameTeam, Item> entry : gameInstance.currentObjective.entrySet())

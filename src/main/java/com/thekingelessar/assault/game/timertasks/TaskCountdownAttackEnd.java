@@ -1,19 +1,18 @@
 package com.thekingelessar.assault.game.timertasks;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
-import com.thekingelessar.assault.util.Util;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class TaskCountdownSwapAttackers extends BukkitRunnable
+public class TaskCountdownAttackEnd extends BukkitRunnable
 {
     public int startTicks;
+    
     public int startDelay;
     
     public int tickDelay;
@@ -23,12 +22,13 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
     
     private Title title = new Title();
     
-    public TaskCountdownSwapAttackers(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
+    public TaskCountdownAttackEnd(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
         this.startTicks = startTicks;
+        this.ticksLeft = startTicks;
+        
         this.startDelay = startDelay;
         this.tickDelay = tickDelay;
-        this.ticksLeft = this.startTicks;
         this.gameInstance = gameInstance;
     }
     
@@ -46,15 +46,13 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
             return;
         }
         
-        List<Player> players = gameInstance.gameWorld.getPlayers();
+        List<Player> players = gameInstance.getPlayers();
         for (Player player : players)
         {
             title.clearTitle(player);
         }
         
-        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2), false);
-    
-        title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
+        title = new Title(" ", ChatColor.WHITE + "This round finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         
         for (Player player : players)
         {
@@ -66,14 +64,22 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
     
     public void finishTimer()
     {
-        List<Player> players = gameInstance.gameWorld.getPlayers();
-        for (Player player : players)
+        this.gameInstance.taskCountdownAttackEnd = null;
+    
+        this.gameInstance.finishRound(gameInstance.getAttackingTeam());
+    
+        if (gameInstance.teamsGone == 0)
         {
-            title.clearTitle(player);
+            gameInstance.updateScoreboards();
+            
+            gameInstance.taskCountdownSwapAttackers = new TaskCountdownSwapAttackers(200, 0, 20, gameInstance);
+            gameInstance.taskCountdownSwapAttackers.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownSwapAttackers.startDelay, gameInstance.taskCountdownSwapAttackers.tickDelay);
+        }
+        else
+        {
+            gameInstance.declareWinners(null);
         }
         
         this.cancel();
-        this.gameInstance.taskCountdownSwapAttackers = null;
-        this.gameInstance.swapAttackingTeams();
     }
 }

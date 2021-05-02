@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
@@ -8,6 +9,7 @@ import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.NameTagVisibility;
@@ -78,13 +80,29 @@ public class GameTeam
     public void addMember(Player player)
     {
         GamePlayer gamePlayer = new GamePlayer(player, gameInstance);
+        
+        if (gameInstance.gameStage.equals(GameStage.BUILDING))
+        {
+            if (gameInstance.buildingCoinsRemaining.containsKey(player))
+            {
+                gamePlayer.playerBank.coins += gameInstance.buildingCoinsRemaining.get(player);
+            }
+            else
+            {
+                gamePlayer.playerBank.coins += 100;
+                gameInstance.buildingCoinsRemaining.put(player, 100);
+            }
+        }
+        
         members.add(gamePlayer);
-        teamScoreboard.addPlayer(player);
+        teamScoreboard.addPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
         
         player.setDisplayName(this.color.chatColor + player.getName() + ChatColor.RESET);
         player.setCustomName(player.getDisplayName() + ChatColor.RESET);
         player.setPlayerListName(player.getDisplayName() + ChatColor.RESET);
         
+        gamePlayer.swapReset();
+        player.getInventory().clear();
         gamePlayer.respawn(PlayerMode.getTeamMode(this));
     }
     

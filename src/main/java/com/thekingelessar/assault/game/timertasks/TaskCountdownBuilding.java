@@ -72,7 +72,7 @@ public class TaskCountdownBuilding extends BukkitRunnable
             return;
         }
         
-        if (ticksLeft < 101)
+        if (ticksLeft < 201)
         {
             List<Player> players = gameInstance.getPlayers();
             for (Player player : players)

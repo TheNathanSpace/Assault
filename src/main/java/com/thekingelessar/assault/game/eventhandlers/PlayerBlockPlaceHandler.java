@@ -4,6 +4,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
@@ -23,13 +24,29 @@ public class PlayerBlockPlaceHandler implements Listener
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent blockPlaceEvent)
     {
-        if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() > 88 || blockPlaceEvent.getBlockPlaced().getLocation().getZ() < 2)
-        {
-            blockPlaceEvent.setCancelled(true);
-            return;
-        }
-        
         Player player = blockPlaceEvent.getPlayer();
+        GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
+        
+        if (gameInstance != null)
+        {
+            
+            if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() > gameInstance.gameMap.maxZ || blockPlaceEvent.getBlockPlaced().getLocation().getZ() < gameInstance.gameMap.minZ)
+            {
+                blockPlaceEvent.setCancelled(true);
+                return;
+            }
+            
+            if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+            {
+                GameTeam gameTeam = gameInstance.getPlayerTeam(player);
+                
+                if (!gameTeam.teamStage.equals(TeamStage.ATTACKING))
+                {
+                    blockPlaceEvent.setCancelled(true);
+                    return;
+                }
+            }
+        }
         
         PlayerMode playerMode = PlayerMode.getPlayerMode(player);
         
@@ -42,7 +59,6 @@ public class PlayerBlockPlaceHandler implements Listener
             }
         }
         
-        GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         if (gameInstance != null)
         {
             Location placedLocation = blockPlaceEvent.getBlock().getLocation();

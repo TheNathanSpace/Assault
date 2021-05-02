@@ -10,6 +10,7 @@ import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +21,35 @@ public class PlayerAttackVictimHandler implements Listener
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent entityAttackEvent)
     {
+        if (entityAttackEvent.getEntity() instanceof Player)
+        {
+            if (entityAttackEvent.getDamager() instanceof Arrow)
+            {
+                Arrow arrow = (Arrow) entityAttackEvent.getDamager();
+                if (arrow.getShooter() instanceof Player)
+                {
+                    Player damagedPlayer = ((Player) entityAttackEvent.getEntity()).getPlayer();
+                    Player shooter = (Player) arrow.getShooter();
+                    
+                    GameInstance gameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
+                    
+                    if (gameInstance != null)
+                    {
+                        GameTeam damagedTeam = gameInstance.getPlayerTeam(damagedPlayer);
+                        GameTeam shooterTeam = gameInstance.getPlayerTeam(shooter);
+                        
+                        if (damagedTeam != null && shooterTeam != null)
+                        {
+                            if (damagedTeam.equals(shooterTeam)) {
+                                entityAttackEvent.setCancelled(true);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         if (entityAttackEvent.getDamager() instanceof Player)
         {
             Player attacker = (Player) entityAttackEvent.getDamager();
@@ -47,7 +77,23 @@ public class PlayerAttackVictimHandler implements Listener
                 GameInstance gameInstance = GameInstance.getPlayerGameInstance(attacker);
                 if (gameInstance != null)
                 {
+                    GameTeam victimTeam = gameInstance.getPlayerTeam(victim);
+                    GameTeam attackerTeam = gameInstance.getPlayerTeam(attacker);
+                    
+                    if (victimTeam.equals(attackerTeam))
+                    {
+                        entityAttackEvent.setCancelled(true);
+                        return;
+                    }
+                    
                     Location victimLocation = victim.getLocation();
+                    
+                    if (attackerTeam.teamStage.equals(TeamStage.DEFENDING) && victim.getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+                    {
+                        entityAttackEvent.setCancelled(true);
+                        return;
+                    }
+                    
                     for (GameTeam gameTeam : gameInstance.teams.values())
                     {
                         MapBase mapBase = gameTeam.mapBase;

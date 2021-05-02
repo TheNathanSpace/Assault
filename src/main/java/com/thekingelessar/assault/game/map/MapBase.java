@@ -7,6 +7,7 @@ import com.thekingelessar.assault.util.Coordinate;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
+import net.citizensnpcs.trait.SkinLayers;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -18,7 +19,7 @@ import java.util.Random;
 
 public class MapBase
 {
-    public static List<String> shopList = Arrays.asList("FrozenFruit", "TheKingElessar", "Willis644", "Mokabu456", "ForgeSmith", "TheAndvark", "pikaguy", "Dirko", "TheWindrunner", "d0bado", "Saanbu789", "AshFire265", "Chadicus_Maximus", "Cyberes");
+    public static List<String> shopList = Arrays.asList("FrozenFruit", "TheKingElessar", "Willis644", "Mokabu456", "ForgeSmith", "TheAndvark", "pikaguy", "Dirko", "TheWindrunner", "d0bado", "Saanbu789", "Chadicus_Maximus", "Cyberes");
     
     public TeamColor teamColor;
     public Coordinate defenderSpawn;
@@ -61,6 +62,10 @@ public class MapBase
             npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
             npc.addTrait(new ItemShopTrait());
             
+            SkinLayers trait = npc.getTrait(SkinLayers.class);
+            trait.hideCape();
+            trait.setVisible(SkinLayers.Layer.CAPE, false);
+            
             npc.spawn(shopLocation);
             npc.getEntity().teleport(shopLocation);
             this.itemShopNPCs.add(npc);
@@ -82,6 +87,10 @@ public class MapBase
             npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, randomName);
             npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
             npc.addTrait(new BuffShopTrait());
+            
+            SkinLayers trait = npc.getTrait(SkinLayers.class);
+            trait.hideCape();
+            trait.setVisible(SkinLayers.Layer.CAPE, false);
             
             npc.spawn(buffShopLocation);
             npc.getEntity().teleport(buffShopLocation);

@@ -27,6 +27,11 @@ public class Map
     public boolean voidEnabled;
     public double voidLevel;
     
+    public double maxZ;
+    public double minZ;
+    
+    public double attackerBaseProtMinZ;
+    
     public List<MapBase> bases = new ArrayList<>();
     
     public List<Material> placeableBlocks = new ArrayList<>();
@@ -44,7 +49,11 @@ public class Map
         
         voidEnabled = config.getBoolean("void_enabled");
         voidLevel = config.getDouble("void_level");
-        
+    
+        maxZ = config.getDouble("max_z");
+        minZ = config.getDouble("min_z");
+        attackerBaseProtMinZ = config.getDouble("attacker_block_prot_min_z");
+    
         List<?> baseList = config.getList("bases");
         
         for (Object base : baseList)

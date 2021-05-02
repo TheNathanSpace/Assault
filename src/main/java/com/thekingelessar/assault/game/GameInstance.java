@@ -16,11 +16,11 @@ import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.Util;
-import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.Vector;
@@ -52,6 +52,8 @@ public class GameInstance
     public TaskCountdownSwapAttackers taskCountdownSwapAttackers;
     public TaskCountdownGameEnd taskCountdownGameEnd;
     
+    public TaskCountdownAttackEnd taskCountdownAttackEnd;
+    
     public TaskEmeraldSpawnTimer emeraldSpawnTimer;
     public Hologram emeraldSpawnHologram;
     public TextLine line2;
@@ -60,7 +62,9 @@ public class GameInstance
     
     public GameTeam overrideWinners = null;
     
+    public HashMap<Player, Integer> buildingCoinsRemaining = new HashMap<>();
     public int buildingSecondsLeft = 180;
+    
     public int teamsGone = 0;
     
     public TaskGiveCoins taskGiveCoins;
@@ -148,10 +152,10 @@ public class GameInstance
             teamLists.add(sublist);
         }
         
-        if (this.players.size() == 1)
-        {
-            teamLists.add(players);
-        }
+        //        if (this.players.size() == 1)
+        //        {
+        //            teamLists.add(players);
+        //        }
         
         for (GameTeam gameTeam : teams.values())
         {
@@ -160,7 +164,7 @@ public class GameInstance
         
         for (Player player : this.getPlayers())
         {
-            GamePlayer gamePlayer = this.getPlayerTeam(player).getGamePlayer(player);
+            GamePlayer gamePlayer = this.getGamePlayer(player);
             gamePlayer.swapReset();
         }
     }
@@ -186,6 +190,11 @@ public class GameInstance
     public PlayerMode getPlayerMode(Player player)
     {
         return this.playerModes.get(player);
+    }
+    
+    public GamePlayer getGamePlayer(Player player)
+    {
+        return this.getPlayerTeam(player).getGamePlayer(player);
     }
     
     public void alertLastEnemyLeft(GameTeam remainingTeam)
@@ -307,9 +316,16 @@ public class GameInstance
         
         createTeams();
         
+        for (Player player : this.getPlayers())
+        {
+            for (PotionEffect effect : player.getActivePotionEffects())
+            {
+                player.removePotionEffect(effect.getType());
+            }
+        }
+        
         for (GameTeam team : teams.values())
         {
-            
             Location objectiveLocation = team.mapBase.objective.toLocation(this.gameWorld);
             objectiveLocation.add(0, 0.5, 0);
             ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
@@ -328,25 +344,18 @@ public class GameInstance
             for (Player player : team.getPlayers())
             {
                 GamePlayer gamePlayer = team.getGamePlayer(player);
-                gamePlayer.playerBank.coins += 100;
                 
-                try
-                {
-                    GameTeam gameTeam = getPlayerTeam(player);
-                    gamePlayer.respawn(PlayerMode.BUILDING);
-                    
-                    Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
-                    title.clearTitle(player);
-                    
-                    title.send(player);
-                    
-                    PlayerMode.setPlayerMode(player, PlayerMode.BUILDING, this);
-                    
-                }
-                catch (Exception exception)
-                {
-                    // Player not valid
-                }
+                buildingCoinsRemaining.put(player, 100);
+                
+                GameTeam gameTeam = getPlayerTeam(player);
+                gamePlayer.respawn(PlayerMode.BUILDING);
+                
+                Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
+                title.clearTitle(player);
+                
+                title.send(player);
+                
+                PlayerMode.setPlayerMode(player, PlayerMode.BUILDING, this);
             }
             
             team.createBuildingShop();
@@ -398,6 +407,14 @@ public class GameInstance
         for (GameTeam gameTeam : teams.values())
         {
             gameTeam.buffList.clear();
+        }
+        
+        for (Player player : this.getPlayers())
+        {
+            for (PotionEffect effect : player.getActivePotionEffects())
+            {
+                player.removePotionEffect(effect.getType());
+            }
         }
         
         TeamColor oldDefenders = this.getDefendingTeam().color;
@@ -508,6 +525,11 @@ public class GameInstance
         
         for (Player currentPlayer : this.getPlayers())
         {
+            for (PotionEffect effect : currentPlayer.getActivePotionEffects())
+            {
+                currentPlayer.removePotionEffect(effect.getType());
+            }
+            
             GameTeam theirTeam = this.getPlayerTeam(currentPlayer);
             GamePlayer gamePlayer = theirTeam.getGamePlayer(currentPlayer);
             
@@ -535,6 +557,7 @@ public class GameInstance
             subtitle = "Time: " + ChatColor.LIGHT_PURPLE + Util.secondsToMinutes(Util.round(this.getWinningTeam().finalAttackingTime, 2), false) + ChatColor.WHITE + " seconds";
         }
         
+        
         String mainTitle = this.getWinningTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " team wins!";
         Title title = new Title(mainTitle, subtitle, 0, 6, 1);
         
@@ -561,8 +584,16 @@ public class GameInstance
     
     public void endGame()
     {
+        
+        if (taskCountdownBuilding != null)
+        {
+            taskCountdownBuilding.cancel();
+        }
+        
         for (GameTeam gameTeam : this.teams.values())
         {
+            gameTeam.buffList.clear();
+            
             for (Player player : gameTeam.getPlayers())
             {
                 gameTeam.teamScoreboard.removePlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
@@ -733,6 +764,8 @@ public class GameInstance
         {
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
+            this.players.add(player);
+            return;
         }
         
         GameTeam smallestTeam = null;
@@ -769,6 +802,19 @@ public class GameInstance
                 return gameInstance;
             }
         }
+        return null;
+    }
+    
+    public static GameInstance getWorldGameInstance(World world)
+    {
+        for (GameInstance gameInstance : Assault.gameInstances)
+        {
+            if (gameInstance.gameWorld.equals(world))
+            {
+                return gameInstance;
+            }
+        }
+        
         return null;
     }
     

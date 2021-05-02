@@ -10,6 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PlayerPickupItemHandler implements Listener
 {
@@ -17,9 +21,26 @@ public class PlayerPickupItemHandler implements Listener
     public void onPlayerPickupItem(PlayerPickupItemEvent playerPickupItemEvent)
     {
         Material pickedUp = playerPickupItemEvent.getItem().getItemStack().getType();
+        Player player = playerPickupItemEvent.getPlayer();
+        
+        List<Material> swordList = Arrays.asList(Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD);
+        if (swordList.contains(pickedUp))
+        {
+            ItemStack[] contents = player.getInventory().getContents();
+            for (int i = 0; i < contents.length; i++)
+            {
+                ItemStack inventoryItem = contents[i];
+                if (inventoryItem != null && inventoryItem.getType().equals(Material.WOOD_SWORD))
+                {
+                    player.getInventory().setItem(i, playerPickupItemEvent.getItem().getItemStack());
+                    playerPickupItemEvent.setCancelled(true);
+                    break;
+                }
+            }
+        }
+        
         if (pickedUp.equals(Material.NETHER_STAR))
         {
-            Player player = playerPickupItemEvent.getPlayer();
             GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
             
             if (gameInstance != null)

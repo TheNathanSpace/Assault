@@ -1,20 +1,36 @@
 ## Todo
 
+- ~~Respawn command~~
+- ~~Team/all chats~~
+- ~~Stop defenders from spawn-camping the attackers~~
+- ~~Fix arrow team-killing~~
+- ~~Move magic location values to map config file~~
+- ~~Make it more user-friendly when you're moving around wood swords and better swords~~
+- End the game if the second time goes past first time? (Forfeit option?)
+- Clean up random barriers around the map
+- Attacker momentum would really stagnate for a while when they couldn't find an easy way into the base, maybe this can
+  be fixed by adding/changing team buffs and by increasing the price of blocks.
+- Better /assault commands
+
 ## Bugs
+
+- ~~Gravel can't be broken when it falls into its location.~~
+- ~~Building phase coin duping~~
+- ~~Shop NPCs have capes~~
+- Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)
+- Name colors aren't updating when new games start.
+- Team buff effects are sometimes persisting in-between rounds(/games?)
+- Cleaner time when it goes to 8 minutes
+- Building mode keep inventory
+- Shops not looking in the right direction (attacker normal shop)
 
 ## Roadmap
 
-- Resource generation/gathering
-    - Emeralds spawn in physical locations near each base
 - Shops
-    - Armor?
-    - Gamer Shop (team buffs)
-        - Potion effects
-        - Movement buffs
-- Lobby/game instance stuff
-    - Moving players in/out of game
-    - Map voting
-    - Joining/leaving game while it's running
+    - Armor
+    - Double jump
+    - Strength?
+- Multiple maps
 - Game modifiers (admin set or voting)
 
 ### Completed

@@ -42,25 +42,19 @@ public class GamePlayer
     {
         spawnItems = new ArrayList<>();
         spawnArmor = new ArrayList<>();
-    
+        
         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
         LeatherArmorMeta bootsMeta = (LeatherArmorMeta) boots.getItemMeta();
         bootsMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
         boots.setItemMeta(bootsMeta);
         spawnArmor.add(boots);
-    
-        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
-        LeatherArmorMeta leggingsMeta = (LeatherArmorMeta) leggings.getItemMeta();
-        leggingsMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
-        leggings.setItemMeta(leggingsMeta);
+        
+        ItemStack leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
         spawnArmor.add(leggings);
-    
-        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
-        LeatherArmorMeta chestplateMeta = (LeatherArmorMeta) chestplate.getItemMeta();
-        chestplateMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
-        chestplate.setItemMeta(chestplateMeta);
+        
+        ItemStack chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
         spawnArmor.add(chestplate);
-    
+        
         ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
         LeatherArmorMeta helmetMeta = (LeatherArmorMeta) helmet.getItemMeta();
         helmetMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
@@ -142,6 +136,9 @@ public class GamePlayer
                 if (cost <= playerBank.coins)
                 {
                     playerBank.coins -= cost;
+                    
+                    gameInstance.buildingCoinsRemaining.put(player, playerBank.coins);
+                    
                     return true;
                 }
                 hasEnough = false;

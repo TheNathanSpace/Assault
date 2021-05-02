@@ -2,15 +2,18 @@ name: ${project.name}
 main: com.thekingelessar.assault.Assault
 version: ${project.version}
 author: TheKingElessar
-softdepend: [HolographicDisplays]
-depend: [Citizens]
+softdepend: [ HolographicDisplays ]
+depend: [ Citizens ]
 commands:
-  assault:
-    description: Utility commands.
+  respawn:
+    description: Respawn, just in case you get trapped somewhere.
     usage: |
-      /assault start <map name>
+      /respawn
+  all:
+    description: Send chat messages to the entire game.
+    usage: |
+      /all <message>
+  assault:
+    description: Dev command.
+    usage: |
       /assault attack
-      /assault shop <building/attack>
-      /assault create <map name> <auto-save> <world ID>
-      /assault join <world ID>
-      /assault close <world ID>

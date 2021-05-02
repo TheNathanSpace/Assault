@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InventoryClickHandler implements Listener
@@ -57,7 +58,7 @@ public class InventoryClickHandler implements Listener
             return;
         }
         
-        GamePlayer gamePlayer = gameInstance.getPlayerTeam(player).getGamePlayer(player);
+        GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
         
         Inventory inventoryOpen = inventoryClickEvent.getInventory();
         ItemStack itemClicked = inventoryClickEvent.getCurrentItem();
@@ -118,17 +119,8 @@ public class InventoryClickHandler implements Listener
         }
         
         boolean canPurchase = gamePlayer.purchaseItem(shopItemClicked.cost, shopItemClicked.currency);
-        
-        List<Material> toolsList = new ArrayList<>();
-        toolsList.add(Material.SHEARS);
-        toolsList.add(Material.WOOD_AXE);
-        toolsList.add(Material.WOOD_PICKAXE);
-        toolsList.add(Material.STONE_AXE);
-        toolsList.add(Material.STONE_PICKAXE);
-        toolsList.add(Material.GOLD_AXE);
-        toolsList.add(Material.GOLD_PICKAXE);
-        toolsList.add(Material.DIAMOND_AXE);
-        toolsList.add(Material.DIAMOND_PICKAXE);
+    
+        List<Material> toolsList = Arrays.asList(Material.SHEARS, Material.WOOD_AXE, Material.WOOD_PICKAXE, Material.STONE_AXE, Material.STONE_PICKAXE, Material.GOLD_AXE, Material.GOLD_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE);
         
         for (ItemStack itemStack : player.getInventory().getContents())
         {
@@ -158,7 +150,47 @@ public class InventoryClickHandler implements Listener
                 givingItemStack.setDurability(DyeColor.valueOf(gameInstance.getPlayerTeam(player).color.toString()).getData());
             }
             
-            player.getInventory().addItem(givingItemStack);
+            List<Material> swordList = Arrays.asList(Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD);
+            if (swordList.contains(givingItemStack.getType()))
+            {
+                boolean hasGoodSword = false;
+                for (ItemStack inventoryItem : player.getInventory().getContents())
+                {
+                    if (inventoryItem != null)
+                    {
+                        if (swordList.contains(inventoryItem.getType()))
+                        {
+                            hasGoodSword = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (hasGoodSword)
+                {
+                    player.getInventory().addItem(givingItemStack);
+                }
+                else
+                {
+                    ItemStack[] contents = player.getInventory().getContents();
+                    for (int i = 0; i < contents.length; i++)
+                    {
+                        ItemStack inventoryItem = contents[i];
+                        if (inventoryItem != null)
+                        {
+                            if (inventoryItem.getType().equals(Material.WOOD_SWORD))
+                            {
+                                player.getInventory().setItem(i, givingItemStack);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                player.getInventory().addItem(givingItemStack);
+            }
             
             if (toolsList.contains(givingItemStack.getType()) && !(playerTeam.shopTeamBuffs != null && inventoryOpen.equals(playerTeam.shopTeamBuffs.inventory)))
             {

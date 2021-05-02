@@ -8,6 +8,7 @@ import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,10 +28,9 @@ public class PlayerDamageHandler implements Listener
         {
             Player damagedPlayer = (Player) entityDamageEvent.getEntity();
             
+            GameInstance playerGameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
             if (damagedPlayer.getHealth() - entityDamageEvent.getDamage() < 1)
             {
-                GameInstance playerGameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
-                
                 // If the player who died isn't in a game
                 if (playerGameInstance == null)
                 {

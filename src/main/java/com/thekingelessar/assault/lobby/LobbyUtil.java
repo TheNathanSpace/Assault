@@ -33,6 +33,15 @@ public class LobbyUtil
                 if (!gameInstance.gameStage.equals(GameStage.FINISHED))
                 {
                     player.sendRawMessage(Assault.assaultPrefix + "Joining game!");
+    
+                    for (Player otherPlayer : player.getWorld().getPlayers())
+                    {
+                        if (!otherPlayer.equals(player))
+                        {
+                            otherPlayer.sendRawMessage(Assault.assaultPrefix + player.getDisplayName() + " has joined a game!");
+                        }
+                    }
+    
                     Assault.gameInstances.get(0).addPlayer(player);
                     return;
                 }
@@ -187,6 +196,8 @@ public class LobbyUtil
     {
         player.teleport(Assault.lobbySpawn);
         player.setDisplayName(player.getName());
+        player.setPlayerListName(player.getName());
+        player.setCustomName(player.getName());
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
