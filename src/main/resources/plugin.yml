@@ -13,6 +13,10 @@ commands:
     description: Send chat messages to the entire game.
     usage: |
       /all <message>
+  forfeit:
+    description: Vote to forfeit.
+    usage: |
+      /forfeit
   assault:
     description: Dev command.
     usage: |

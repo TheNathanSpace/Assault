@@ -2,6 +2,7 @@ package com.thekingelessar.assault;
 
 import com.thekingelessar.assault.commands.CommandAll;
 import com.thekingelessar.assault.commands.CommandAssault;
+import com.thekingelessar.assault.commands.CommandForfeit;
 import com.thekingelessar.assault.commands.CommandRespawn;
 import com.thekingelessar.assault.config.MapConfig;
 import com.thekingelessar.assault.game.GameInstance;
@@ -56,7 +57,8 @@ public class Assault extends JavaPlugin
         this.getCommand("assault").setExecutor(new CommandAssault());
         this.getCommand("respawn").setExecutor(new CommandRespawn());
         this.getCommand("all").setExecutor(new CommandAll());
-        
+        this.getCommand("forfeit").setExecutor(new CommandForfeit());
+    
         RegisterHandlers.registerHandlers();
         
         net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));

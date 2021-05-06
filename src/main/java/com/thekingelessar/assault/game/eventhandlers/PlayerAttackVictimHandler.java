@@ -40,7 +40,8 @@ public class PlayerAttackVictimHandler implements Listener
                         
                         if (damagedTeam != null && shooterTeam != null)
                         {
-                            if (damagedTeam.equals(shooterTeam)) {
+                            if (damagedTeam.equals(shooterTeam))
+                            {
                                 entityAttackEvent.setCancelled(true);
                                 return;
                             }
@@ -48,6 +49,11 @@ public class PlayerAttackVictimHandler implements Listener
                     }
                 }
             }
+        }
+        
+        if (!(entityAttackEvent.getDamager() instanceof Player || entityAttackEvent.getDamager() instanceof Arrow))
+        {
+            return;
         }
         
         if (entityAttackEvent.getDamager() instanceof Player)
@@ -64,20 +70,55 @@ public class PlayerAttackVictimHandler implements Listener
                     return;
                 }
             }
+        }
+        
+        if (entityAttackEvent.getEntity() instanceof Player)
+        {
+            Player victim = (Player) entityAttackEvent.getEntity();
             
-            if (entityAttackEvent.getEntity() instanceof Player)
+            if (victim.getWorld().equals(Assault.lobbyWorld))
             {
-                Player victim = (Player) entityAttackEvent.getEntity();
+                entityAttackEvent.setCancelled(true);
+            }
+            
+            GameInstance gameInstance = GameInstance.getPlayerGameInstance(victim);
+            if (gameInstance != null)
+            {
+                PlayerMode victimMode = PlayerMode.getPlayerMode(victim);
                 
-                if (victim.getWorld().equals(Assault.lobbyWorld))
+                if (victimMode != null)
                 {
-                    entityAttackEvent.setCancelled(true);
+                    // Cancel if victim can't take damage
+                    if (!(victimMode.canBeDamaged))
+                    {
+                        entityAttackEvent.setCancelled(true);
+                        return;
+                    }
                 }
                 
-                GameInstance gameInstance = GameInstance.getPlayerGameInstance(attacker);
-                if (gameInstance != null)
+                GameTeam victimTeam = gameInstance.getPlayerTeam(victim);
+                
+                if (entityAttackEvent.getDamager() instanceof Player || entityAttackEvent.getDamager() instanceof Arrow)
                 {
-                    GameTeam victimTeam = gameInstance.getPlayerTeam(victim);
+                    Player attacker = null;
+                    Arrow arrow = null;
+                    if (entityAttackEvent.getDamager() instanceof Arrow)
+                    {
+                        arrow = (Arrow) entityAttackEvent.getDamager();
+                        if (arrow.getShooter() instanceof Player)
+                        {
+                            attacker = (Player) arrow.getShooter();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        attacker = (Player) entityAttackEvent.getDamager();
+                    }
+                    
                     GameTeam attackerTeam = gameInstance.getPlayerTeam(attacker);
                     
                     if (victimTeam.equals(attackerTeam))
@@ -106,43 +147,23 @@ public class PlayerAttackVictimHandler implements Listener
                     }
                     
                     gameInstance.lastDamagedBy.put(victim, attacker);
-                }
-                
-                PlayerMode victimMode = PlayerMode.getPlayerMode(victim);
-                
-                if (victimMode != null)
-                {
-                    // Cancel if victim can't take damage
-                    if (!(victimMode.canBeDamaged))
+                    
+                    if (victim.getHealth() - entityAttackEvent.getDamage() < 1)
                     {
-                        entityAttackEvent.setCancelled(true);
-                    }
-                }
-                
-                if (victim.getHealth() - entityAttackEvent.getDamage() < 1)
-                {
-                    if (gameInstance != null)
-                    {
-                        
                         gameInstance.gameWorld.playSound(victim.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
                         
-                        GameTeam gameTeam = gameInstance.getPlayerTeam(attacker);
+                        GamePlayer attackerPlayer = attackerTeam.getGamePlayer(attacker);
                         
-                        if (gameTeam != null)
+                        GamePlayer victimPlayer = victimTeam.getGamePlayer(victim);
+                        
+                        if (arrow != null)
                         {
-                            GamePlayer gamePlayer = gameTeam.getGamePlayer(attacker);
-                            
-                            if (gameTeam.teamStage.equals(TeamStage.ATTACKING))
-                            {
-                                gameTeam.gamerPoints += 1;
-                            }
-                            
-                            GamePlayer victimPlayer = gameInstance.getPlayerTeam(victim).getGamePlayer(victim);
-                            gamePlayer.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
-                            
-                            attacker.playSound(attacker.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
-                            
-                            gamePlayer.updateScoreboard();
+                            victimPlayer.addBowDeathFeed(attacker);
+                            attackerPlayer.killPlayer(victim, true);
+                        }
+                        else
+                        {
+                            attackerPlayer.killPlayer(victim, false);
                         }
                     }
                 }

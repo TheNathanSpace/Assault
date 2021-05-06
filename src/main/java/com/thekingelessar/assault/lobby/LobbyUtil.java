@@ -33,7 +33,7 @@ public class LobbyUtil
                 if (!gameInstance.gameStage.equals(GameStage.FINISHED))
                 {
                     player.sendRawMessage(Assault.assaultPrefix + "Joining game!");
-    
+                    
                     for (Player otherPlayer : player.getWorld().getPlayers())
                     {
                         if (!otherPlayer.equals(player))
@@ -41,7 +41,7 @@ public class LobbyUtil
                             otherPlayer.sendRawMessage(Assault.assaultPrefix + player.getDisplayName() + " has joined a game!");
                         }
                     }
-    
+                    
                     Assault.gameInstances.get(0).addPlayer(player);
                     return;
                 }
@@ -62,6 +62,7 @@ public class LobbyUtil
                 if (queueList.contains(worldPlayer))
                 {
                     worldPlayer.sendRawMessage(Assault.assaultPrefix + "Game starting!");
+                    worldPlayer.getInventory().clear();
                 }
                 else
                 {

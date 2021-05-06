@@ -77,7 +77,7 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
         }
         else
         {
-            gameInstance.declareWinners(null);
+            gameInstance.declareWinners(null, false);
         }
         
         this.cancel();

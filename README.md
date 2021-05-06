@@ -6,23 +6,41 @@
 - ~~Fix arrow team-killing~~
 - ~~Move magic location values to map config file~~
 - ~~Make it more user-friendly when you're moving around wood swords and better swords~~
-- End the game if the second time goes past first time? (Forfeit option?)
+- ~~Kill feed~~
+- **End the game if the second time goes past first time? (Forfeit option?)**
+- **Hardcode nether star location so it's not pushed around**
+- Explanation of /all command
 - Clean up random barriers around the map
 - Attacker momentum would really stagnate for a while when they couldn't find an easy way into the base, maybe this can
   be fixed by adding/changing team buffs and by increasing the price of blocks.
-- Better /assault commands
+- Durability
+- Update skins on player join
+- End building mode when people are out of coins
+- Blow up/go under map
+- Better tools
+- Pick up flower
+- Keep players from using old secret storage and actually add a secret storage tab in the shop
 
 ## Bugs
 
 - ~~Gravel can't be broken when it falls into its location.~~
 - ~~Building phase coin duping~~
 - ~~Shop NPCs have capes~~
+- ~~Sword duplication--replacing sword and adding to inventory~~
+- ~~Building mode keep inventory~~
+- ~~Not killing shops after game~~
+- ~~Bow kills ding feedback gamer points~~
+- ~~Tossing the book out allows you to join an instance multiple times~~
 - Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)
 - Name colors aren't updating when new games start.
 - Team buff effects are sometimes persisting in-between rounds(/games?)
 - Cleaner time when it goes to 8 minutes
-- Building mode keep inventory
 - Shops not looking in the right direction (attacker normal shop)
+- Shop skins gone?
+- Wood sword in secret storage = can't buy sword
+- Double "join" message
+- Some instances start where coins don't decrease when buying stuff
+- Shops don't have player skins anymore?
 
 ## Roadmap
 
@@ -31,46 +49,16 @@
     - Double jump
     - Strength?
 - Multiple maps
-- Game modifiers (admin set or voting)
+- Game modifiers (infinite time)
 
-### Completed
+## Refactoring
 
-- Teams
-- Me and my cohort built Saloon 😎
-- Restructure current world setup (worlds vs. map)
-- World copying/loading/deleting from maps
-- Game cycle to about #6
-- Basic game restrictions
-    - Attacking players
-    - Placing blocks
-    - Destroying blocks
-- Block breaking/placing restrictions (based on block type, nothing too complicated)
-- Spawning, death, respawning
-- Resource generation/gathering
-    - Coins automatically tick up
-    - GP on kill
-- Shops
-    - UBOM (physical items)
-        - Weapons
-        - Blocks
-        - Utility items
-        - Special map-specific items
-        - Some items take coins, more powerful ones take emeralds
-- Ending build stage
-- Tools (stay with you on death, only buy once)
-- Spawn items
-- Swapping attacking teams
-- Team buff shop
-- Indication if team has the buff
-- Kill sound effects
-- Yaw/pitch values in spawns
-- Forfeit when last player leaves
-- Add player to instance while balancing it
-- Book in hotbar takes you to website
-- Emerald spawning
-- Transportation out of base for defenders
-- Stop block placing in spawn area
-- Shop NPCs
+Buying items in a shop is very hap-hazard. There should be a standardized way of doing it. Have each `ItemStack` in an
+inventory correspond to an object extending `ShopItem`. `ShopItem` has a `buyItem` method that adds it to the player's
+inventory. `ShopItem::buyItem` just adds it to the player's inventory, but more advanced items extend `ShopItem` and
+override `buyItem`, allowing more advanced functionality for stuff like tools.
+
+Normal items can probably just be created in-line, you don't need a separate class for each item.
 
 ---
 

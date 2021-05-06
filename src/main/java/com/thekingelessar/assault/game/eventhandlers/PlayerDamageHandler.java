@@ -1,23 +1,12 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
-import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.player.DeathType;
 import com.thekingelessar.assault.game.player.GamePlayer;
-import com.thekingelessar.assault.game.player.PlayerMode;
-import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerDamageHandler implements Listener
 {
@@ -31,44 +20,23 @@ public class PlayerDamageHandler implements Listener
             GameInstance playerGameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
             if (damagedPlayer.getHealth() - entityDamageEvent.getDamage() < 1)
             {
-                // If the player who died isn't in a game
                 if (playerGameInstance == null)
                 {
                     return;
                 }
                 
-                if (PlayerMode.getPlayerMode(damagedPlayer).equals(PlayerMode.BUILDING))
+                GamePlayer gamePlayer = playerGameInstance.getGamePlayer(damagedPlayer);
+                
+                playerGameInstance.lastDamagedBy.put(damagedPlayer, null);
+                
+                if (!entityDamageEvent.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE))
                 {
-                    damagedPlayer.teleport(playerGameInstance.gameMap.getSpawn(playerGameInstance.getPlayerTeam(damagedPlayer), null).toLocation(playerGameInstance.gameWorld));
-                    damagedPlayer.setHealth(damagedPlayer.getMaxHealth());
+                    gamePlayer.respawn(null, true, DeathType.SWORD);
                 }
-                
-                List<Material> dropItems = new ArrayList<>();
-                dropItems.add(Material.EMERALD);
-                
-                PlayerInventory inventory = damagedPlayer.getInventory();
-                for (ItemStack itemStack : inventory.getContents())
+                else
                 {
-                    if (itemStack != null)
-                    {
-                        if (dropItems.contains(itemStack.getType()))
-                        {
-                            Location location = damagedPlayer.getLocation();
-                            location.getWorld().dropItemNaturally(location, itemStack);
-                        }
-                    }
+                    gamePlayer.respawn(null, true, DeathType.BOW);
                 }
-                
-                PlayerMode.setPlayerMode(damagedPlayer, PlayerMode.SPECTATOR, playerGameInstance);
-                
-                damagedPlayer.teleport(playerGameInstance.gameMap.waitingSpawn.toLocation(playerGameInstance.gameWorld));
-                
-                GameTeam gameTeam = playerGameInstance.getPlayerTeam(damagedPlayer);
-                GamePlayer gamePlayer = gameTeam.getGamePlayer(damagedPlayer);
-                
-                gamePlayer.taskCountdownRespawn = new TaskCountdownRespawn(60, 0, 20, playerGameInstance, damagedPlayer);
-                gamePlayer.taskCountdownRespawn.runTaskTimer(Assault.INSTANCE, gamePlayer.taskCountdownRespawn.startDelay, gamePlayer.taskCountdownRespawn.tickDelay);
-                
                 entityDamageEvent.setCancelled(true);
             }
         }

@@ -1,8 +1,10 @@
 package com.thekingelessar.assault.game.inventory.shops;
 
 import com.thekingelessar.assault.game.inventory.Currency;
+import com.thekingelessar.assault.game.inventory.IShop;
 import com.thekingelessar.assault.game.inventory.ShopUtil;
-import com.thekingelessar.assault.game.inventory.TeamBuffItem;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItemBuff;
 import com.thekingelessar.assault.game.inventory.teambuffs.BuffHaste;
 import com.thekingelessar.assault.game.inventory.teambuffs.BuffHealing;
 import com.thekingelessar.assault.game.inventory.teambuffs.BuffSpeed;
@@ -16,20 +18,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ShopTeamBuffs
+public class ShopTeamBuffs implements IShop
 {
-    public List<TeamBuffItem> shopItems = new ArrayList<>();
-    
     public Inventory inventory;
     
-    public List<TeamBuffItem> getShopItems()
-    {
-        return shopItems;
-    }
-    
+    public Map<ItemStack, ShopItem> shopItemMap = new HashMap<>();
     private List<Integer> airSlots = new ArrayList<>();
+    
+    @Override
+    public ShopItem getShopItem(ItemStack itemStack)
+    {
+        return this.shopItemMap.get(itemStack);
+    }
     
     public ShopTeamBuffs(GameTeam gameTeam, List<ItemStack> additionalItems)
     {
@@ -40,15 +44,15 @@ public class ShopTeamBuffs
         
         inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "Team Upgrade Shop");
         
-        constructShopItem(new ItemStack(Material.GOLD_PICKAXE, 1), new BuffHaste(gameTeam), "Haste Upgrade", "Gives your team permanent Haste I.", 4, false);
-        constructShopItem(new ItemStack(Material.FEATHER, 1), new BuffSpeed(gameTeam), "Speed Upgrade", "Gives your team permanent Speed I.", 6, false);
-        constructShopItem(new ItemStack(Material.SPECKLED_MELON, 1), new BuffHealing(gameTeam), "Healing Upgrade", "Gives your team permanent Regeneration II.", 8, false);
+        constructShopItemBuff(new ItemStack(Material.GOLD_PICKAXE, 1), new BuffHaste(gameTeam), "Haste Upgrade", "Gives your team permanent Haste I.", 4, false);
+        constructShopItemBuff(new ItemStack(Material.FEATHER, 1), new BuffSpeed(gameTeam), "Speed Upgrade", "Gives your team permanent Speed I.", 6, false);
+        constructShopItemBuff(new ItemStack(Material.SPECKLED_MELON, 1), new BuffHealing(gameTeam), "Healing Upgrade", "Gives your team permanent Regeneration II.", 8, false);
         
     }
     
-    private void constructShopItem(ItemStack itemStack, IBuff buff, String name, String description, int cost, boolean newRow)
+    private void constructShopItemBuff(ItemStack shopItemStack, IBuff buff, String name, String description, int cost, boolean newRow)
     {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+        ItemMeta itemMeta = shopItemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.RESET + name);
         
         List<String> lore = new ArrayList<>();
@@ -58,31 +62,24 @@ public class ShopTeamBuffs
         lore.add(ChatColor.RESET + "Click to buy!");
         itemMeta.setLore(lore);
         
-        itemStack.setItemMeta(itemMeta);
+        shopItemStack.setItemMeta(itemMeta);
         
-        TeamBuffItem shopItem = new TeamBuffItem(cost, itemStack, buff);
+        ItemStack alreadyPurchasedItemStack = shopItemStack.clone();
+        ItemMeta alreadyPurchasedMeta = alreadyPurchasedItemStack.getItemMeta();
+        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[PURCHASED] " + ChatColor.RESET + name);
         
-        this.shopItems.add(shopItem);
+        List<String> alreadyPurchasedLore = new ArrayList<>();
+        alreadyPurchasedLore.add(ChatColor.RESET + description);
+        alreadyPurchasedLore.add("");
+        alreadyPurchasedLore.add(ChatColor.GREEN + "Your team already purchased this!");
+        alreadyPurchasedMeta.setLore(alreadyPurchasedLore);
+        
+        alreadyPurchasedItemStack.setItemMeta(alreadyPurchasedMeta);
+        
+        ShopItemBuff shopItem = new ShopItemBuff(cost, shopItemStack, alreadyPurchasedItemStack, buff);
+        
+        this.shopItemMap.put(shopItemStack, shopItem);
         
         ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
     }
-    
-    public void modifyShopItem(TeamBuffItem oldShopItem, ItemStack itemStack, String name, String description, int slot)
-    {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RESET + name);
-        
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.RESET + description);
-        lore.add("");
-        lore.add(ChatColor.RESET + "Your team already has this upgrade!");
-        itemMeta.setLore(lore);
-        
-        itemStack.setItemMeta(itemMeta);
-        
-        this.shopItems.remove(oldShopItem);
-        
-        inventory.setItem(slot, itemStack);
-    }
-    
 }

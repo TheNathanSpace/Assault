@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.team;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
@@ -9,6 +10,7 @@ import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,6 +44,8 @@ public class GameTeam
     public double displaySeconds = 0;
     public long startAttackingTime = 0; // in nanoseconds
     public double finalAttackingTime = 0; // in seconds
+    
+    public List<Player> forfeitList = new ArrayList<>();
     
     public GameTeam(TeamColor color, GameInstance instance)
     {
@@ -79,7 +83,7 @@ public class GameTeam
     
     public void addMember(Player player)
     {
-        GamePlayer gamePlayer = new GamePlayer(player, gameInstance);
+        GamePlayer gamePlayer = new GamePlayer(player, gameInstance, this);
         
         if (gameInstance.gameStage.equals(GameStage.BUILDING))
         {
@@ -103,7 +107,9 @@ public class GameTeam
         
         gamePlayer.swapReset();
         player.getInventory().clear();
-        gamePlayer.respawn(PlayerMode.getTeamMode(this));
+        gamePlayer.spawn(PlayerMode.getTeamMode(this));
+        
+        this.evaluateForfeit();
     }
     
     public void addMembers(List<Player> players)
@@ -125,10 +131,12 @@ public class GameTeam
             {
                 case BUILDING:
                 case ATTACKING:
-                    gameInstance.alertLastEnemyLeft(gameInstance.getOppositeTeam(this));
+                    gameInstance.alertLastEnemyLeft(this.getOppositeTeam());
                     break;
             }
         }
+        
+        this.evaluateForfeit();
     }
     
     public List<Player> getPlayers()
@@ -155,7 +163,7 @@ public class GameTeam
             this.shopTeamBuffs = new ShopTeamBuffs(this, null);
         }
         
-        this.shopAttacking = new ShopAttack(this.color, null);
+        this.shopAttacking = new ShopAttack(this.color);
     }
     
     
@@ -167,6 +175,65 @@ public class GameTeam
         }
         
         return null;
+    }
+    
+    public GameTeam getOppositeTeam()
+    {
+        for (GameTeam listTeam : gameInstance.teams.values())
+        {
+            if (!this.equals(listTeam))
+            {
+                return listTeam;
+            }
+        }
+        return null;
+    }
+    
+    public boolean canForfeit()
+    {
+        if (this.teamStage.equals(TeamStage.DEFENDING))
+        {
+            return false;
+        }
+        
+        GameTeam oppositeTeam = this.getOppositeTeam();
+        long nanosecondsTaken = System.nanoTime() - this.startAttackingTime;
+        double secondsTaken = nanosecondsTaken / 1000000000.;
+        
+        return oppositeTeam.finalAttackingTime > secondsTaken;
+    }
+    
+    public void toggleForfeit(Player player)
+    {
+        if (this.forfeitList.contains(player))
+        {
+            this.forfeitList.remove(player);
+            player.sendRawMessage(Assault.assaultPrefix + "You've voted to " + ChatColor.GREEN + "not forfeit" + ChatColor.RESET + "!");
+        }
+        else
+        {
+            this.forfeitList.add(player);
+            player.sendRawMessage(Assault.assaultPrefix + "You've voted to " + ChatColor.RED + "forfeit" + ChatColor.RESET + "!");
+        }
+        
+        this.evaluateForfeit();
+    }
+    
+    public void evaluateForfeit()
+    {
+        if (this.forfeitList.size() >= this.getPlayers().size() * 0.66)
+        {
+            for (Player player : this.getPlayers())
+            {
+                player.sendRawMessage(Assault.assaultPrefix + "Your team " + ChatColor.RED + "forfeits" + ChatColor.RESET + "!");
+            }
+            
+            gameInstance.finishRound(gameInstance.getDefendingTeam());
+            gameInstance.declareWinners(null, true);
+            
+            gameInstance.getAttackingTeam().finalAttackingTime = 481;
+            gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
+        }
     }
     
 }

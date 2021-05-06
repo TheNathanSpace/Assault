@@ -34,6 +34,7 @@ public class PlayerPickupItemHandler implements Listener
                 {
                     player.getInventory().setItem(i, playerPickupItemEvent.getItem().getItemStack());
                     playerPickupItemEvent.setCancelled(true);
+                    playerPickupItemEvent.getItem().remove();
                     break;
                 }
             }
@@ -72,7 +73,7 @@ public class PlayerPickupItemHandler implements Listener
                 
                 if (gameInstance.teamsGone == 1)
                 {
-                    gameInstance.declareWinners(null);
+                    gameInstance.declareWinners(null, false);
                 }
                 else
                 {

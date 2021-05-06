@@ -1,8 +1,9 @@
 package com.thekingelessar.assault.game.inventory;
 
-import java.util.List;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import org.bukkit.inventory.ItemStack;
 
 public interface IShop
 {
-    public List<ShopItem> getShopItems();
+    public ShopItem getShopItem(ItemStack itemStack);
 }

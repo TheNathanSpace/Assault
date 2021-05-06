@@ -1,17 +1,24 @@
 package com.thekingelessar.assault.game.inventory;
 
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShopUtil
 {
-    public static void insertItem(Inventory inventory, List<Integer> airSlots, ShopItem shopItem, boolean newRow)
+    
+    public static int insertItem(Inventory inventory, List<Integer> airSlots, ShopItem shopItem, boolean newRow)
     {
         int lastItem = -1;
         int lastEmpty = -1;
+        
+        int insertedSlot = -1;
         
         ItemStack[] contents = inventory.getContents();
         for (int i = 0; i < contents.length; i++)
@@ -40,7 +47,8 @@ public class ShopUtil
                 }
             }
             
-            inventory.setItem(startingSlot, shopItem.shopItemStack);
+            insertedSlot = startingSlot;
+            shopItem.insertItem(inventory, insertedSlot);
         }
         
         if (!newRow)
@@ -50,56 +58,28 @@ public class ShopUtil
                 lastItem++;
             }
             
-            inventory.setItem(lastItem + 1, shopItem.shopItemStack);
+            insertedSlot = lastItem + 1;
+            shopItem.insertItem(inventory, insertedSlot);
             
         }
+        
+        return insertedSlot;
     }
     
-    public static void insertItem(Inventory inventory, List<Integer> airSlots, TeamBuffItem shopItem, boolean newRow)
+    public static ItemStack constructShopItemStack(ItemStack itemStack, String name, int cost, Currency currency)
     {
-        int lastItem = -1;
-        int lastEmpty = -1;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.RESET + name);
         
-        ItemStack[] contents = inventory.getContents();
-        for (int i = 0; i < contents.length; i++)
-        {
-            ItemStack inventoryItem = contents[i];
-            
-            if (inventoryItem == null || inventoryItem.getType().equals(Material.AIR))
-            {
-                lastEmpty = i;
-            }
-            else
-            {
-                lastItem = i;
-            }
-        }
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "Cost: " + ChatColor.RESET + cost + " " + currency.name);
+        lore.add("");
+        lore.add(ChatColor.RESET + "Click to buy!");
+        itemMeta.setLore(lore);
         
-        if (newRow)
-        {
-            int startingSlot = -1;
-            for (int i = 1; i < 11; i++)
-            {
-                if ((lastItem + i) % 9 == 0)
-                {
-                    startingSlot = lastItem + i + 1;
-                    break;
-                }
-            }
-            
-            inventory.setItem(startingSlot, shopItem.shopItemStack);
-        }
+        itemStack.setItemMeta(itemMeta);
         
-        if (!newRow)
-        {
-            while (airSlots.contains(lastItem + 1))
-            {
-                lastItem++;
-            }
-            
-            inventory.setItem(lastItem + 1, shopItem.shopItemStack);
-            
-        }
+        return itemStack;
     }
     
 }

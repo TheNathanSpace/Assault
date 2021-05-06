@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,10 +40,16 @@ public class PlayerItemDropHandler implements Listener
                 return;
             }
             
+            if (itemStack.equals(LobbyUtil.rulesBook))
+            {
+                playerDropItemEvent.setCancelled(true);
+                return;
+            }
+            
             List<Material> toolsList = Arrays.asList(Material.SHEARS, Material.WOOD_AXE, Material.WOOD_PICKAXE, Material.STONE_AXE, Material.STONE_PICKAXE, Material.GOLD_AXE, Material.GOLD_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE);
             if (toolsList.contains(itemStack.getType()))
             {
-                playerDropItemEvent.getItemDrop().remove();
+                playerDropItemEvent.setCancelled(true);
                 return;
             }
             
