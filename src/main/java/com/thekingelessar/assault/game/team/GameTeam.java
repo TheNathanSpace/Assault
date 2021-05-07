@@ -14,6 +14,7 @@ import com.thekingelessar.assault.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 
@@ -191,7 +192,7 @@ public class GameTeam
     
     public boolean canForfeit()
     {
-        if (this.teamStage.equals(TeamStage.DEFENDING))
+        if (this.teamStage.equals(TeamStage.DEFENDING) || this.gameInstance.teamsGone == 0)
         {
             return false;
         }
@@ -234,6 +235,28 @@ public class GameTeam
             gameInstance.getAttackingTeam().finalAttackingTime = 481;
             gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
         }
+    }
+    
+    public List<Inventory> getShopInventories()
+    {
+        List<Inventory> shopInventories = new ArrayList<>();
+        
+        if (this.shopBuilding != null)
+        {
+            shopInventories.add(this.shopBuilding.inventory);
+        }
+    
+        if (this.shopAttacking != null)
+        {
+            shopInventories.add(this.shopAttacking.inventory);
+        }
+    
+        if (this.shopTeamBuffs != null)
+        {
+            shopInventories.add(this.shopTeamBuffs.inventory);
+        }
+    
+        return shopInventories;
     }
     
 }

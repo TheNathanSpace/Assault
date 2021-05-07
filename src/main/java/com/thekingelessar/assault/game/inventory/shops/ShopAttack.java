@@ -7,10 +7,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
 
 public class ShopAttack extends ShopItemShop implements IShop
 {
+    
+    public Inventory secretStorage;
+    public ItemStack storageItem;
+    public ItemStack goldItem;
     
     public ShopAttack(TeamColor teamColor)
     {
@@ -19,6 +27,7 @@ public class ShopAttack extends ShopItemShop implements IShop
             airSlots.add(i);
         }
         
+        secretStorage = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Storage");
         inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Shop");
         
         constructShopItem(new ItemStack(Material.WOOL, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Wool", 4, Currency.COINS, false);
@@ -41,6 +50,20 @@ public class ShopAttack extends ShopItemShop implements IShop
         constructShopItem(new ItemStack(Material.OBSIDIAN, 4), "Obsidian", 4, Currency.EMERALDS, true);
         constructShopItem(new ItemStack(Material.TNT, 1), "TNT", 4, Currency.EMERALDS, false);
         
+        storageItem = new ItemStack(Material.CHEST);
+        ItemMeta chestMeta = storageItem.getItemMeta();
+        chestMeta.setDisplayName(ChatColor.RESET + "Secret Storage");
+        chestMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to open the secret storage.", ChatColor.RESET + "The secret storage can be used", ChatColor.RESET + "by your" + teamColor.chatColor + " entire team§r."));
+        storageItem.setItemMeta(chestMeta);
+        
+        goldItem = new ItemStack(Material.GOLD_INGOT);
+        ItemMeta goldMeta = goldItem.getItemMeta();
+        goldMeta.setDisplayName(ChatColor.RESET + "Return to shop");
+        goldMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to return to the shop.", ChatColor.RESET + "This storage can be used", ChatColor.RESET + "by your" + teamColor.chatColor + " entire team§r."));
+        goldItem.setItemMeta(goldMeta);
+        
+        inventory.setItem(53, storageItem);
+        secretStorage.setItem(0, goldItem);
     }
     
 }

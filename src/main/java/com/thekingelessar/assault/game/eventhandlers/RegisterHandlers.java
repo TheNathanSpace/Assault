@@ -10,6 +10,8 @@ public class RegisterHandlers
         Bukkit.getServer().getPluginManager().registerEvents(new GravelFallHandler(), Assault.INSTANCE);
         
         Bukkit.getServer().getPluginManager().registerEvents(new InventoryClickHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new InventoryCloseHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new InventoryDragHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new ItemDespawnHandler(), Assault.INSTANCE);
         
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerAttackVictimHandler(), Assault.INSTANCE);

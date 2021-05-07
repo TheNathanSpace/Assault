@@ -5,5 +5,9 @@ public enum DeathType
     SWORD,
     BOW,
     VOID,
+    CONTACT,
+    FALL,
+    DROWNING,
+    EXPLOSION,
     DEATH;
 }

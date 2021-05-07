@@ -18,8 +18,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GamePlayer
@@ -34,6 +36,8 @@ public class GamePlayer
     
     public List<ItemStack> spawnItems = new ArrayList<>();
     public List<ItemStack> spawnArmor = new ArrayList<>();
+    
+    List<Material> itemsToDrop = Arrays.asList(Material.EMERALD, Material.TNT, Material.OBSIDIAN);
     
     public GamePlayer(Player player, GameInstance gameInstance, GameTeam gameTeam)
     {
@@ -79,6 +83,14 @@ public class GamePlayer
     {
         GameTeam playerTeam = gameInstance.getPlayerTeam(player);
         PlayerMode mode = PlayerMode.setPlayerMode(player, playerMode, gameInstance);
+        
+        Vector velocity = player.getVelocity();
+        velocity.setX(0);
+        velocity.setY(0);
+        velocity.setZ(0);
+        player.setVelocity(velocity);
+        player.setFallDistance(0);
+        
         player.teleport(gameInstance.gameMap.getSpawn(playerTeam, null).toLocation(gameInstance.gameWorld));
         player.setHealth(player.getMaxHealth());
         
@@ -103,6 +115,8 @@ public class GamePlayer
     
     public void respawn(PlayerMode playerMode, boolean delay, DeathType deathType)
     {
+        this.player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+        
         if (playerMode == null)
         {
             playerMode = this.gameInstance.getPlayerMode(this.player);
@@ -112,15 +126,12 @@ public class GamePlayer
         {
             case SWORD:
             case BOW:
-                List<Material> dropItems = new ArrayList<>();
-                dropItems.add(Material.EMERALD);
-                
                 PlayerInventory inventory = this.player.getInventory();
                 for (ItemStack itemStack : inventory.getContents())
                 {
                     if (itemStack != null)
                     {
-                        if (dropItems.contains(itemStack.getType()))
+                        if (itemsToDrop.contains(itemStack.getType()))
                         {
                             Location location = this.player.getLocation();
                             location.getWorld().dropItemNaturally(location, itemStack);
@@ -128,53 +139,28 @@ public class GamePlayer
                     }
                 }
                 break;
-            
             case VOID:
-                if (gameInstance.lastDamagedBy.get(player) == null)
-                {
-                    this.addVoidFallFeed();
-                    if (playerMode.equals(PlayerMode.BUILDING))
-                    {
-                        this.spawn(playerMode);
-                        return;
-                    }
-                }
-                else
-                {
-                    Player attacker = gameInstance.lastDamagedBy.get(player);
-                    this.addVoidDeathFeed(attacker);
-                    
-                    gameInstance.getPlayerTeam(attacker).gamerPoints += 1;
-                    
-                    GamePlayer attackerPlayer = gameInstance.getGamePlayer(attacker);
-                    GamePlayer victimPlayer = gameInstance.getGamePlayer(player);
-                    
-                    attackerPlayer.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
-                    attacker.playSound(attacker.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
-                    
-                    int emeraldCount = 0;
-                    for (ItemStack itemStack : player.getInventory().getContents())
-                    {
-                        if (itemStack != null && itemStack.getType().equals(Material.EMERALD))
-                        {
-                            emeraldCount += itemStack.getAmount();
-                        }
-                    }
-                    
-                    if (emeraldCount > 0)
-                    {
-                        attacker.getInventory().addItem(new ItemStack(Material.EMERALD, emeraldCount));
-                    }
-                    
-                    attackerPlayer.updateScoreboard();
-                    
-                    gameInstance.lastDamagedBy.put(player, null);
-                }
+                this.indirectKill(deathType, false);
                 break;
-            
+            case CONTACT:
+            case FALL:
+                this.indirectKill(deathType, true);
+                break;
+            case DROWNING:
+                this.addDrownDeathFeed();
+                break;
+            case EXPLOSION:
+                this.addExplosionDeathFeed();
+                break;
             case DEATH:
                 this.addDeathFeed();
                 break;
+        }
+        
+        if (playerMode.equals(PlayerMode.BUILDING))
+        {
+            this.spawn(playerMode);
+            return;
         }
         
         PlayerMode.setPlayerMode(player, PlayerMode.SPECTATOR, gameInstance);
@@ -193,6 +179,84 @@ public class GamePlayer
         {
             this.spawn(playerMode);
         }
+    }
+    
+    public void indirectKill(DeathType deathType, boolean dropItems)
+    {
+        Player attacker = gameInstance.lastDamagedBy.get(player);
+        
+        switch (deathType)
+        {
+            case VOID:
+                if (attacker != null)
+                {
+                    this.addVoidDeathFeed(attacker);
+                }
+                else
+                {
+                    this.addVoidFallFeed();
+                }
+                break;
+            case CONTACT:
+                this.addContactDeathFeed();
+                break;
+            case FALL:
+                this.addFallDeathFeed();
+                break;
+            case DROWNING:
+                this.addDrownDeathFeed();
+                break;
+            case EXPLOSION:
+                this.addExplosionDeathFeed();
+                break;
+            case DEATH:
+                this.addDeathFeed();
+                break;
+        }
+        
+        if (attacker != null && !dropItems)
+        {
+            gameInstance.getPlayerTeam(attacker).gamerPoints += 1;
+            
+            GamePlayer attackerPlayer = gameInstance.getGamePlayer(attacker);
+            GamePlayer victimPlayer = gameInstance.getGamePlayer(player);
+            
+            attackerPlayer.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
+            attacker.playSound(attacker.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+            
+            int emeraldCount = 0;
+            for (ItemStack itemStack : player.getInventory().getContents())
+            {
+                if (itemStack != null && itemStack.getType().equals(Material.EMERALD))
+                {
+                    emeraldCount += itemStack.getAmount();
+                }
+            }
+            
+            if (emeraldCount > 0)
+            {
+                attacker.getInventory().addItem(new ItemStack(Material.EMERALD, emeraldCount));
+            }
+            
+            attackerPlayer.updateScoreboard();
+        }
+        else if (dropItems)
+        {
+            PlayerInventory inventory = this.player.getInventory();
+            for (ItemStack itemStack : inventory.getContents())
+            {
+                if (itemStack != null)
+                {
+                    if (itemsToDrop.contains(itemStack.getType()))
+                    {
+                        Location location = this.player.getLocation();
+                        location.getWorld().dropItemNaturally(location, itemStack);
+                    }
+                }
+            }
+        }
+        
+        gameInstance.lastDamagedBy.put(player, null);
     }
     
     public void killPlayer(Player victim, boolean arrow)
@@ -253,6 +317,38 @@ public class GamePlayer
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " died");
+        }
+    }
+    
+    public void addContactDeathFeed()
+    {
+        for (Player player : this.gameInstance.getPlayers())
+        {
+            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " was pricked to death");
+        }
+    }
+    
+    public void addFallDeathFeed()
+    {
+        for (Player player : this.gameInstance.getPlayers())
+        {
+            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " fell to their death");
+        }
+    }
+    
+    public void addDrownDeathFeed()
+    {
+        for (Player player : this.gameInstance.getPlayers())
+        {
+            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " drowned");
+        }
+    }
+    
+    public void addExplosionDeathFeed()
+    {
+        for (Player player : this.gameInstance.getPlayers())
+        {
+            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " blew up");
         }
     }
     

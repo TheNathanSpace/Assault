@@ -44,10 +44,9 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        
-        if (gameInstance.getAttackingTeam().displaySeconds == 465)
+        if (gameInstance.getAttackingTeam().displaySeconds == 464)
         {
-            gameInstance.taskCountdownAttackEnd = new TaskCountdownAttackEnd(280, 0, 20, gameInstance);
+            gameInstance.taskCountdownAttackEnd = new TaskCountdownAttackEnd(300, 0, 20, gameInstance);
             gameInstance.taskCountdownAttackEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownAttackEnd.startDelay, gameInstance.taskCountdownAttackEnd.tickDelay);
         }
         
@@ -72,7 +71,7 @@ public class TaskAttackTimer extends BukkitRunnable
         }
         
         double attackingTime = gameInstance.getAttackingTeam().displaySeconds;
-        attackingTime = attackingTime + 1.;
+        attackingTime += 1.;
         
         gameInstance.teams.get(gameInstance.attackingTeam).displaySeconds = attackingTime;
         
@@ -87,8 +86,17 @@ public class TaskAttackTimer extends BukkitRunnable
         this.gameInstance.taskGiveCoins.cancel();
         this.gameInstance.taskGiveCoins = null;
         
+        if (this.gameInstance.taskCountdownAttackEnd != null)
+        {
+            this.gameInstance.taskCountdownAttackEnd.cancel();
+        }
+        
         long nanosecondsTaken = System.nanoTime() - this.gameInstance.getAttackingTeam().startAttackingTime;
         this.gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+        if (this.gameInstance.getAttackingTeam().finalAttackingTime > 480)
+        {
+            this.gameInstance.getAttackingTeam().finalAttackingTime = 480;
+        }
         this.gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
         
         this.cancel();

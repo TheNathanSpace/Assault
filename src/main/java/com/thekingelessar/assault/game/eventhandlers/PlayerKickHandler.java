@@ -19,7 +19,6 @@ public class PlayerKickHandler implements Listener
         
         if (gameInstance != null)
         {
-            
             GameTeam gameTeam = gameInstance.getPlayerTeam(player);
             GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
             gamePlayer.respawn(null, true, DeathType.DEATH);

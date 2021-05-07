@@ -36,7 +36,15 @@ public class PlayerMoveHandler implements Listener
                 }
             }
             
-            if (gameInstance.getDefendingTeam().equals(gameInstance.getPlayerTeam(player)))
+            if (gameInstance.gameStage.equals(GameStage.BUILDING))
+            {
+                if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+                {
+                    playerMoveEvent.setCancelled(true);
+                    return;
+                }
+            }
+            else if (gameInstance.getDefendingTeam().equals(gameInstance.getPlayerTeam(player)))
             {
                 if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
                 {

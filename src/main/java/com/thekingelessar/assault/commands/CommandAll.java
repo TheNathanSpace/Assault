@@ -26,7 +26,7 @@ public class CommandAll implements CommandExecutor
                 GameTeam gameTeam = gameInstance.getPlayerTeam(player);
                 if (gameTeam != null)
                 {
-                    String format = ChatColor.LIGHT_PURPLE + "[ALL] " + gameTeam.color.chatColor + "[" + gameTeam.color.getFormattedName(false, false, null) + gameTeam.color.chatColor + "]§r %1$s§r: %2$s";
+                    String format = ChatColor.GRAY + "[ALL] " + gameTeam.color.chatColor + "[" + gameTeam.color.getFormattedName(false, false, null) + gameTeam.color.chatColor + "]§r %1$s§r: %2$s";
                     message = String.format(format, player.getName(), message);
                     
                     for (Player gamePlayer : gameInstance.getPlayers())

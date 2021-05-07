@@ -51,7 +51,7 @@ public class ShopItem
     {
         if (success)
         {
-            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+            player.playSound(player.getLocation(), Sound.NOTE_PLING, 1.0F, 2.0F);
         }
         else
         {

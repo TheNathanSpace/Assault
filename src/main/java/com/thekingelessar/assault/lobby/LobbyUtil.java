@@ -41,7 +41,7 @@ public class LobbyUtil
                             otherPlayer.sendRawMessage(Assault.assaultPrefix + player.getDisplayName() + " has joined a game!");
                         }
                     }
-                    
+                    player.getInventory().clear();
                     Assault.gameInstances.get(0).addPlayer(player);
                     return;
                 }

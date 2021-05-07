@@ -29,14 +29,28 @@ public class PlayerDamageHandler implements Listener
                 
                 playerGameInstance.lastDamagedBy.put(damagedPlayer, null);
                 
-                if (!entityDamageEvent.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE))
+                switch (entityDamageEvent.getCause())
                 {
-                    gamePlayer.respawn(null, true, DeathType.SWORD);
+                    case ENTITY_ATTACK:
+                        gamePlayer.respawn(null, true, DeathType.SWORD);
+                        break;
+                    case CONTACT:
+                        gamePlayer.respawn(null, true, DeathType.CONTACT);
+                        break;
+                    case PROJECTILE:
+                        gamePlayer.respawn(null, true, DeathType.BOW);
+                        break;
+                    case FALL:
+                        gamePlayer.respawn(null, true, DeathType.FALL);
+                        break;
+                    case DROWNING:
+                        gamePlayer.respawn(null, true, DeathType.DROWNING);
+                        break;
+                    case ENTITY_EXPLOSION:
+                        gamePlayer.respawn(null, true, DeathType.EXPLOSION);
+                        break;
                 }
-                else
-                {
-                    gamePlayer.respawn(null, true, DeathType.BOW);
-                }
+                
                 entityDamageEvent.setCancelled(true);
             }
         }

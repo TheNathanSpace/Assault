@@ -189,7 +189,12 @@ public class Util
         int x2 = Math.max(l1.getBlockX(), l2.getBlockX());
         int y2 = Math.max(l1.getBlockY(), l2.getBlockY());
         int z2 = Math.max(l1.getBlockZ(), l2.getBlockZ());
-    
+        
         return testedLocation.getX() >= x1 && testedLocation.getX() <= x2 && testedLocation.getY() >= y1 && testedLocation.getY() <= y2 && testedLocation.getZ() >= z1 && testedLocation.getZ() <= z2;
+    }
+    
+    public static boolean blockLocationsEqual(Location loc1, Location loc2)
+    {
+        return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ();
     }
 }

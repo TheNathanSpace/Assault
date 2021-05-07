@@ -390,6 +390,13 @@ public class GameInstance
         this.teams.get(this.attackingTeam).teamStage = TeamStage.ATTACKING;
         this.teams.get(randomList.get(1)).teamStage = TeamStage.DEFENDING;
         
+        for (GameTeam gameTeam : teams.values())
+        {
+            gameTeam.mapBase.destroyShops();
+            gameTeam.mapBase.spawnShops(this);
+            gameTeam.displaySeconds = 0;
+        }
+        
         startRound();
     }
     
@@ -420,13 +427,6 @@ public class GameInstance
     
     public void startRound()
     {
-        for (GameTeam gameTeam : teams.values())
-        {
-            gameTeam.mapBase.destroyShops();
-            gameTeam.mapBase.spawnShops(this);
-            gameTeam.displaySeconds = 0;
-        }
-        
         taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
         
@@ -491,6 +491,14 @@ public class GameInstance
                 gameTeam.getGamePlayer(player).spawn(mode);
             }
         }
+        
+        for (GameTeam gameTeam : teams.values())
+        {
+            gameTeam.mapBase.destroyShops();
+        }
+        
+        this.getDefendingTeam().mapBase.spawnShops(this);
+        this.getAttackingTeam().displaySeconds = 0;
         
         Location objectiveLocation = this.getDefendingTeam().mapBase.objective.toLocation(this.gameWorld);
         objectiveLocation.add(0, 0.5, 0);

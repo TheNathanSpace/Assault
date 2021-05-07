@@ -71,6 +71,13 @@ public class PlayerBlockPlaceHandler implements Listener
                     blockPlaceEvent.setCancelled(true);
                     return;
                 }
+                
+                Location objectiveLocation = mapBase.objective.toLocation(gameInstance.gameWorld);
+                if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
+                {
+                    blockPlaceEvent.setCancelled(true);
+                    return;
+                }
             }
             
             Coordinate placedCoordinate = new Coordinate(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());
