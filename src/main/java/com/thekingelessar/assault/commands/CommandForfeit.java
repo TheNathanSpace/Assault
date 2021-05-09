@@ -28,7 +28,7 @@ public class CommandForfeit implements CommandExecutor
                 }
                 else
                 {
-                    player.sendRawMessage(Assault.assaultPrefix + "Your team cannot forfeit right now! Wait until enough time has passed.");
+                    player.sendRawMessage(Assault.assaultPrefix + "Your team cannot forfeit right now! You probably need to wait longer.");
                     return true;
                 }
             }

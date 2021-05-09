@@ -34,7 +34,7 @@ public class InventoryCloseHandler implements Listener
         
         Inventory inventoryOpen = inventoryCloseEvent.getInventory();
         
-        if (inventoryOpen.equals(playerTeam.shopAttacking.secretStorage))
+        if (playerTeam.shopAttacking != null && inventoryOpen.equals(playerTeam.shopAttacking.secretStorage))
         {
             player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 0.5F, 1.3F);
         }

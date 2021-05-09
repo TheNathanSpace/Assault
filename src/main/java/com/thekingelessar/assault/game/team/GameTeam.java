@@ -201,7 +201,7 @@ public class GameTeam
         long nanosecondsTaken = System.nanoTime() - this.startAttackingTime;
         double secondsTaken = nanosecondsTaken / 1000000000.;
         
-        return oppositeTeam.finalAttackingTime > secondsTaken;
+        return oppositeTeam.finalAttackingTime < secondsTaken;
     }
     
     public void toggleForfeit(Player player)
@@ -245,17 +245,17 @@ public class GameTeam
         {
             shopInventories.add(this.shopBuilding.inventory);
         }
-    
+        
         if (this.shopAttacking != null)
         {
             shopInventories.add(this.shopAttacking.inventory);
         }
-    
+        
         if (this.shopTeamBuffs != null)
         {
             shopInventories.add(this.shopTeamBuffs.inventory);
         }
-    
+        
         return shopInventories;
     }
     

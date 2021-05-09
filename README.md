@@ -8,8 +8,8 @@
 - ~~Make it more user-friendly when you're moving around wood swords and better swords~~
 - ~~Kill feed~~
 - ~~Keep players from using old secret storage and actually add a secret storage tab in the shop~~
-- **End building mode when people are out of coins**
-- **End the game if the second time goes past first time? (Forfeit option?)**
+- ~~No more invisible wall, throw them violently away from it instead. Fix kicking behavior.~~
+- ~~End the game if the second time goes past first time? (Forfeit option?)~~
 - **Hardcode nether star location so it's not pushed around**
 - Explanation of commands
 - Clean up random barriers around the map
@@ -32,8 +32,9 @@
 - ~~Bow kills ding feedback gamer points~~
 - ~~Tossing the book out allows you to join an instance multiple times~~
 - ~~Wood sword in secret storage = can't buy sword~~
-- **Cleaner time when it goes to 8 minutes**
-- **Shops not looking in the right direction (attacker normal shop)**
+- ~~Cleaner time when it goes to 8 minutes~~
+- ~~Red team can go to the attacker base during building stage~~
+- ~~Shops not looking in the right direction (attacker normal shop)~~
 - Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)
 - Name colors aren't updating when new games start.
 - Team buff effects are sometimes persisting in-between rounds(/games?)
@@ -41,7 +42,6 @@
 - Double "join" message
 - Some instances start where coins don't decrease when buying stuff
 - Shops don't have player skins anymore?
-- Red team can go to the attacker base during building stage
 - Gravel can still push item
 - Defending team logging out times are weird
 
@@ -52,7 +52,7 @@
     - Double jump
     - Strength?
     - Sharpness/prot
-  - Map-specific items
+    - Map-specific items
 - Multiple maps
 - Game modifiers (infinite time)
 

@@ -22,7 +22,6 @@ public class RegisterHandlers
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerFoodLevelChange(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerItemDropHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerJoinServerHandler(), Assault.INSTANCE);
-        Bukkit.getServer().getPluginManager().registerEvents(new PlayerKickHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerLeaveServerHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMoveHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMoveWorldHandler(), Assault.INSTANCE);

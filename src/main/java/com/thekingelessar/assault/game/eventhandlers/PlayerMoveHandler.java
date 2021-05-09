@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 public class PlayerMoveHandler implements Listener
 {
@@ -31,7 +32,7 @@ public class PlayerMoveHandler implements Listener
                 
                 if (Util.isInside(locTo, enemyMapBase.defenderBoundingBox.get(0).toLocation(gameInstance.gameWorld), enemyMapBase.defenderBoundingBox.get(1).toLocation(gameInstance.gameWorld)))
                 {
-                    playerMoveEvent.setCancelled(true);
+                    cancelMovement(playerMoveEvent);
                     return;
                 }
             }
@@ -40,7 +41,7 @@ public class PlayerMoveHandler implements Listener
             {
                 if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
                 {
-                    playerMoveEvent.setCancelled(true);
+                    cancelMovement(playerMoveEvent);
                     return;
                 }
             }
@@ -48,7 +49,7 @@ public class PlayerMoveHandler implements Listener
             {
                 if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
                 {
-                    playerMoveEvent.setCancelled(true);
+                    cancelMovement(playerMoveEvent);
                     return;
                 }
             }
@@ -68,6 +69,20 @@ public class PlayerMoveHandler implements Listener
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
             gamePlayer.respawn(null, true, DeathType.VOID);
         }
+    }
+    
+    private void cancelMovement(PlayerMoveEvent playerMoveEvent)
+    {
+        Player player = playerMoveEvent.getPlayer();
+        
+        Vector fromVec = playerMoveEvent.getFrom().toVector();
+        Vector toVec = playerMoveEvent.getTo().toVector();
+        Vector newVec = fromVec.subtract(toVec).normalize();
+        newVec.setY(0.5);
+        
+        player.setVelocity(newVec);
+        
+        playerMoveEvent.setCancelled(true);
     }
     
 }

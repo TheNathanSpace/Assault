@@ -65,6 +65,8 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
     public void finishTimer()
     {
         this.gameInstance.taskCountdownAttackEnd = null;
+        
+        this.gameInstance.getAttackingTeam().finalAttackingTime = 480;
     
         this.gameInstance.finishRound(gameInstance.getAttackingTeam());
     

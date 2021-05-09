@@ -5,8 +5,11 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.Util;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -24,6 +27,7 @@ public class TaskAttackTimer extends BukkitRunnable
     public GameInstance gameInstance;
     
     public boolean doneFirst = false;
+    public boolean forfeitAlerted = false;
     
     private Title title = new Title();
     
@@ -50,6 +54,18 @@ public class TaskAttackTimer extends BukkitRunnable
             gameInstance.taskCountdownAttackEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownAttackEnd.startDelay, gameInstance.taskCountdownAttackEnd.tickDelay);
         }
         
+        if (!forfeitAlerted)
+        {
+            if (gameInstance.getAttackingTeam().canForfeit())
+            {
+                for (Player player : gameInstance.getAttackingTeam().getPlayers())
+                {
+                    player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1.5f, 2.0f);
+                    player.sendRawMessage(Assault.assaultPrefix + gameInstance.getAttackingTeam().color.chatColor + "Your team " + ChatColor.RESET + "can now forfeit! Use /forfeit.");
+                }
+                forfeitAlerted = true;
+            }
+        }
         if (!doneFirst)
         {
             for (Map.Entry<GameTeam, Item> entry : gameInstance.currentObjective.entrySet())
@@ -91,12 +107,12 @@ public class TaskAttackTimer extends BukkitRunnable
             this.gameInstance.taskCountdownAttackEnd.cancel();
         }
         
-        long nanosecondsTaken = System.nanoTime() - this.gameInstance.getAttackingTeam().startAttackingTime;
-        this.gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
-        if (this.gameInstance.getAttackingTeam().finalAttackingTime > 480)
+        if (this.gameInstance.getAttackingTeam().finalAttackingTime != 480)
         {
-            this.gameInstance.getAttackingTeam().finalAttackingTime = 480;
+            long nanosecondsTaken = System.nanoTime() - this.gameInstance.getAttackingTeam().startAttackingTime;
+            this.gameInstance.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
         }
+        
         this.gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
         
         this.cancel();
