@@ -10,6 +10,10 @@ import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
 import com.thekingelessar.assault.game.map.BuffShopTrait;
 import com.thekingelessar.assault.game.map.ItemShopTrait;
 import com.thekingelessar.assault.game.map.Map;
+import com.thekingelessar.assault.game.world.WorldManager;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -25,6 +29,7 @@ import java.util.List;
 public class Assault extends JavaPlugin
 {
     static public Assault INSTANCE;
+    
     static public boolean useHolographicDisplays;
     
     static public FileConfiguration mainConfig = null;
@@ -36,6 +41,7 @@ public class Assault extends JavaPlugin
     static public HashMap<String, Map> maps = new HashMap<>();
     
     static public List<GameInstance> gameInstances = new ArrayList<>();
+    static public List<NPC> gameNPCs = new ArrayList<>();
     
     static public List<Player> waitingPlayers = new ArrayList<>();
     
@@ -58,11 +64,11 @@ public class Assault extends JavaPlugin
         this.getCommand("respawn").setExecutor(new CommandRespawn());
         this.getCommand("all").setExecutor(new CommandAll());
         this.getCommand("forfeit").setExecutor(new CommandForfeit());
-    
+        
         RegisterHandlers.registerHandlers();
         
-        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));
-        net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(BuffShopTrait.class).withName("buffshoptrait"));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));
+        CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(BuffShopTrait.class).withName("buffshoptrait"));
         
         super.onEnable();
     }
@@ -71,6 +77,30 @@ public class Assault extends JavaPlugin
     public void onDisable()
     {
         super.onDisable();
+        for (NPC npc : gameNPCs)
+        {
+            try
+            {
+                npc.despawn();
+            }
+            catch (Exception ignored)
+            {
+            }
+            
+            try
+            {
+                npc.destroy();
+            }
+            catch (Exception ignored)
+            {
+            }
+        }
+        
+        for (String worldString : WorldManager.gameWorlds)
+        {
+            World world = Bukkit.getWorld(worldString);
+            WorldManager.deleteWorld(world);
+        }
     }
     
 }

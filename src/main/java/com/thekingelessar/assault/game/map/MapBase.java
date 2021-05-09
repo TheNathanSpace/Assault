@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.map;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.team.TeamColor;
@@ -75,6 +76,8 @@ public class MapBase
             {
                 ((SkinnableEntity) npcEntity).getSkinTracker().notifySkinChange(true);
             }
+    
+            Assault.gameNPCs.add(npc);
         }
         
         if (gameInstance.gameStage.equals(GameStage.ATTACKING))
@@ -101,6 +104,8 @@ public class MapBase
             {
                 ((SkinnableEntity) npcEntity).getSkinTracker().notifySkinChange(true);
             }
+    
+            Assault.gameNPCs.add(npc);
         }
     }
     
@@ -110,6 +115,7 @@ public class MapBase
         List<NPC> shopNPCs = this.itemShopNPCs;
         for (NPC npc : shopNPCs)
         {
+            Assault.gameNPCs.remove(npc);
             removedIndeces.add(npc);
             npc.despawn();
             npc.destroy();
@@ -119,6 +125,7 @@ public class MapBase
         
         if (this.teamBuffShopNPC != null)
         {
+            Assault.gameNPCs.remove(this.teamBuffShopNPC);
             this.teamBuffShopNPC.despawn();
             this.teamBuffShopNPC.destroy();
             this.teamBuffShopNPC = null;

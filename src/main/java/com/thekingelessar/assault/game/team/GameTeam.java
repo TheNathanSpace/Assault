@@ -110,6 +110,8 @@ public class GameTeam
         player.getInventory().clear();
         gamePlayer.spawn(PlayerMode.getTeamMode(this));
         
+        gameInstance.updateShopSkins(player);
+        
         this.evaluateForfeit();
     }
     

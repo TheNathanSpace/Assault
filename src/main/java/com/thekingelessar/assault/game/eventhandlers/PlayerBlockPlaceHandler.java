@@ -19,6 +19,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PlayerBlockPlaceHandler implements Listener
 {
     @EventHandler
@@ -83,6 +86,12 @@ public class PlayerBlockPlaceHandler implements Listener
             Coordinate placedCoordinate = new Coordinate(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());
             
             gameInstance.placedBlocks.add(placedCoordinate);
+            
+            List<Material> fallingBlocks = Arrays.asList(Material.SAND, Material.GRAVEL, Material.ANVIL, Material.DRAGON_EGG);
+            if (fallingBlocks.contains(blockPlaceEvent.getBlock().getType()))
+            {
+                gameInstance.fallingBlockCoordinateMap.put(placedCoordinate.toString(), player);
+            }
             
             if (blockPlaceEvent.getBlock().getType().equals(Material.TNT))
             {

@@ -214,28 +214,28 @@ public class GamePlayer
                 break;
         }
         
-        if (attacker != null && !dropItems)
+        if (attacker != null)
         {
-            gameInstance.getPlayerTeam(attacker).gamerPoints += 1;
-            
             GamePlayer attackerPlayer = gameInstance.getGamePlayer(attacker);
             GamePlayer victimPlayer = gameInstance.getGamePlayer(player);
             
-            attackerPlayer.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
-            attacker.playSound(attacker.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+            attackerPlayer.killPlayer(victimPlayer.player, false);
             
-            int emeraldCount = 0;
-            for (ItemStack itemStack : player.getInventory().getContents())
+            if (!dropItems)
             {
-                if (itemStack != null && itemStack.getType().equals(Material.EMERALD))
+                int emeraldCount = 0;
+                for (ItemStack itemStack : player.getInventory().getContents())
                 {
-                    emeraldCount += itemStack.getAmount();
+                    if (itemStack != null && itemStack.getType().equals(Material.EMERALD))
+                    {
+                        emeraldCount += itemStack.getAmount();
+                    }
                 }
-            }
-            
-            if (emeraldCount > 0)
-            {
-                attacker.getInventory().addItem(new ItemStack(Material.EMERALD, emeraldCount));
+                
+                if (emeraldCount > 0)
+                {
+                    attacker.getInventory().addItem(new ItemStack(Material.EMERALD, emeraldCount));
+                }
             }
             
             attackerPlayer.updateScoreboard();

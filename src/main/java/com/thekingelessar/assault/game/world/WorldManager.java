@@ -72,6 +72,8 @@ public class WorldManager
     
     public static boolean deleteWorld(World world)
     {
+        Bukkit.unloadWorld(world, false);
+        
         File worldFolder = world.getWorldFolder();
         
         if (worldFolder.exists())

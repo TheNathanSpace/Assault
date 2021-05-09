@@ -10,13 +10,13 @@
 - ~~Keep players from using old secret storage and actually add a secret storage tab in the shop~~
 - ~~No more invisible wall, throw them violently away from it instead. Fix kicking behavior.~~
 - ~~End the game if the second time goes past first time? (Forfeit option?)~~
-- **Hardcode nether star location so it's not pushed around**
+- ~~Update skins on player join~~
+- ~~Hardcode nether star location so it's not pushed around~~
 - Explanation of commands
 - Clean up random barriers around the map
 - Attacker momentum would really stagnate for a while when they couldn't find an easy way into the base, maybe this can
   be fixed by adding/changing team buffs and by increasing the price of blocks.
 - Durability
-- Update skins on player join
 - Blow up/go under map
 - Better tools
 - Pick up flower
@@ -35,14 +35,12 @@
 - ~~Cleaner time when it goes to 8 minutes~~
 - ~~Red team can go to the attacker base during building stage~~
 - ~~Shops not looking in the right direction (attacker normal shop)~~
-- Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)
+- ~~Gravel can still push item~~
+- ~~Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)~~
 - Name colors aren't updating when new games start.
 - Team buff effects are sometimes persisting in-between rounds(/games?)
-- Shop skins gone?
 - Double "join" message
 - Some instances start where coins don't decrease when buying stuff
-- Shops don't have player skins anymore?
-- Gravel can still push item
 - Defending team logging out times are weird
 
 ## Roadmap

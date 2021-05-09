@@ -5,6 +5,7 @@ import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.map.Map;
+import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -16,7 +17,11 @@ import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.Util;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -70,6 +75,8 @@ public class GameInstance
     public TaskGiveCoins taskGiveCoins;
     
     public List<Coordinate> placedBlocks = new ArrayList<>();
+    public HashMap<FallingBlock, Player> fallingBlockPlayerMap = new HashMap<>();
+    public HashMap<String, Player> fallingBlockCoordinateMap = new HashMap<>();
     
     public HashMap<GameTeam, Item> guidingObjectives = new HashMap<>();
     public HashMap<GameTeam, Item> currentObjective = new HashMap<>();
@@ -142,20 +149,20 @@ public class GameInstance
         
         Collections.shuffle(this.players);
         
-        int numberOfTeams = 2;
-        int firstMember = 0;
         List<List<Player>> teamLists = new ArrayList<>();
+        
+        int numberOfTeams = 2;
+        int halfwayPoint = players.size() / numberOfTeams;
+        int start = 0;
+        int end = halfwayPoint;
         for (int i = 0; i < numberOfTeams; i++)
         {
-            List<Player> sublist = players.subList(firstMember, (players.size() / numberOfTeams) * (i + 1));
-            firstMember = (players.size() / numberOfTeams) * (i + 1);
+            List<Player> sublist = players.subList(start, end);
+            end = players.size();
+            start = halfwayPoint;
+            
             teamLists.add(sublist);
         }
-        
-        //        if (this.players.size() == 1)
-        //        {
-        //            teamLists.add(players);
-        //        }
         
         for (GameTeam gameTeam : teams.values())
         {
@@ -805,6 +812,30 @@ public class GameInstance
         }
         
         smallestTeam.addMember(player);
+    }
+    
+    public void updateShopSkins(Player player)
+    {
+        for (MapBase mapBase : this.gameMap.bases)
+        {
+            for (NPC npc : mapBase.itemShopNPCs)
+            {
+                Entity npcEntity = npc.getEntity();
+                if (npcEntity instanceof SkinnableEntity)
+                {
+                    ((SkinnableEntity) npcEntity).getSkinTracker().updateViewer(player);
+                }
+            }
+            
+            if (mapBase.teamBuffShopNPC != null)
+            {
+                Entity npcEntity = mapBase.teamBuffShopNPC.getEntity();
+                if (npcEntity instanceof SkinnableEntity)
+                {
+                    ((SkinnableEntity) npcEntity).getSkinTracker().updateViewer(player);
+                }
+            }
+        }
     }
     
     public static GameInstance getPlayerGameInstance(Player player)
