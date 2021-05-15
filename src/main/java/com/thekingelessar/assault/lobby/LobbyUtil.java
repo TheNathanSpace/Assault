@@ -24,6 +24,7 @@ public class LobbyUtil
     
     public static void joinQueue(Player player)
     {
+        // todo: if already in queueList, remove them. check for player uuid.
         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
         
         if (Assault.gameInstances.size() > 0)

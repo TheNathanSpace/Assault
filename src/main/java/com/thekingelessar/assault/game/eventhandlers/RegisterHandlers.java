@@ -27,6 +27,7 @@ public class RegisterHandlers
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMoveWorldHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerPickupItemHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerRightClickHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerToggleFlightHandler(), Assault.INSTANCE);
         
         Bukkit.getServer().getPluginManager().registerEvents(new VanillaWorldHandler(), Assault.INSTANCE);
         

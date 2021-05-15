@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItemTool;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.Material;
@@ -46,8 +47,7 @@ public class PlayerItemDropHandler implements Listener
                 return;
             }
             
-            List<Material> toolsList = Arrays.asList(Material.SHEARS, Material.WOOD_AXE, Material.WOOD_PICKAXE, Material.STONE_AXE, Material.STONE_PICKAXE, Material.GOLD_AXE, Material.GOLD_PICKAXE, Material.DIAMOND_AXE, Material.DIAMOND_PICKAXE);
-            if (toolsList.contains(itemStack.getType()))
+            if (ShopItemTool.axes.contains(itemStack.getType()) || ShopItemTool.pickaxes.contains(itemStack.getType()))
             {
                 playerDropItemEvent.setCancelled(true);
                 return;

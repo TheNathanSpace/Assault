@@ -2,12 +2,15 @@ package com.thekingelessar.assault.game.inventory.shops;
 
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.IShop;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItemTool;
+import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumAxeTier;
+import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumPickaxeTier;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.TeamColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -15,19 +18,25 @@ import java.util.Arrays;
 
 public class ShopAttack extends ShopItemShop implements IShop
 {
+    GamePlayer gamePlayer;
     
-    public Inventory secretStorage;
     public ItemStack storageItem;
-    public ItemStack goldItem;
     
-    public ShopAttack(TeamColor teamColor)
+    public EnumAxeTier axeTier;
+    public EnumPickaxeTier pickaxeTier;
+    
+    public int axeSlot;
+    public int pickaxeSlot;
+    
+    public ShopAttack(TeamColor teamColor, GamePlayer gamePlayer)
     {
+        this.gamePlayer = gamePlayer;
+        
         for (int i = 0; i < 10; i++)
         {
             airSlots.add(i);
         }
         
-        secretStorage = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Storage");
         inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Shop");
         
         constructShopItem(new ItemStack(Material.WOOL, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Wool", 4, Currency.COINS, false);
@@ -43,9 +52,15 @@ public class ShopAttack extends ShopItemShop implements IShop
         constructShopItem(new ItemStack(Material.BOW, 1), "Bow", 32, Currency.COINS, false);
         constructShopItem(new ItemStack(Material.ARROW, 8), "Arrows", 32, Currency.COINS, false);
         
-        constructShopItemTool(new ItemStack(Material.WOOD_AXE, 1), "Wooden Axe", 24, Currency.COINS, true);
-        constructShopItemTool(new ItemStack(Material.WOOD_PICKAXE, 1), "Wooden Pickaxe", 24, Currency.COINS, false);
-        constructShopItemTool(new ItemStack(Material.SHEARS, 1), "Shears", 28, Currency.COINS, false);
+        ShopItemTool woodAxeItem = constructShopItemTool(new ItemStack(Material.WOOD_AXE, 1), "Wooden Axe", 24, Currency.COINS, true, 0);
+        axeSlot = woodAxeItem.slot;
+        axeTier = EnumAxeTier.NONE;
+        
+        ShopItemTool woodPickItem = constructShopItemTool(new ItemStack(Material.WOOD_PICKAXE, 1), "Wooden Pickaxe", 24, Currency.COINS, false, 0);
+        pickaxeSlot = woodPickItem.slot;
+        pickaxeTier = EnumPickaxeTier.NONE;
+        
+        constructShopItemTool(new ItemStack(Material.SHEARS, 1), "Shears", 28, Currency.COINS, false, 0);
         
         constructShopItem(new ItemStack(Material.OBSIDIAN, 4), "Obsidian", 4, Currency.EMERALDS, true);
         constructShopItem(new ItemStack(Material.TNT, 1), "TNT", 4, Currency.EMERALDS, false);
@@ -56,14 +71,119 @@ public class ShopAttack extends ShopItemShop implements IShop
         chestMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to open the secret storage.", ChatColor.RESET + "The secret storage can be used", ChatColor.RESET + "by your" + teamColor.chatColor + " entire team§r."));
         storageItem.setItemMeta(chestMeta);
         
-        goldItem = new ItemStack(Material.GOLD_INGOT);
-        ItemMeta goldMeta = goldItem.getItemMeta();
-        goldMeta.setDisplayName(ChatColor.RESET + "Return to shop");
-        goldMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to return to the shop.", ChatColor.RESET + "This storage can be used", ChatColor.RESET + "by your" + teamColor.chatColor + " entire team§r."));
-        goldItem.setItemMeta(goldMeta);
-        
         inventory.setItem(53, storageItem);
-        secretStorage.setItem(0, goldItem);
+    }
+    
+    public boolean upgradePickaxe()
+    {
+        if (this.pickaxeTier == null || this.pickaxeTier.equals(EnumPickaxeTier.NONE))
+        {
+            return false;
+        }
+        
+        if (this.pickaxeTier.shopItemTool.level == 3)
+        {
+            return false;
+        }
+        
+        if (this.pickaxeTier.getHigherPickaxeTier() == null)
+        {
+            return false;
+        }
+        
+        this.pickaxeTier = this.pickaxeTier.getHigherPickaxeTier();
+        
+        if (this.pickaxeTier.getHigherPickaxeTier() != null)
+        {
+            ShopItemTool.updateItemPurchase(this, this.pickaxeTier.getHigherPickaxeTier().shopItemTool);
+        }
+        
+        gamePlayer.spawnItems.removeIf(spawnItem -> ShopItemTool.pickaxes.contains(spawnItem.getType()));
+        gamePlayer.addSpawnItem(this.pickaxeTier.shopItemTool.boughtItemStack);
+        
+        return true;
+    }
+    
+    public boolean upgradeAxe()
+    {
+        if (this.axeTier == null || this.axeTier.equals(EnumAxeTier.NONE))
+        {
+            return false;
+        }
+        
+        if (this.axeTier.shopItemTool.level == 3)
+        {
+            return false;
+        }
+        
+        if (this.axeTier.getHigherAxeTier() == null)
+        {
+            return false;
+        }
+        
+        this.axeTier = this.axeTier.getHigherAxeTier();
+        
+        if (this.axeTier.getHigherAxeTier() != null)
+        {
+            ShopItemTool.updateItemPurchase(this, this.axeTier.getHigherAxeTier().shopItemTool);
+        }
+        
+        gamePlayer.spawnItems.removeIf(spawnItem -> ShopItemTool.axes.contains(spawnItem.getType()));
+        gamePlayer.addSpawnItem(this.axeTier.shopItemTool.boughtItemStack);
+        
+        return true;
+    }
+    
+    public boolean downgradePickaxe()
+    {
+        if (this.pickaxeTier == null || this.pickaxeTier.equals(EnumPickaxeTier.NONE))
+        {
+            return false;
+        }
+        
+        if (this.pickaxeTier.shopItemTool.level == 0)
+        {
+            return false;
+        }
+        
+        if (this.pickaxeTier.getLowerPickaxeTier() == null)
+        {
+            return false;
+        }
+        
+        this.pickaxeTier = this.pickaxeTier.getLowerPickaxeTier();
+        ShopItemTool.updateItemPurchase(this, this.pickaxeTier.getHigherPickaxeTier().shopItemTool);
+        
+        gamePlayer.spawnItems.removeIf(spawnItem -> ShopItemTool.pickaxes.contains(spawnItem.getType()));
+        gamePlayer.addSpawnItem(this.pickaxeTier.shopItemTool.boughtItemStack);
+        
+        return true;
+    }
+    
+    public boolean downgradeAxe()
+    {
+        if (this.axeTier == null || this.axeTier.equals(EnumAxeTier.NONE))
+        {
+            return false;
+        }
+        
+        if (this.axeTier.shopItemTool.level == 0)
+        {
+            return false;
+        }
+        
+        if (this.axeTier.getLowerAxeTier() == null)
+        {
+            return false;
+        }
+        
+        this.axeTier = this.axeTier.getLowerAxeTier();
+        ShopItemTool.updateItemPurchase(this, this.axeTier.getHigherAxeTier().shopItemTool);
+        
+        gamePlayer.spawnItems.removeIf(spawnItem -> ShopItemTool.axes.contains(spawnItem.getType()));
+        gamePlayer.addSpawnItem(this.axeTier.shopItemTool.boughtItemStack);
+        
+        return true;
     }
     
 }

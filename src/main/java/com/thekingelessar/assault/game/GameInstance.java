@@ -119,6 +119,8 @@ public class GameInstance
             player.getInventory().clear();
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
+            
+            System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());
         }
         
         if (spectators != null)
@@ -173,6 +175,7 @@ public class GameInstance
         {
             GamePlayer gamePlayer = this.getGamePlayer(player);
             gamePlayer.swapReset();
+            System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());
         }
     }
     
@@ -642,14 +645,7 @@ public class GameInstance
         
         WorldManager.closeWorld(this.gameWorld);
         List<GameInstance> gameInstances = Assault.gameInstances;
-        for (int i = 0; i < gameInstances.size(); i++)
-        {
-            GameInstance gameInstance = gameInstances.get(i);
-            if (gameInstance.equals(this))
-            {
-                GameInstance removed = Assault.gameInstances.remove(i);
-            }
-        }
+        Assault.gameInstances.remove(this);
     }
     
     public void endPreGame()
@@ -664,14 +660,7 @@ public class GameInstance
         
         WorldManager.closeWorld(this.gameWorld);
         List<GameInstance> gameInstances = Assault.gameInstances;
-        for (int i = 0; i < gameInstances.size(); i++)
-        {
-            GameInstance gameInstance = gameInstances.get(i);
-            if (gameInstance.equals(this))
-            {
-                GameInstance removed = Assault.gameInstances.remove(i);
-            }
-        }
+        Assault.gameInstances.remove(this);
     }
     
     public List<Player> getPlayers()

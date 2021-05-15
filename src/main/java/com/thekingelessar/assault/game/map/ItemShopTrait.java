@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.map;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import net.citizensnpcs.api.trait.Trait;
 import org.bukkit.entity.Player;
@@ -48,6 +49,7 @@ public class ItemShopTrait extends Trait
             GameTeam gameTeam = gameInstance.getPlayerTeam(player);
             if (gameTeam != null)
             {
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 InventoryView inventoryView;
                 switch (gameInstance.gameStage)
                 {
@@ -55,7 +57,7 @@ public class ItemShopTrait extends Trait
                         inventoryView = player.openInventory(gameTeam.shopBuilding.inventory);
                         break;
                     case ATTACKING:
-                        inventoryView = player.openInventory(gameTeam.shopAttacking.inventory);
+                        inventoryView = player.openInventory(gamePlayer.shopAttacking.inventory);
                         break;
                 }
             }

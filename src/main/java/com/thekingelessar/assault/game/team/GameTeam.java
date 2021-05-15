@@ -13,12 +13,16 @@ import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameTeam
@@ -35,8 +39,10 @@ public class GameTeam
     public MapBase mapBase;
     
     public ShopBuilding shopBuilding;
-    public ShopAttack shopAttacking;
     public ShopTeamBuffs shopTeamBuffs;
+    
+    public ItemStack goldItem;
+    public Inventory secretStorage;
     
     public int gamerPoints = 0;
     
@@ -53,6 +59,20 @@ public class GameTeam
         this.color = color;
         this.gameInstance = instance;
         createScoreboard();
+        
+    }
+    
+    public void setSecretStorage()
+    {
+        secretStorage = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Storage");
+        
+        goldItem = new ItemStack(Material.GOLD_INGOT);
+        ItemMeta goldMeta = goldItem.getItemMeta();
+        goldMeta.setDisplayName(ChatColor.RESET + "Return to shop");
+        goldMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to return to the shop.", ChatColor.RESET + "This storage can be used", ChatColor.RESET + "by your" + this.color.chatColor + " entire team§r."));
+        goldItem.setItemMeta(goldMeta);
+        
+        secretStorage.setItem(0, goldItem);
     }
     
     public void setTeamMapBase()
@@ -157,6 +177,7 @@ public class GameTeam
     public void createBuildingShop()
     {
         this.shopBuilding = new ShopBuilding(this.color, null);
+        this.setSecretStorage();
     }
     
     public void createAttackShop()
@@ -166,7 +187,13 @@ public class GameTeam
             this.shopTeamBuffs = new ShopTeamBuffs(this, null);
         }
         
-        this.shopAttacking = new ShopAttack(this.color);
+        for (Player player : this.getPlayers())
+        {
+            GamePlayer gamePlayer = this.getGamePlayer(player);
+            gamePlayer.shopAttacking = new ShopAttack(this.color, gamePlayer);
+        }
+        
+        this.setSecretStorage();
     }
     
     
@@ -248,9 +275,13 @@ public class GameTeam
             shopInventories.add(this.shopBuilding.inventory);
         }
         
-        if (this.shopAttacking != null)
+        for (Player player : this.getPlayers())
         {
-            shopInventories.add(this.shopAttacking.inventory);
+            GamePlayer gamePlayer = this.getGamePlayer(player);
+            if (gamePlayer.shopAttacking != null)
+            {
+                shopInventories.add(gamePlayer.shopAttacking.inventory);
+            }
         }
         
         if (this.shopTeamBuffs != null)

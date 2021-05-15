@@ -10,6 +10,7 @@ import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.lobby.LobbyUtil;
+import net.citizensnpcs.npc.CitizensNPC;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -65,12 +66,12 @@ public class InventoryClickHandler implements Listener
         Inventory inventoryOpen = inventoryClickEvent.getInventory();
         ItemStack itemClicked = inventoryClickEvent.getCurrentItem();
         
-        if (!playerTeam.getShopInventories().contains(inventoryClickEvent.getInventory()) && !inventoryClickEvent.getInventory().equals(playerTeam.shopAttacking.secretStorage))
+        if (!playerTeam.getShopInventories().contains(inventoryClickEvent.getInventory()) && !inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
         {
             return;
         }
         
-        if (placingItemInTop(inventoryClickEvent))
+        if (!inventoryClickEvent.getInventory().equals(playerTeam.secretStorage) && placingItemInTop(inventoryClickEvent))
         {
             inventoryClickEvent.setCancelled(true);
             return;
@@ -82,25 +83,25 @@ public class InventoryClickHandler implements Listener
             ShopBuilding shop = playerTeam.shopBuilding;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
-        else if (playerTeam.shopAttacking != null && inventoryOpen.equals(playerTeam.shopAttacking.inventory))
+        else if (inventoryOpen.equals(gamePlayer.shopAttacking.inventory))
         {
-            if (itemClicked.equals(playerTeam.shopAttacking.storageItem))
+            if (itemClicked.equals(gamePlayer.shopAttacking.storageItem))
             {
                 player.playSound(player.getLocation(), Sound.CHEST_OPEN, 0.5F, 1.3F);
-                player.openInventory(playerTeam.shopAttacking.secretStorage);
+                player.openInventory(playerTeam.secretStorage);
                 inventoryClickEvent.setCancelled(true);
                 return;
             }
             
-            ShopAttack shop = playerTeam.shopAttacking;
+            ShopAttack shop = gamePlayer.shopAttacking;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
-        else if (playerTeam.shopAttacking != null && inventoryClickEvent.getInventory().equals(playerTeam.shopAttacking.secretStorage))
+        else if (inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
         {
-            if (itemClicked.equals(playerTeam.shopAttacking.goldItem))
+            if (itemClicked.equals(playerTeam.goldItem))
             {
                 player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 0.5F, 1.3F);
-                player.openInventory(playerTeam.shopAttacking.inventory);
+                player.openInventory(gamePlayer.shopAttacking.inventory);
                 inventoryClickEvent.setCancelled(true);
                 return;
             }

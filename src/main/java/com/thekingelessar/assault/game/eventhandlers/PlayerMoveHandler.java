@@ -8,6 +8,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,6 +52,16 @@ public class PlayerMoveHandler implements Listener
                 {
                     cancelMovement(playerMoveEvent);
                     return;
+                }
+            }
+            
+            GameTeam gameTeam = gameInstance.getPlayerTeam(player);
+            if (gameTeam != null)
+            {
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
+                if (((Entity) player).isOnGround() && !gamePlayer.flightReset)
+                {
+                    gamePlayer.flightReset = true;
                 }
             }
             

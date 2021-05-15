@@ -1,6 +1,8 @@
 package com.thekingelessar.assault.commands;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,20 +14,32 @@ public class CommandAssault implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if (args == null || args.length == 0) return false;
-        switch (args[0])
+        
+        if (sender instanceof Player)
         {
-            case "attack":
-                if (sender instanceof Player)
+            Player player = (Player) sender;
+            GameInstance testInstance = GameInstance.getPlayerGameInstance(player);
+            if (testInstance != null)
+            {
+                GameTeam gameTeam = testInstance.getPlayerTeam(player);
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
+                switch (args[0])
                 {
-                    Player senderPlayer = (Player) sender;
-                    GameInstance testInstance = GameInstance.getPlayerGameInstance(senderPlayer);
-                    if (testInstance != null)
-                    {
+                    case "attack":
                         testInstance.taskCountdownBuilding.ticksLeft = 60;
-                    }
+                        break;
+                    case "gp":
+                        gameTeam.gamerPoints += Integer.parseInt(args[1]);
+                        break;
+                    case "coins":
+                        gamePlayer.playerBank.coins += Integer.parseInt(args[1]);
+                        break;
+                    
                 }
-                break;
+                return true;
+            }
+            return false;
         }
-        return true;
+        return false;
     }
 }

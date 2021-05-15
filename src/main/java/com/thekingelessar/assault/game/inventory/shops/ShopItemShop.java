@@ -51,11 +51,24 @@ public class ShopItemShop implements IShop
         ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
     }
     
-    public void constructShopItemTool(ItemStack boughtItemStack, String name, int cost, Currency currency, boolean newRow)
+    public ShopItemTool constructShopItemTool(ItemStack boughtItemStack, String name, int cost, Currency currency, boolean newRow, int level)
     {
         ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtItemStack.clone(), name, cost, currency);
-        ShopItemTool shopItem = new ShopItemTool(cost, currency, shopItemStack, boughtItemStack);
+        ShopItemTool shopItem = new ShopItemTool(cost, currency, shopItemStack, boughtItemStack, level);
         
+        this.insertShopItemTool(shopItemStack, shopItem, newRow);
+        
+        return shopItem;
+    }
+    
+    public static ShopItemTool constructShopItemToolLevel(ItemStack boughtItemStack, String name, int cost, Currency currency, int level)
+    {
+        ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtItemStack.clone(), name, cost, currency);
+        return new ShopItemTool(cost, currency, shopItemStack, boughtItemStack, level);
+    }
+    
+    public void insertShopItemTool(ItemStack shopItemStack, ShopItemTool shopItem, boolean newRow)
+    {
         this.shopItemMap.put(shopItemStack, shopItem);
         
         ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);

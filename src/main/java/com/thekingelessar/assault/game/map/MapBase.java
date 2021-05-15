@@ -67,6 +67,11 @@ public class MapBase
             trait.hideCape();
             trait.setVisible(SkinLayers.Layer.CAPE, false);
             
+            if (shopLocation == null)
+            {
+                System.out.println("Shop location is null! " + this.teamColor);
+            }
+            
             npc.spawn(shopLocation);
             npc.getEntity().teleport(shopLocation);
             this.itemShopNPCs.add(npc);
@@ -76,7 +81,7 @@ public class MapBase
             {
                 ((SkinnableEntity) npcEntity).getSkinTracker().notifySkinChange(true);
             }
-    
+            
             Assault.gameNPCs.add(npc);
         }
         
@@ -95,6 +100,11 @@ public class MapBase
             trait.hideCape();
             trait.setVisible(SkinLayers.Layer.CAPE, false);
             
+            if (buffShopLocation == null)
+            {
+                System.out.println("Shop location is null! " + this.teamColor);
+            }
+            
             npc.spawn(buffShopLocation);
             npc.getEntity().teleport(buffShopLocation);
             this.teamBuffShopNPC = npc;
@@ -104,7 +114,7 @@ public class MapBase
             {
                 ((SkinnableEntity) npcEntity).getSkinTracker().notifySkinChange(true);
             }
-    
+            
             Assault.gameNPCs.add(npc);
         }
     }

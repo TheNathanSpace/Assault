@@ -4,6 +4,7 @@ import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.Currency;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
@@ -29,8 +30,10 @@ public class GamePlayer
     public Player player;
     public GameInstance gameInstance;
     public GameTeam gameTeam;
-    public PlayerBank playerBank;
     public FastBoard scoreboard;
+    
+    public PlayerBank playerBank;
+    public ShopAttack shopAttacking;
     
     public TaskCountdownRespawn taskCountdownRespawn;
     
@@ -38,6 +41,8 @@ public class GamePlayer
     public List<ItemStack> spawnArmor = new ArrayList<>();
     
     List<Material> itemsToDrop = Arrays.asList(Material.EMERALD, Material.TNT, Material.OBSIDIAN);
+    
+    public boolean flightReset = true;
     
     public GamePlayer(Player player, GameInstance gameInstance, GameTeam gameTeam)
     {
@@ -99,9 +104,24 @@ public class GamePlayer
             player.getInventory().clear();
         }
         
-        for (ItemStack itemStack : spawnArmor)
+        player.getInventory().setArmorContents(spawnArmor.toArray(new ItemStack[0]));
+        
+        System.out.println("---");
+        for (ItemStack itemStack : this.spawnItems)
         {
-            player.getInventory().setArmorContents(spawnArmor.toArray(new ItemStack[0]));
+            System.out.println(itemStack.getType());
+        }
+        
+        if (this.shopAttacking != null)
+        {
+            this.shopAttacking.downgradeAxe();
+            this.shopAttacking.downgradePickaxe();
+        }
+        
+        System.out.println("---");
+        for (ItemStack itemStack : this.spawnItems)
+        {
+            System.out.println(itemStack.getType());
         }
         
         for (ItemStack itemStack : spawnItems)
@@ -167,13 +187,10 @@ public class GamePlayer
         
         player.teleport(gameInstance.gameMap.waitingSpawn.toLocation(gameInstance.gameWorld));
         
-        GameTeam gameTeam = gameInstance.getPlayerTeam(player);
-        GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
-        
         if (delay)
         {
-            gamePlayer.taskCountdownRespawn = new TaskCountdownRespawn(60, 0, 20, gameInstance, player);
-            gamePlayer.taskCountdownRespawn.runTaskTimer(Assault.INSTANCE, gamePlayer.taskCountdownRespawn.startDelay, gamePlayer.taskCountdownRespawn.tickDelay);
+            this.taskCountdownRespawn = new TaskCountdownRespawn(60, 0, 20, gameInstance, player);
+            this.taskCountdownRespawn.runTaskTimer(Assault.INSTANCE, this.taskCountdownRespawn.startDelay, this.taskCountdownRespawn.tickDelay);
         }
         else
         {

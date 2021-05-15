@@ -27,7 +27,7 @@ public class BuffHealing implements IBuff
                 }
             }
             
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1000000, 2, true, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1000000, 1, true, true));
         }
     }
 }
