@@ -57,7 +57,6 @@ public class ShopItemTool extends ShopItem
             }
         }
         
-        // todo: cancel the purchase if they have max level already
         boolean success;
         if (!gamePlayer.shopAttacking.axeTier.equals(EnumAxeTier.NONE) && this.boughtItemStack.getType().equals(gamePlayer.shopAttacking.axeTier.shopItemTool.boughtItemStack.getType()))
         {

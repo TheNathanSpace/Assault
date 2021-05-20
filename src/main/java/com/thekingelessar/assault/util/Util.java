@@ -151,32 +151,6 @@ public class Util
         return (double) Math.round(value * scale) / scale;
     }
     
-    public static boolean isOnCarpet(Player player)
-    {
-        Block block = player.getLocation().getBlock();
-        return block.getType().equals(Material.CARPET);
-    }
-    
-    public static boolean isOnCarpet(Location location)
-    {
-        Block block = location.getBlock();
-        return block.getType().equals(Material.CARPET);
-    }
-    
-    public static List<TeamColor> getCarpetColor(Player player)
-    {
-        Block block = player.getLocation().getBlock();
-        MaterialData materialData = block.getState().getData();
-        return TeamColor.findByDataValue(materialData.getData());
-    }
-    
-    public static List<TeamColor> getCarpetColor(Location location)
-    {
-        Block block = location.getBlock();
-        MaterialData materialData = block.getState().getData();
-        return TeamColor.findByDataValue(materialData.getData());
-    }
-    
     /*
      * From https://bukkit.org/threads/how-to-check-if-a-player-is-between-two-areas.78028/#post-1140505
      * Check if Location testedLocation is within the cuboid with corners l1 and l2.

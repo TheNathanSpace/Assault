@@ -1,9 +1,6 @@
 package com.thekingelessar.assault;
 
-import com.thekingelessar.assault.commands.CommandAll;
-import com.thekingelessar.assault.commands.CommandAssault;
-import com.thekingelessar.assault.commands.CommandForfeit;
-import com.thekingelessar.assault.commands.CommandRespawn;
+import com.thekingelessar.assault.commands.*;
 import com.thekingelessar.assault.config.MapConfig;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
@@ -14,10 +11,7 @@ import com.thekingelessar.assault.game.world.WorldManager;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -60,10 +54,11 @@ public class Assault extends JavaPlugin
         Map mapObject = MapConfig.loadWorldFromConfig("map_saloon.yml");
         maps.put("map_saloon", mapObject);
         
-        this.getCommand("assault").setExecutor(new CommandAssault());
-        this.getCommand("respawn").setExecutor(new CommandRespawn());
+        this.getCommand("help").setExecutor(new CommandHelp());
         this.getCommand("all").setExecutor(new CommandAll());
+        this.getCommand("respawn").setExecutor(new CommandRespawn());
         this.getCommand("forfeit").setExecutor(new CommandForfeit());
+        this.getCommand("assault").setExecutor(new CommandAssault());
         
         RegisterHandlers.registerHandlers();
         

@@ -88,7 +88,8 @@ public class GameTeam
     
     private void createScoreboard()
     {
-        teamScoreboard = gameInstance.teamScoreboard.registerNewTeam(color.toString());
+        teamScoreboard = gameInstance.scoreboard.registerNewTeam(color.toString());
+        teamScoreboard.setPrefix(color.chatColor + ChatColor.BOLD.toString() + " " + color.toString().charAt(0));
         teamScoreboard.setAllowFriendlyFire(false);
         teamScoreboard.setCanSeeFriendlyInvisibles(true);
         teamScoreboard.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
@@ -120,7 +121,7 @@ public class GameTeam
         }
         
         members.add(gamePlayer);
-        teamScoreboard.addPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+        teamScoreboard.addPlayer(player);
         
         player.setDisplayName(this.color.chatColor + player.getName() + ChatColor.RESET);
         player.setCustomName(player.getDisplayName() + ChatColor.RESET);

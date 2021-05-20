@@ -8,10 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class LobbyUtil
 {
@@ -24,7 +21,6 @@ public class LobbyUtil
     
     public static void joinQueue(Player player)
     {
-        // todo: if already in queueList, remove them. check for player uuid.
         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
         
         if (Assault.gameInstances.size() > 0)
@@ -72,7 +68,11 @@ public class LobbyUtil
                 }
             }
             
-            GameInstance newInstance = new GameInstance("saloon", queueList, null);
+            Random random = new Random();
+            List<String> mapNames = new ArrayList<>(Assault.maps.keySet());
+            String randomMap = mapNames.get(random.nextInt(mapNames.size()));
+            
+            GameInstance newInstance = new GameInstance(randomMap, queueList, null);
             newInstance.startWorld();
             newInstance.sendPlayersToWorld();
             Assault.gameInstances.add(newInstance);
@@ -108,18 +108,14 @@ public class LobbyUtil
     
     public static void sendRules(Player player)
     {
-        String message = Assault.assaultPrefix + ChatColor.BLUE + ChatColor.UNDERLINE + "Click here to open the tutorial!";
-        String url = "https://thenathan.space/assault/";
-        LobbyUtil.sendMessage(player, message, url);
+        LobbyUtil.sendGuideURL(player);
         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
     }
     
-    private static void sendMessage(Player player, String message, String url)
+    private static void sendGuideURL(Player player)
     {
-        String command = "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the rules!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://thenathan.space/assault/\"}}]";
-        Bukkit.getServer().dispatchCommand(
-                Bukkit.getConsoleSender(),
-                command);
+        String command = "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the guide online!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://thenathan.space/assault/\"}}]";
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
     }
     
     private static ItemStack initStar()
@@ -166,8 +162,8 @@ public class LobbyUtil
         ItemStack itemStack = new ItemStack(Material.BOOK);
         
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.BLUE + ChatColor.BOLD.toString() + "Tutorial");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the explanation!"));
+        itemMeta.setDisplayName(ChatColor.BLUE + ChatColor.BOLD.toString() + "Guide");
+        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the guide!"));
         
         itemStack.setItemMeta(itemMeta);
         

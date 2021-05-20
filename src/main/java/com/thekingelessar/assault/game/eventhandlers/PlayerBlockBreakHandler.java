@@ -49,14 +49,7 @@ public class PlayerBlockBreakHandler implements Listener
                 blockBreakEvent.setCancelled(false);
             }
             
-            //            for (Material block : gameInstance.gameMap.breakableBlocks)
-            //            {
-            //                if (block.equals(blockBreakEvent.getBlock().getType()))
-            //                {
-            //                    blockBreakEvent.setCancelled(false);
-            //                }
-            //            }
-            
+            player.getItemInHand().setDurability(player.getItemInHand().getType().getMaxDurability());
         }
     }
 }

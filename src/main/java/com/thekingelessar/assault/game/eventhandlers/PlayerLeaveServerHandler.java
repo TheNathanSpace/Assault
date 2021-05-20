@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
+import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,5 +27,7 @@ public class PlayerLeaveServerHandler implements Listener
                 gameInstance.removePlayer(player);
             }
         }
+        
+        LobbyUtil.queueList.remove(player);
     }
 }

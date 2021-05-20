@@ -31,6 +31,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameInstance
 {
@@ -43,7 +44,7 @@ public class GameInstance
     public World gameWorld;
     
     public HashMap<TeamColor, GameTeam> teams = new HashMap<>();
-    public Scoreboard teamScoreboard;
+    public Scoreboard scoreboard;
     
     private final List<Player> players;
     private final List<Player> spectators;
@@ -94,7 +95,7 @@ public class GameInstance
         this.gameID = mapName + "_" + gameUUID.toString();
         
         ScoreboardManager manager = Bukkit.getScoreboardManager();
-        teamScoreboard = manager.getNewScoreboard();
+        scoreboard = manager.getNewScoreboard();
         
         this.players = new ArrayList<>(players);
         this.spectators = spectators;
@@ -106,6 +107,9 @@ public class GameInstance
         
         this.gameWorld.setGameRuleValue("DO_DAYLIGHT_CYCLE", "false");
         this.gameWorld.setGameRuleValue("DO_MOB_SPAWNING", "false");
+        
+        int randomTime = ThreadLocalRandom.current().nextInt(0, 24000 + 1);
+        this.gameWorld.setTime(randomTime);
         
         Assault.INSTANCE.getLogger().info("Opened new game world: " + gameWorld.getName());
     }
@@ -637,14 +641,15 @@ public class GameInstance
             
             for (Player player : gameTeam.getPlayers())
             {
-                gameTeam.teamScoreboard.removePlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+                gameTeam.teamScoreboard.removePlayer(player);
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 gamePlayer.scoreboard.delete();
             }
+            
+            gameTeam.teamScoreboard.unregister();
         }
         
         WorldManager.closeWorld(this.gameWorld);
-        List<GameInstance> gameInstances = Assault.gameInstances;
         Assault.gameInstances.remove(this);
     }
     

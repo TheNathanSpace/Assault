@@ -14,12 +14,10 @@
 - ~~Hardcode nether star location so it's not pushed around~~
 - ~~More upgrades: Sharpness, protection, double jumping~~
 - ~~Better tools~~
-- Explanation of commands
-- Clean up random barriers around the map
-- Durability
-- Blow up/go under map
-- Pick up flower
-- See other peoples' health?
+- ~~Explanation of commands~~
+- ~~Clean up random barriers around the map~~
+- ~~Blow up/go under map~~
+- **Durability**
 
 ## Bugs
 
@@ -37,24 +35,18 @@
 - ~~Shops not looking in the right direction (attacker normal shop)~~
 - ~~Gravel can still push item~~
 - ~~Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)~~
+- Defending team logging out times are weird
+- Running out clock times are weird?
 - Name colors aren't updating when new games start.
 - Team buff effects are sometimes persisting in-between rounds(/games?)
 - Double "join" message
 - Some instances start where coins don't decrease when buying stuff
-- Defending team logging out times are weird
-- Running out clock times are weird?
 
 ## Roadmap
 
 - Shops
     - Armor
-    - Strength?
+    - Strength team buff?
     - Map-specific items
 - Multiple maps
 - Game modifiers (infinite time)
-
----
-
-#### Resources
-
-[FastBoard](https://github.com/MrMicky-FR/FastBoard)

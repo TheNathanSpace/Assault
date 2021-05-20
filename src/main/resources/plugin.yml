@@ -5,19 +5,29 @@ author: TheKingElessar
 softdepend: [ HolographicDisplays ]
 depend: [ Citizens ]
 commands:
-  respawn:
-    description: Respawn, just in case you get trapped somewhere.
+  help:
+    aliases: [ h, Help ]
+    description: Explanation of commands.
     usage: |
-      /respawn
+      /help
   all:
-    description: Send chat messages to the entire game.
+    aliases: [ a, All ]
+    description: Shows a chat message to all players in the game.
     usage: |
       /all <message>
+  respawn:
+    aliases: [ Respawn ]
+    description: Kills you (in case you get stuck somewhere).
+    usage: |
+      /respawn
   forfeit:
-    description: Vote to forfeit.
+    aliases: [ Forfeit, forfiet, Forfiet ]
+    description: Toggles your vote to forfeit.
     usage: |
       /forfeit
   assault:
-    description: Dev command.
+    description: Dev command. Kinda sus...
     usage: |
       /assault attack
+      /assault coins <amount>
+      /assault gp <amount>
