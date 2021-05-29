@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.eventhandlers;
+package com.thekingelessar.assault.game.eventhandlers.inventory;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
@@ -7,10 +7,10 @@ import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
+import com.thekingelessar.assault.game.modifiers.ShopPlayerModifier;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.lobby.LobbyUtil;
-import net.citizensnpcs.npc.CitizensNPC;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -29,13 +29,12 @@ public class InventoryClickHandler implements Listener
     {
         Player player = (Player) inventoryClickEvent.getWhoClicked();
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
+        ItemStack itemStack = inventoryClickEvent.getCurrentItem();
         
         if (gameInstance == null)
         {
             if (player.getWorld().equals(Assault.lobbyWorld))
             {
-                ItemStack itemStack = inventoryClickEvent.getCurrentItem();
-                
                 if (itemStack != null)
                 {
                     if (itemStack.equals(LobbyUtil.joinGameStar))
@@ -57,7 +56,12 @@ public class InventoryClickHandler implements Listener
         
         if (gameInstance.gameStage.equals(GameStage.PREGAME))
         {
-            return;
+            if (itemStack != null && itemStack.equals(GameInstance.gameModifierItemStack))
+            {
+                player.openInventory(gameInstance.modifierShopMap.get(player).inventory);
+                inventoryClickEvent.setCancelled(true);
+                return;
+            }
         }
         
         GameTeam playerTeam = gameInstance.getPlayerTeam(player);
@@ -78,7 +82,12 @@ public class InventoryClickHandler implements Listener
         }
         
         ShopItem shopItemClicked = null;
-        if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))
+        if (gameInstance.modifierShopMap != null && inventoryOpen.equals(gameInstance.modifierShopMap.get(player).inventory))
+        {
+            ShopPlayerModifier shop = gameInstance.modifierShopMap.get(player);
+            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
+        }
+        else if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))
         {
             ShopBuilding shop = playerTeam.shopBuilding;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);

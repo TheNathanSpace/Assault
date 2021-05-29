@@ -1,17 +1,17 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.lobby.LobbyUtil;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerRightClickHandler implements Listener
+public class PlayerInteractHandler implements Listener
 {
     @EventHandler
-    public void onPlayerRightClick(PlayerInteractEvent playerInteractEvent)
+    public void onPlayerInteract(PlayerInteractEvent playerInteractEvent)
     {
         Player player = playerInteractEvent.getPlayer();
         ItemStack itemStack = playerInteractEvent.getItem();
@@ -24,16 +24,25 @@ public class PlayerRightClickHandler implements Listener
                 return;
             }
             
-            if (itemStack.getType().equals(Material.BARRIER))
+            if (itemStack.equals(LobbyUtil.leaveBarrier))
             {
                 LobbyUtil.leaveQueue(player);
                 return;
             }
             
-            if (itemStack.getType().equals(Material.BOOK))
+            if (itemStack.equals(LobbyUtil.rulesBook))
             {
                 LobbyUtil.sendRules(player);
                 return;
+            }
+            
+            GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
+            if (gameInstance != null)
+            {
+                if (itemStack.equals(GameInstance.gameModifierItemStack))
+                {
+                    player.openInventory(gameInstance.modifierShopMap.get(player).inventory);
+                }
             }
         }
     }

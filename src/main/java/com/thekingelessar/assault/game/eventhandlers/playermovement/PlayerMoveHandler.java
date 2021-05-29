@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.eventhandlers;
+package com.thekingelessar.assault.game.eventhandlers.playermovement;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;

@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.eventhandlers;
+package com.thekingelessar.assault.game.eventhandlers.world;
 
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;

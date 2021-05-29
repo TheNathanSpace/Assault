@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.eventhandlers;
+package com.thekingelessar.assault.game.eventhandlers.combat;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.player.DeathType;
