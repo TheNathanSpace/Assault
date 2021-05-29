@@ -6,6 +6,8 @@ import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.map.MapBase;
+import com.thekingelessar.assault.game.modifiers.ShopPlayerModifier;
+import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -25,6 +27,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -48,6 +51,10 @@ public class GameInstance
     
     private final List<Player> players;
     private final List<Player> spectators;
+    
+    public static ItemStack gameModifierItemStack = GameInstance.initGameModifierItemStack();
+    public HashMap<Player, ShopPlayerModifier> modifierShopMap = new HashMap<>();
+    public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
@@ -124,6 +131,9 @@ public class GameInstance
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
             
+            player.getInventory().setItem(8, GameInstance.gameModifierItemStack.clone());
+            this.modifierShopMap.put(player, new ShopPlayerModifier(this, player));
+            
             System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());
         }
         
@@ -138,6 +148,27 @@ public class GameInstance
         
         taskCountdownGameStart = new TaskCountdownGameStart(200, 20, 20, this);
         taskCountdownGameStart.runTaskTimer(Assault.INSTANCE, taskCountdownGameStart.startDelay, taskCountdownGameStart.tickDelay);
+    }
+    
+    private static ItemStack initGameModifierItemStack()
+    {
+        ItemStack itemStack = new ItemStack(Material.REDSTONE_COMPARATOR);
+        
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Modifiers");
+        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the modifier voting menu!"));
+        
+        itemStack.setItemMeta(itemMeta);
+        
+        return itemStack;
+    }
+    
+    public void updateModShops()
+    {
+        for (ShopPlayerModifier shopPlayerModifier : this.modifierShopMap.values())
+        {
+            shopPlayerModifier.updateCounts();
+        }
     }
     
     public void createTeams()
@@ -175,8 +206,10 @@ public class GameInstance
             gameTeam.addMembers(teamLists.remove(0));
         }
         
+        this.modifierShopMap = null;
         for (Player player : this.getPlayers())
         {
+            player.getInventory().clear();
             GamePlayer gamePlayer = this.getGamePlayer(player);
             gamePlayer.swapReset();
             System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());

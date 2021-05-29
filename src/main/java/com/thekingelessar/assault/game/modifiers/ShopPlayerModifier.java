@@ -1,0 +1,88 @@
+package com.thekingelessar.assault.game.modifiers;
+
+import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.inventory.IShop;
+import com.thekingelessar.assault.game.inventory.ShopUtil;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ShopPlayerModifier implements IShop
+{
+    public GameInstance gameInstance;
+    public Player player;
+    public Inventory inventory;
+    
+    public Map<ItemStack, ShopItemModifier> shopItemMap = new HashMap<>();
+    private List<Integer> airSlots = new ArrayList<>();
+    
+    @Override
+    public ShopItem getShopItem(ItemStack itemStack)
+    {
+        return this.shopItemMap.get(itemStack);
+    }
+    
+    public ShopPlayerModifier(GameInstance gameInstance, Player player)
+    {
+        this.player = player;
+        
+        for (int i = 0; i < 10; i++)
+        {
+            airSlots.add(i);
+        }
+        
+        inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "Game Modifiers");
+        
+        constructShopItemModifier(new ItemStack(Material.WATCH, 0), gameInstance.modInfiniteTime, "Infinite Time", "Removes the time limit of 8 minutes.", false);
+    }
+    
+    private void constructShopItemModifier(ItemStack notVotedItemStack, GameModifier gameModifier, String name, String description, boolean newRow)
+    {
+        ItemMeta itemMeta = notVotedItemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.RESET + name);
+        
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.RESET + description);
+        lore.add("");
+        lore.add(ChatColor.RESET + "Click to " + ChatColor.GREEN + " vote" + ChatColor.RESET + "!");
+        itemMeta.setLore(lore);
+        
+        notVotedItemStack.setItemMeta(itemMeta);
+        
+        ItemStack alreadyVotedItemStack = notVotedItemStack.clone();
+        ItemMeta alreadyPurchasedMeta = alreadyVotedItemStack.getItemMeta();
+        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[VOTED] " + ChatColor.RESET + name);
+        
+        List<String> alreadyPurchasedLore = new ArrayList<>();
+        alreadyPurchasedLore.add(ChatColor.RESET + description);
+        alreadyPurchasedLore.add("");
+        alreadyPurchasedLore.add(ChatColor.RESET + "Click to " + ChatColor.RED + "remove vote" + ChatColor.RESET + "!");
+        alreadyPurchasedMeta.setLore(alreadyPurchasedLore);
+        
+        alreadyVotedItemStack.setItemMeta(alreadyPurchasedMeta);
+        
+        ShopItemModifier shopItem = new ShopItemModifier(notVotedItemStack, alreadyVotedItemStack, gameModifier);
+        
+        this.shopItemMap.put(notVotedItemStack, shopItem);
+        
+        ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
+    }
+    
+    public void updateCounts()
+    {
+        for (ShopItemModifier shopItemModifier : this.shopItemMap.values())
+        {
+            shopItemModifier.updateCount(this);
+        }
+    }
+}
