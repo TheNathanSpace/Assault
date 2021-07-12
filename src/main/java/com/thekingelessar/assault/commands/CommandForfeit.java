@@ -22,7 +22,7 @@ public class CommandForfeit implements CommandExecutor
             {
                 GameTeam gameTeam = gameInstance.getPlayerTeam(player);
                 
-                if (gameTeam.canForfeit())
+                if (gameTeam.canForfeit() || (args != null && args.length != 0 && args[0].equalsIgnoreCase("force")))
                 {
                     gameTeam.toggleForfeit(player);
                 }

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShopPlayerModifier implements IShop
+public class PlayerShopModifiers implements IShop
 {
     public GameInstance gameInstance;
     public Player player;
@@ -32,7 +32,7 @@ public class ShopPlayerModifier implements IShop
         return this.shopItemMap.get(itemStack);
     }
     
-    public ShopPlayerModifier(GameInstance gameInstance, Player player)
+    public PlayerShopModifiers(GameInstance gameInstance, Player player)
     {
         this.player = player;
         
@@ -49,19 +49,19 @@ public class ShopPlayerModifier implements IShop
     private void constructShopItemModifier(ItemStack notVotedItemStack, GameModifier gameModifier, String name, String description, boolean newRow)
     {
         ItemMeta itemMeta = notVotedItemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RESET + name);
+        itemMeta.setDisplayName(ChatColor.RESET.toString() + ChatColor.BOLD + name + ChatColor.RESET);
         
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.RESET + description);
         lore.add("");
-        lore.add(ChatColor.RESET + "Click to " + ChatColor.GREEN + " vote" + ChatColor.RESET + "!");
+        lore.add(ChatColor.RESET + "Click to " + ChatColor.GREEN + "vote" + ChatColor.RESET + "!");
         itemMeta.setLore(lore);
         
         notVotedItemStack.setItemMeta(itemMeta);
         
         ItemStack alreadyVotedItemStack = notVotedItemStack.clone();
         ItemMeta alreadyPurchasedMeta = alreadyVotedItemStack.getItemMeta();
-        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[VOTED] " + ChatColor.RESET + name);
+        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[VOTED] " + ChatColor.RESET + ChatColor.BOLD + name);
         
         List<String> alreadyPurchasedLore = new ArrayList<>();
         alreadyPurchasedLore.add(ChatColor.RESET + description);
@@ -80,9 +80,26 @@ public class ShopPlayerModifier implements IShop
     
     public void updateCounts()
     {
+        Map<ItemStack, ShopItemModifier> addItems = new HashMap<>();
+        List<ItemStack> removeItems = new ArrayList<>();
+        
         for (ShopItemModifier shopItemModifier : this.shopItemMap.values())
         {
-            shopItemModifier.updateCount(this);
+            removeItems.add(shopItemModifier.alreadyVotedItemStack);
+            removeItems.add(shopItemModifier.shopItemStack);
+            
+            ItemStack newItem = shopItemModifier.updateCount(this);
+            addItems.put(newItem, shopItemModifier);
+        }
+        
+        for (ItemStack itemStack : removeItems)
+        {
+            this.shopItemMap.remove(itemStack);
+        }
+        
+        for (Map.Entry<ItemStack, ShopItemModifier> entry : addItems.entrySet())
+        {
+            this.shopItemMap.put(entry.getKey(), entry.getValue());
         }
     }
 }

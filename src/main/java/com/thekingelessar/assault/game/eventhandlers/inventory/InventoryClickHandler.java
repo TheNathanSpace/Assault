@@ -7,7 +7,7 @@ import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
-import com.thekingelessar.assault.game.modifiers.ShopPlayerModifier;
+import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.lobby.LobbyUtil;
@@ -70,21 +70,24 @@ public class InventoryClickHandler implements Listener
         Inventory inventoryOpen = inventoryClickEvent.getInventory();
         ItemStack itemClicked = inventoryClickEvent.getCurrentItem();
         
-        if (!playerTeam.getShopInventories().contains(inventoryClickEvent.getInventory()) && !inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
+        if (playerTeam != null)
         {
-            return;
-        }
-        
-        if (!inventoryClickEvent.getInventory().equals(playerTeam.secretStorage) && placingItemInTop(inventoryClickEvent))
-        {
-            inventoryClickEvent.setCancelled(true);
-            return;
+            if (!playerTeam.getShopInventories().contains(inventoryClickEvent.getInventory()) && !inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
+            {
+                return;
+            }
+            
+            if (!inventoryClickEvent.getInventory().equals(playerTeam.secretStorage) && placingItemInTop(inventoryClickEvent))
+            {
+                inventoryClickEvent.setCancelled(true);
+                return;
+            }
         }
         
         ShopItem shopItemClicked = null;
         if (gameInstance.modifierShopMap != null && inventoryOpen.equals(gameInstance.modifierShopMap.get(player).inventory))
         {
-            ShopPlayerModifier shop = gameInstance.modifierShopMap.get(player);
+            PlayerShopModifiers shop = gameInstance.modifierShopMap.get(player);
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
         else if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))
@@ -127,7 +130,11 @@ public class InventoryClickHandler implements Listener
         }
         
         shopItemClicked.buyItem(player);
-        gamePlayer.updateScoreboard();
+        
+        if (gamePlayer != null)
+        {
+            gamePlayer.updateScoreboard();
+        }
         
         //        if (gameInstance.gameStage.equals(GameStage.BUILDING))
         //        {

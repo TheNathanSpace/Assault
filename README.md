@@ -1,5 +1,20 @@
 ## Todo
 
+- Statistics runthenumbers
+
+## Bugs
+
+- Defending team logging out times are weird
+- Running out clock times are weird?
+- Name colors aren't updating when new games start.
+- Team buff effects are sometimes persisting in-between rounds(/games?)
+- Double "join" message
+- Some instances start where coins don't decrease when buying stuff
+
+### Completed
+
+See? I get stuff done.
+
 - ~~Respawn command~~
 - ~~Team/all chats~~
 - ~~Stop defenders from spawn-camping the attackers~~
@@ -17,10 +32,8 @@
 - ~~Explanation of commands~~
 - ~~Clean up random barriers around the map~~
 - ~~Blow up/go under map~~
-- **Durability**
-
-## Bugs
-
+- ~~Durability~~
+- ~~Infinite time modifier~~
 - ~~Gravel can't be broken when it falls into its location.~~
 - ~~Building phase coin duping~~
 - ~~Shop NPCs have capes~~
@@ -35,12 +48,6 @@
 - ~~Shops not looking in the right direction (attacker normal shop)~~
 - ~~Gravel can still push item~~
 - ~~Sometimes players aren't assigned to a team (maybe if there's an odd number of players?)~~
-- Defending team logging out times are weird
-- Running out clock times are weird?
-- Name colors aren't updating when new games start.
-- Team buff effects are sometimes persisting in-between rounds(/games?)
-- Double "join" message
-- Some instances start where coins don't decrease when buying stuff
 
 ## Roadmap
 
@@ -49,4 +56,3 @@
     - Strength team buff?
     - Map-specific items
 - Multiple maps
-- Game modifiers (infinite time)

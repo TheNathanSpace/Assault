@@ -6,6 +6,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,12 @@ public class ShopItemSword extends ShopItem
             
             if (hasGoodSword)
             {
-                player.getInventory().addItem(this.boughtItemStack.clone());
+                ItemStack giveItemStack = this.boughtItemStack.clone();
+                ItemMeta itemMeta = giveItemStack.getItemMeta();
+                itemMeta.spigot().setUnbreakable(true);
+                giveItemStack.setItemMeta(itemMeta);
+    
+                player.getInventory().addItem(giveItemStack);
             }
             else
             {
@@ -60,14 +66,19 @@ public class ShopItemSword extends ShopItem
                     {
                         if (inventoryItem.getType().equals(Material.WOOD_SWORD))
                         {
-                            player.getInventory().setItem(i, this.boughtItemStack.clone());
+                            ItemStack giveItemStack = this.boughtItemStack.clone();
+                            ItemMeta itemMeta = giveItemStack.getItemMeta();
+                            itemMeta.spigot().setUnbreakable(true);
+                            giveItemStack.setItemMeta(itemMeta);
+                            
+                            player.getInventory().setItem(i, giveItemStack);
                             break;
                         }
                     }
                 }
             }
         }
-    
+        
         super.playSound(player, success);
     }
 }

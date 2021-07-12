@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.List;
@@ -103,11 +104,14 @@ public class ShopItemTool extends ShopItem
                 {
                     add = false;
                     ItemStack giveItemStack = this.boughtItemStack.clone();
+                    ItemMeta itemMeta = giveItemStack.getItemMeta();
+                    itemMeta.spigot().setUnbreakable(true);
+                    giveItemStack.setItemMeta(itemMeta);
                     player.getInventory().setItem(i, giveItemStack);
                     
                     gamePlayer.spawnItems.removeIf(spawnItem -> axes.contains(spawnItem.getType()));
                     
-                    gamePlayer.addSpawnItem(this.boughtItemStack.clone());
+                    gamePlayer.addSpawnItem(giveItemStack.clone());
                 }
             }
             gamePlayer.shopAttacking.upgradeAxe();
@@ -126,11 +130,14 @@ public class ShopItemTool extends ShopItem
                 {
                     add = false;
                     ItemStack giveItemStack = this.boughtItemStack.clone();
+                    ItemMeta itemMeta = giveItemStack.getItemMeta();
+                    itemMeta.spigot().setUnbreakable(true);
+                    giveItemStack.setItemMeta(itemMeta);
                     player.getInventory().setItem(i, giveItemStack);
                     
                     gamePlayer.spawnItems.removeIf(spawnItem -> pickaxes.contains(spawnItem.getType()));
                     
-                    gamePlayer.addSpawnItem(this.boughtItemStack.clone());
+                    gamePlayer.addSpawnItem(giveItemStack.clone());
                 }
             }
             gamePlayer.shopAttacking.upgradePickaxe();
@@ -138,8 +145,12 @@ public class ShopItemTool extends ShopItem
         
         if (success && add)
         {
-            player.getInventory().addItem(this.boughtItemStack.clone());
-            gamePlayer.addSpawnItem(this.boughtItemStack.clone());
+            ItemStack giveItemStack = this.boughtItemStack.clone();
+            ItemMeta itemMeta = giveItemStack.getItemMeta();
+            itemMeta.spigot().setUnbreakable(true);
+            giveItemStack.setItemMeta(itemMeta);
+            player.getInventory().addItem(giveItemStack);
+            gamePlayer.addSpawnItem(giveItemStack.clone());
         }
     }
     

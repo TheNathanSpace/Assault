@@ -3,6 +3,7 @@ package com.thekingelessar.assault.game.modifiers;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -44,38 +45,32 @@ public class ShopItemModifier extends ShopItem
         super.playSound(player, gameModifier.votedPlayers.contains(player));
     }
     
-    public void updateCount(ShopPlayerModifier shopPlayerModifier)
+    public ItemStack updateCount(PlayerShopModifiers playerShopModifiers)
     {
         ItemStack newItemStack = null;
         
-        if (gameModifier.votedPlayers.contains(shopPlayerModifier.player))
+        if (gameModifier.votedPlayers.contains(playerShopModifiers.player))
         {
-            newItemStack = this.alreadyVotedItemStack;
+            newItemStack = this.alreadyVotedItemStack.clone();
         }
         else
         {
-            newItemStack = this.shopItemStack;
+            newItemStack = this.shopItemStack.clone();
         }
         
         int votes = this.gameModifier.votedPlayers.size();
         
-        if (votes == 0)
-        {
-            newItemStack.setAmount(1);
-        }
-        else
-        {
-            newItemStack.setAmount(votes);
-        }
+        newItemStack.setAmount(votes);
         
         ItemMeta itemMeta = newItemStack.getItemMeta();
         String name = itemMeta.getDisplayName();
-        String nameWithVotes = name + " | Votes: " + votes;
+        String nameWithVotes = name + " | Votes: " + ChatColor.BLUE + votes;
         itemMeta.setDisplayName(nameWithVotes);
         newItemStack.setItemMeta(itemMeta);
         
-        shopPlayerModifier.shopItemMap.put(newItemStack, this);
-        shopPlayerModifier.inventory.setItem(this.slot, newItemStack);
+        playerShopModifiers.inventory.setItem(this.slot, newItemStack);
+        
+        return newItemStack;
     }
     
 }

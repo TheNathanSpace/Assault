@@ -3,19 +3,24 @@ package com.thekingelessar.assault.lobby;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
-import org.bukkit.*;
+import com.thekingelessar.assault.util.ItemInit;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class LobbyUtil
 {
-    public static ItemStack joinGameStar = initStar();
-    public static ItemStack inQueueStar = initInQueueStar();
-    public static ItemStack leaveBarrier = initBarrier();
-    public static ItemStack rulesBook = initBook();
+    public static ItemStack joinGameStar = ItemInit.initStar();
+    public static ItemStack inQueueStar = ItemInit.initInQueueStar();
+    public static ItemStack leaveBarrier = ItemInit.initBarrier();
+    public static ItemStack rulesBook = ItemInit.initBook();
     
     public static List<Player> queueList = new ArrayList<>();
     
@@ -116,58 +121,6 @@ public class LobbyUtil
     {
         String command = "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the guide online!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://thenathan.space/assault/\"}}]";
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
-    }
-    
-    private static ItemStack initStar()
-    {
-        ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
-        
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Join Game");
-        itemMeta.setLore(Arrays.asList(ChatColor.RESET + "Click this to join a game of Assault!", ChatColor.RESET + "", ChatColor.RESET + "If there's no game available,", ChatColor.RESET + "you'll be added to the queue."));
-        
-        itemStack.setItemMeta(itemMeta);
-        
-        return itemStack;
-    }
-    
-    private static ItemStack initInQueueStar()
-    {
-        ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
-        
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "You are in the queue!");
-        itemMeta.setLore(Arrays.asList(ChatColor.RESET + "You have been added to the queue!", ChatColor.RESET + "", ChatColor.RESET + "When there are enough players,", ChatColor.RESET + "the game will start."));
-        
-        itemStack.setItemMeta(itemMeta);
-        
-        return itemStack;
-    }
-    
-    private static ItemStack initBarrier()
-    {
-        ItemStack itemStack = new ItemStack(Material.BARRIER);
-        
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Queue");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to leave the queue."));
-        
-        itemStack.setItemMeta(itemMeta);
-        
-        return itemStack;
-    }
-    
-    private static ItemStack initBook()
-    {
-        ItemStack itemStack = new ItemStack(Material.BOOK);
-        
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.BLUE + ChatColor.BOLD.toString() + "Guide");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the guide!"));
-        
-        itemStack.setItemMeta(itemMeta);
-        
-        return itemStack;
     }
     
     public static void giveStar(Player player)

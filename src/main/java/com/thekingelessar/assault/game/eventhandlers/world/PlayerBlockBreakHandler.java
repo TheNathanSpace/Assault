@@ -48,8 +48,6 @@ public class PlayerBlockBreakHandler implements Listener
             {
                 blockBreakEvent.setCancelled(false);
             }
-            
-            player.getItemInHand().setDurability(player.getItemInHand().getType().getMaxDurability());
         }
     }
 }

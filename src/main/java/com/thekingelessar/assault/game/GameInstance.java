@@ -6,7 +6,8 @@ import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.map.MapBase;
-import com.thekingelessar.assault.game.modifiers.ShopPlayerModifier;
+import com.thekingelessar.assault.game.modifiers.GameModifier;
+import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
@@ -15,10 +16,7 @@ import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
-import com.thekingelessar.assault.util.Coordinate;
-import com.thekingelessar.assault.util.FireworkUtils;
-import com.thekingelessar.assault.util.Title;
-import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.*;
@@ -27,7 +25,6 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -52,9 +49,10 @@ public class GameInstance
     private final List<Player> players;
     private final List<Player> spectators;
     
-    public static ItemStack gameModifierItemStack = GameInstance.initGameModifierItemStack();
-    public HashMap<Player, ShopPlayerModifier> modifierShopMap = new HashMap<>();
+    public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
+    public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
     public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
+    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime);
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
@@ -132,7 +130,7 @@ public class GameInstance
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
             
             player.getInventory().setItem(8, GameInstance.gameModifierItemStack.clone());
-            this.modifierShopMap.put(player, new ShopPlayerModifier(this, player));
+            this.modifierShopMap.put(player, new PlayerShopModifiers(this, player));
             
             System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());
         }
@@ -146,28 +144,15 @@ public class GameInstance
             }
         }
         
-        taskCountdownGameStart = new TaskCountdownGameStart(200, 20, 20, this);
+        taskCountdownGameStart = new TaskCountdownGameStart(400, 20, 20, this);
         taskCountdownGameStart.runTaskTimer(Assault.INSTANCE, taskCountdownGameStart.startDelay, taskCountdownGameStart.tickDelay);
-    }
-    
-    private static ItemStack initGameModifierItemStack()
-    {
-        ItemStack itemStack = new ItemStack(Material.REDSTONE_COMPARATOR);
-        
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Modifiers");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the modifier voting menu!"));
-        
-        itemStack.setItemMeta(itemMeta);
-        
-        return itemStack;
     }
     
     public void updateModShops()
     {
-        for (ShopPlayerModifier shopPlayerModifier : this.modifierShopMap.values())
+        for (PlayerShopModifiers playerShopModifiers : this.modifierShopMap.values())
         {
-            shopPlayerModifier.updateCounts();
+            playerShopModifiers.updateCounts();
         }
     }
     
@@ -206,7 +191,9 @@ public class GameInstance
             gameTeam.addMembers(teamLists.remove(0));
         }
         
+        this.modifierShopMap.clear();
         this.modifierShopMap = null;
+        
         for (Player player : this.getPlayers())
         {
             player.getInventory().clear();
@@ -241,7 +228,12 @@ public class GameInstance
     
     public GamePlayer getGamePlayer(Player player)
     {
-        return this.getPlayerTeam(player).getGamePlayer(player);
+        if (this.getPlayerTeam(player) != null)
+        {
+            return this.getPlayerTeam(player).getGamePlayer(player);
+        }
+        
+        return null;
     }
     
     public void alertLastEnemyLeft(GameTeam remainingTeam)
@@ -362,6 +354,29 @@ public class GameInstance
         this.gameStage = GameStage.BUILDING;
         
         createTeams();
+        
+        boolean intro = false;
+        for (GameModifier gameModifier : modifierList)
+        {
+            boolean enabled = gameModifier.setEnabled();
+            
+            if (enabled)
+            {
+                if (!intro)
+                {
+                    for (Player player : this.getPlayers())
+                    {
+                        player.sendMessage("§5§l[§d§lGame Modifiers§5§l]" + ChatColor.RESET);
+                    }
+                    intro = true;
+                }
+                
+                for (Player player : this.getPlayers())
+                {
+                    player.sendMessage(" - " + gameModifier.name);
+                }
+            }
+        }
         
         for (Player player : this.getPlayers())
         {
@@ -586,7 +601,7 @@ public class GameInstance
         {
             for (int i = 0; i < 3; i++)
             {
-                FireworkUtils.spawnRandomFirework(winPlayer.getLocation(), this.getAttackingTeam().color);
+                FireworkUtils.spawnRandomFirework(winPlayer.getLocation(), fireworkRecipents.color);
             }
         }
         
@@ -661,7 +676,10 @@ public class GameInstance
             gameTeam.mapBase.destroyShops();
         }
         
-        this.taskTickTimer.cancel();
+        if (this.taskTickTimer != null)
+        {
+            this.taskTickTimer.cancel();
+        }
         
         if (taskCountdownBuilding != null)
         {

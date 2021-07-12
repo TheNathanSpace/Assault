@@ -1,7 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -50,7 +49,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
             title.clearTitle(player);
         }
         
-        title = new Title(" ", ChatColor.WHITE + "Game starts in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
+        title = new Title(ChatColor.WHITE + "Starting in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + "!", "Vote for modifiers!");
         
         for (Player player : players)
         {

@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public enum PlayerMode
 {
-    LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false, true),
+    LOBBY(GameMode.ADVENTURE, false, false, false, false, false, false, false),
     SPECTATOR(GameMode.SPECTATOR, false, false, false, false, true, true, false),
     ATTACKING(GameMode.SURVIVAL, true, true, true, true, false, false, true),
     BUILDING(GameMode.SURVIVAL, true, true, true, false, false, false, true),

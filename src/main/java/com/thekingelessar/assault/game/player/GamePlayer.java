@@ -18,6 +18,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.Vector;
 
@@ -61,22 +62,34 @@ public class GamePlayer
         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
         LeatherArmorMeta bootsMeta = (LeatherArmorMeta) boots.getItemMeta();
         bootsMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
+        bootsMeta.spigot().setUnbreakable(true);
         boots.setItemMeta(bootsMeta);
         spawnArmor.add(boots);
         
         ItemStack leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+        ItemMeta leggingsMeta = leggings.getItemMeta();
+        leggingsMeta.spigot().setUnbreakable(true);
+        leggings.setItemMeta(leggingsMeta);
         spawnArmor.add(leggings);
         
         ItemStack chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        ItemMeta chestplateMeta = chestplate.getItemMeta();
+        chestplateMeta.spigot().setUnbreakable(true);
+        chestplate.setItemMeta(chestplateMeta);
         spawnArmor.add(chestplate);
         
         ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
         LeatherArmorMeta helmetMeta = (LeatherArmorMeta) helmet.getItemMeta();
         helmetMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
+        helmetMeta.spigot().setUnbreakable(true);
         helmet.setItemMeta(helmetMeta);
         spawnArmor.add(helmet);
         
-        spawnItems.add(new ItemStack(Material.WOOD_SWORD));
+        ItemStack woodSword = new ItemStack(Material.WOOD_SWORD);
+        ItemMeta itemMeta = woodSword.getItemMeta();
+        itemMeta.spigot().setUnbreakable(true);
+        woodSword.setItemMeta(itemMeta);
+        spawnItems.add(woodSword);
     }
     
     public void addSpawnItem(ItemStack spawnItem)
@@ -106,22 +119,10 @@ public class GamePlayer
         
         player.getInventory().setArmorContents(spawnArmor.toArray(new ItemStack[0]));
         
-        System.out.println("---");
-        for (ItemStack itemStack : this.spawnItems)
-        {
-            System.out.println(itemStack.getType());
-        }
-        
         if (this.shopAttacking != null)
         {
             this.shopAttacking.downgradeAxe();
             this.shopAttacking.downgradePickaxe();
-        }
-        
-        System.out.println("---");
-        for (ItemStack itemStack : this.spawnItems)
-        {
-            System.out.println(itemStack.getType());
         }
         
         for (ItemStack itemStack : spawnItems)

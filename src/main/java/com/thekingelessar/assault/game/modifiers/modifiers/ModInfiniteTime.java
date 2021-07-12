@@ -8,6 +8,6 @@ public class ModInfiniteTime extends GameModifier
     
     public ModInfiniteTime(GameInstance gameInstance)
     {
-        super(gameInstance);
+        super(gameInstance, "Infinite Time");
     }
 }
