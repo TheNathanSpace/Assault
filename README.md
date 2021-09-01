@@ -4,6 +4,10 @@
 
 ## Bugs
 
+- Names are all white
+- Drop sand in spawn area
+- nullpointer
+
 - Defending team logging out times are weird
 - Running out clock times are weird?
 - Name colors aren't updating when new games start.

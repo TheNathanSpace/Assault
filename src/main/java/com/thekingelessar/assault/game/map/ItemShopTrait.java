@@ -57,7 +57,7 @@ public class ItemShopTrait extends Trait
                         inventoryView = player.openInventory(gameTeam.shopBuilding.inventory);
                         break;
                     case ATTACKING:
-                        inventoryView = player.openInventory(gamePlayer.shopAttacking.inventory);
+                        inventoryView = player.openInventory(gamePlayer.shopAttacking.inventory); // todo: nullpointer
                         break;
                 }
             }
