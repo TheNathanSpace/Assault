@@ -16,7 +16,7 @@ public class CommandForfeit implements CommandExecutor
     {
         if (sender instanceof Player)
         {
-            if (!((Player) sender).hasPermission("assault.command.help"))
+            if (!((Player) sender).hasPermission("assault.command.forfeit"))
             {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to use that command");
                 return true;

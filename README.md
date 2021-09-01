@@ -7,6 +7,8 @@
 - Names are all white
 - Drop sand in spawn area
 - nullpointer
+- Allow you to change the co-ords of lobby
+- Add a command to toggle building when in said lobby.
 
 - Defending team logging out times are weird
 - Running out clock times are weird?
