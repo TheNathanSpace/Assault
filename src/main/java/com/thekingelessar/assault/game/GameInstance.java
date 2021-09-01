@@ -705,7 +705,6 @@ public class GameInstance
             
             for (Player player : gameTeam.getPlayers())
             {
-                gameTeam.teamScoreboard.removePlayer(player);
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 gamePlayer.scoreboard.delete();
             }
