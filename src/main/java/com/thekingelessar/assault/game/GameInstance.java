@@ -326,7 +326,7 @@ public class GameInstance
         }
     }
     
-    public void endPrematurely()
+    public GameTeam getRemainingTeam()
     {
         GameTeam remainingTeam = null;
         GameTeam disconnectedTeam = null;
@@ -341,6 +341,14 @@ public class GameInstance
             
             disconnectedTeam = gameTeam;
         }
+        
+        return remainingTeam;
+    }
+    
+    public void endPrematurely()
+    {
+        GameTeam remainingTeam = getRemainingTeam();
+        GameTeam disconnectedTeam = this.getOppositeTeam(remainingTeam);
         
         this.overrideWinners = remainingTeam;
         
@@ -628,6 +636,11 @@ public class GameInstance
     {
         this.gameStage = GameStage.FINISHED;
         
+        if (this.getAttackingTeam() == null)
+        {
+            alertLastEnemyLeft(this.getRemainingTeam());
+        }
+        
         long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
         this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
         this.getAttackingTeam().displaySeconds = Util.round(this.getAttackingTeam().finalAttackingTime, 2);
@@ -807,6 +820,19 @@ public class GameInstance
         }
         return null;
     }
+    
+    public GameTeam getOppositeTeam(GameTeam gameTeam)
+    {
+        for (GameTeam overTeam : this.teams.values())
+        {
+            if (!overTeam.equals(gameTeam))
+            {
+                return overTeam;
+            }
+        }
+        return null;
+    }
+    
     
     public void removePlayer(Player player)
     {
