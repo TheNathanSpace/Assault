@@ -17,6 +17,12 @@ public class CommandAll implements CommandExecutor
         
         if (sender instanceof Player)
         {
+            if (!((Player) sender).hasPermission("assault.command.help"))
+            {
+                sender.sendMessage(ChatColor.RED + "You don't have permission to use that command");
+                return true;
+            }
+    
             Player player = (Player) sender;
             String message = String.join(" ", args);
             

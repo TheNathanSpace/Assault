@@ -17,6 +17,11 @@ public class CommandAssault implements CommandExecutor
         
         if (sender instanceof Player)
         {
+            if (!((Player) sender).hasPermission("assault.command.help"))
+            {
+                return true;
+            }
+            
             Player player = (Player) sender;
             GameInstance testInstance = GameInstance.getPlayerGameInstance(player);
             if (testInstance != null)

@@ -31,3 +31,27 @@ commands:
       /assault attack
       /assault coins <amount>
       /assault gp <amount>
+permissions:
+  assault.*:
+    description: All Assault commands.
+    children:
+      assault.command.assault: true
+      assault.help: true
+      assault.all: true
+      assault.respawn: true
+      assault.forfeit: true
+  assault.command.assault:
+    description: A testing command, allowing you to skip the building phase and edit coin/GP values.
+    default: op
+  assault.command.help:
+    description: Explanation of commands.
+    default: true
+  assault.command.all:
+    description: Shows a chat message to all players in the game.
+    default: true
+  assault.command.respawn:
+    description: Kills you (in case you get stuck somewhere).
+    default: true
+  assault.command.forfeit:
+    description: Toggles your vote to forfeit.
+    default: true

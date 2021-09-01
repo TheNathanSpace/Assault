@@ -252,6 +252,11 @@ public class GameTeam
     
     public void evaluateForfeit()
     {
+        if (this.getPlayers().size() == 0)
+        {
+            return;
+        }
+        
         if (this.forfeitList.size() >= this.getPlayers().size() * 0.66)
         {
             for (Player player : this.getPlayers())

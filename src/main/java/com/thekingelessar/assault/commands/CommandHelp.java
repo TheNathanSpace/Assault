@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.commands;
 
 import com.thekingelessar.assault.Assault;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,6 +20,12 @@ public class CommandHelp implements CommandExecutor
     {
         if (sender instanceof Player)
         {
+            if (!((Player) sender).hasPermission("assault.command.help"))
+            {
+                sender.sendMessage(ChatColor.RED + "You don't have permission to use that command");
+                return true;
+            }
+            
             Player player = (Player) sender;
             
             List<String> helpResponse = new ArrayList<>();

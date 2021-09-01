@@ -273,6 +273,7 @@ public class GameInstance
             
             this.taskCountdownGameEnd = new TaskCountdownGameEnd(240, 20, 20, this);
             this.taskCountdownGameEnd.runTaskTimer(Assault.INSTANCE, this.taskCountdownGameEnd.startDelay, this.taskCountdownGameEnd.tickDelay);
+            System.out.println("");
             return;
         }
         
