@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.persistence.Lob;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,13 +36,8 @@ public class PlayerItemDropHandler implements Listener
         
         if (itemStack != null)
         {
-            if (itemStack.equals(LobbyUtil.joinGameStar))
-            {
-                playerDropItemEvent.setCancelled(true);
-                return;
-            }
-            
-            if (itemStack.equals(LobbyUtil.rulesBook))
+            List<ItemStack> undroppable = Arrays.asList(LobbyUtil.joinGameStar, LobbyUtil.rulesBook, LobbyUtil.inQueueStar, LobbyUtil.leaveBarrier, GameInstance.gameModifierItemStack);
+            if (undroppable.contains(itemStack))
             {
                 playerDropItemEvent.setCancelled(true);
                 return;
