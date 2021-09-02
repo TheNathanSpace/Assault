@@ -38,6 +38,8 @@ public class GamePlayer
     
     public TaskCountdownRespawn taskCountdownRespawn;
     
+    public long startTimeInAir = 0; // in nanoseconds
+    
     public List<ItemStack> spawnItems = new ArrayList<>();
     public List<ItemStack> spawnArmor = new ArrayList<>();
     

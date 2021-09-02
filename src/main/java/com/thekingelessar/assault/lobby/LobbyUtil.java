@@ -41,13 +41,13 @@ public class LobbyUtil
             {
                 if (!gameInstance.gameStage.equals(GameStage.FINISHED))
                 {
-                    player.sendRawMessage(Assault.assaultPrefix + "Joining game!");
+                    player.sendRawMessage(Assault.ASSAULT_PREFIX + "Joining game!");
                     
                     for (Player otherPlayer : player.getWorld().getPlayers())
                     {
                         if (!otherPlayer.equals(player))
                         {
-                            otherPlayer.sendRawMessage(Assault.assaultPrefix + player.getDisplayName() + " has joined a game!");
+                            otherPlayer.sendRawMessage(Assault.ASSAULT_PREFIX + player.getDisplayName() + " has joined a game!");
                         }
                     }
                     player.getInventory().clear();
@@ -70,12 +70,12 @@ public class LobbyUtil
             {
                 if (queueList.contains(worldPlayer))
                 {
-                    worldPlayer.sendRawMessage(Assault.assaultPrefix + "Game starting!");
+                    worldPlayer.sendRawMessage(Assault.ASSAULT_PREFIX + "Game starting!");
                     worldPlayer.getInventory().clear();
                 }
                 else
                 {
-                    worldPlayer.sendRawMessage(Assault.assaultPrefix + "A game is starting! Click the §dnether star§r to join!");
+                    worldPlayer.sendRawMessage(Assault.ASSAULT_PREFIX + "A game is starting! Click the §dnether star§r to join!");
                     try
                     {
                         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
@@ -101,13 +101,13 @@ public class LobbyUtil
         else
         {
             LobbyUtil.giveQueueStar(player);
-            player.sendRawMessage(Assault.assaultPrefix + "You've been added to the queue! The game will start when there are enough players.");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've been added to the queue! The game will start when there are enough players.");
             
             for (Player otherPlayer : player.getWorld().getPlayers())
             {
                 if (!otherPlayer.equals(player))
                 {
-                    otherPlayer.sendRawMessage(Assault.assaultPrefix + player.getDisplayName() + " has joined the queue!");
+                    otherPlayer.sendRawMessage(Assault.ASSAULT_PREFIX + player.getDisplayName() + " has joined the queue!");
                 }
             }
             
@@ -129,7 +129,7 @@ public class LobbyUtil
         queueList.remove(player);
         player.getInventory().setItem(8, new ItemStack(Material.AIR));
         LobbyUtil.giveStar(player);
-        player.sendRawMessage(Assault.assaultPrefix + "You've been removed from the queue. :(");
+        player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've been removed from the queue. :(");
     }
     
     public static void sendRules(Player player)

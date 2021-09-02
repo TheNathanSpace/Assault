@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.eventhandlers.playermovement;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.map.MapBase;
@@ -59,6 +60,25 @@ public class PlayerMoveHandler implements Listener
             if (gameTeam != null)
             {
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
+                
+                if (((Entity) player).isOnGround())
+                {
+                    gamePlayer.startTimeInAir = 0;
+                }
+                else if (gamePlayer.startTimeInAir == 0)
+                {
+                    if (locTo.getY() > playerMoveEvent.getFrom().getY())
+                    {
+                        gamePlayer.startTimeInAir = System.nanoTime();
+                    }
+                }
+                else if ((System.nanoTime() - gamePlayer.startTimeInAir) / 1000000000. > 5)
+                {
+                    player.sendMessage(Assault.ASSAULT_PREFIX + "Looks like you're stuck—respawning!");
+                    gamePlayer.respawn(null, true, DeathType.DEATH);
+                    gamePlayer.startTimeInAir = 0;
+                }
+                
                 if (((Entity) player).isOnGround() && !gamePlayer.flightReset)
                 {
                     gamePlayer.flightReset = true;

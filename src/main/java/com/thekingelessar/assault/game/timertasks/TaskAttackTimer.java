@@ -72,7 +72,7 @@ public class TaskAttackTimer extends BukkitRunnable
                         player.playSound(player.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_BASS"), 1.5f, 2.0f);
                     }
     
-                    player.sendRawMessage(Assault.assaultPrefix + gameInstance.getAttackingTeam().color.chatColor + "Your team " + ChatColor.RESET + "can now forfeit! Use /forfeit.");
+                    player.sendRawMessage(Assault.ASSAULT_PREFIX + gameInstance.getAttackingTeam().color.chatColor + "Your team " + ChatColor.RESET + "can now forfeit! Use /forfeit.");
                 }
                 forfeitAlerted = true;
             }

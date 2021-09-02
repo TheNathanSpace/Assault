@@ -30,7 +30,7 @@ public class CommandHelp implements CommandExecutor
             
             List<String> helpResponse = new ArrayList<>();
             helpResponse.add("-------------");
-            helpResponse.add(Assault.assaultPrefix + "Help");
+            helpResponse.add(Assault.ASSAULT_PREFIX + "Help");
             helpResponse.add(GRAY + "/help" + RESET + ": Explanation of commands.");
             helpResponse.add(GRAY + "/all <message>" + RESET + ": Shows a chat message to all players in the game.");
             helpResponse.add(GRAY + "/respawn" + RESET + ": Kills you (in case you get stuck somewhere).");

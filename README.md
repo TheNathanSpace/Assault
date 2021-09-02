@@ -10,6 +10,7 @@
 - Add more game modifiers like First to 5 (stars) or Most stars in 8 minutes
 - Options for multiple defender spawnpoints
 
+- Actual documentation
 
 - Defending team logging out times are weird
 - Running out clock times are weird?

@@ -33,7 +33,7 @@ public class Assault extends JavaPlugin
     static public World lobbyWorld;
     static public Location lobbySpawn;
     
-    static public String assaultPrefix = "§5§l[§d§lAssault§5§l] " + ChatColor.RESET;
+    static public final String ASSAULT_PREFIX = "§5§l[§d§lAssault§5§l] " + ChatColor.RESET;
     
     static public HashMap<String, Map> maps = new HashMap<>();
     

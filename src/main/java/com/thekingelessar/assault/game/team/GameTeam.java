@@ -239,12 +239,12 @@ public class GameTeam
         if (this.forfeitList.contains(player))
         {
             this.forfeitList.remove(player);
-            player.sendRawMessage(Assault.assaultPrefix + "You've voted to " + ChatColor.GREEN + "not forfeit" + ChatColor.RESET + "!");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.GREEN + "not forfeit" + ChatColor.RESET + "!");
         }
         else
         {
             this.forfeitList.add(player);
-            player.sendRawMessage(Assault.assaultPrefix + "You've voted to " + ChatColor.RED + "forfeit" + ChatColor.RESET + "!");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.RED + "forfeit" + ChatColor.RESET + "!");
         }
         
         this.evaluateForfeit();
@@ -261,7 +261,7 @@ public class GameTeam
         {
             for (Player player : this.getPlayers())
             {
-                player.sendRawMessage(Assault.assaultPrefix + "Your team " + ChatColor.RED + "forfeits" + ChatColor.RESET + "!");
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + "Your team " + ChatColor.RED + "forfeits" + ChatColor.RESET + "!");
             }
             
             gameInstance.finishRound(gameInstance.getDefendingTeam());

@@ -263,7 +263,7 @@ public class GameInstance
             List<Player> players = this.getWinningTeam().getPlayers();
             for (Player player : players)
             {
-                player.sendRawMessage(Assault.assaultPrefix + "Congratulations! " + this.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + "Congratulations! " + this.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
                 
                 for (int i = 0; i < 5; i++)
                 {
@@ -314,7 +314,7 @@ public class GameInstance
             List<Player> players = this.getWinningTeam().getPlayers();
             for (Player player : players)
             {
-                player.sendRawMessage(Assault.assaultPrefix + "Congratulations! " + this.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + "Congratulations! " + this.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
                 
                 for (int i = 0; i < 5; i++)
                 {
@@ -671,7 +671,7 @@ public class GameInstance
         List<Player> players = this.getWinningTeam().getPlayers();
         for (Player player : players)
         {
-            player.sendRawMessage(Assault.assaultPrefix + "Congratulations! " + this.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "Congratulations! " + this.getPlayerTeam(player).color.chatColor + ChatColor.BOLD + "Your team" + ChatColor.RESET + " wins!");
             
             for (int i = 0; i < 5; i++)
             {
@@ -731,7 +731,7 @@ public class GameInstance
             {
                 player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
             }
-            player.sendRawMessage(Assault.assaultPrefix + "Not enough players! :(");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "Not enough players! :(");
         }
         
         WorldManager.closeWorld(this.gameWorld);
