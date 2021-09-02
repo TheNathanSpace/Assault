@@ -99,7 +99,15 @@ public class InventoryClickHandler implements Listener
         {
             if (itemClicked.equals(gamePlayer.shopAttacking.storageItem))
             {
-                player.playSound(player.getLocation(), Sound.CHEST_OPEN, 0.5F, 1.3F);
+                try
+                {
+                    player.playSound(player.getLocation(), Sound.CHEST_OPEN, 0.5F, 1.3F);
+                }
+                catch (Exception e)
+                {
+                    player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_OPEN"), 0.5F, 1.3F);
+                }
+    
                 player.openInventory(playerTeam.secretStorage);
                 inventoryClickEvent.setCancelled(true);
                 return;
@@ -112,7 +120,15 @@ public class InventoryClickHandler implements Listener
         {
             if (itemClicked.equals(playerTeam.goldItem))
             {
-                player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 0.5F, 1.3F);
+                try
+                {
+                    player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 0.5F, 1.3F);
+                }
+                catch (Exception e)
+                {
+                    player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_CLOSE"), 0.5F, 1.3F);
+                }
+    
                 player.openInventory(gamePlayer.shopAttacking.inventory);
                 inventoryClickEvent.setCancelled(true);
                 return;

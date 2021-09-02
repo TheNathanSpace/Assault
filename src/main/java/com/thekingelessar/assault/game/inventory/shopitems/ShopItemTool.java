@@ -52,7 +52,15 @@ public class ShopItemTool extends ShopItem
             {
                 if (this.boughtItemStack.getType().equals(itemStack.getType()))
                 {
-                    player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                    try
+                    {
+                        player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                    }
+                    catch (Exception e)
+                    {
+                        player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
+                    }
+    
                     return;
                 }
             }

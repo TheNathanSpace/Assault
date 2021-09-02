@@ -136,7 +136,15 @@ public class GamePlayer
     
     public void respawn(PlayerMode playerMode, boolean delay, DeathType deathType)
     {
-        this.player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+        try
+        {
+            this.player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+        }
+        catch (Exception e)
+        {
+            this.player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
+        }
+        
         
         if (playerMode == null)
         {
@@ -293,7 +301,14 @@ public class GamePlayer
         
         this.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
         
-        this.player.playSound(this.player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+        try
+        {
+            this.player.playSound(this.player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
+        }
+        catch (Exception e)
+        {
+            this.player.playSound(this.player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 0.8F, 1.0F);
+        }
         
         this.updateScoreboard();
     }

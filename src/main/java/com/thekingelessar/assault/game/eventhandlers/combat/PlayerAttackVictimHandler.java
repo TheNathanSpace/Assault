@@ -150,7 +150,14 @@ public class PlayerAttackVictimHandler implements Listener
                     
                     if (victim.getHealth() - entityAttackEvent.getDamage() < 1)
                     {
-                        gameInstance.gameWorld.playSound(victim.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                        try
+                        {
+                            gameInstance.gameWorld.playSound(victim.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+                        }
+                        catch (Exception e)
+                        {
+                            gameInstance.gameWorld.playSound(victim.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
+                        }
                         
                         GamePlayer attackerPlayer = attackerTeam.getGamePlayer(attacker);
                         

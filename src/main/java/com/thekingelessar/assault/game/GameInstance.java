@@ -723,7 +723,14 @@ public class GameInstance
         {
             Title title = new Title();
             title.clearTitle(player);
-            player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+            try
+            {
+                player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+            }
+            catch (Exception e)
+            {
+                player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
+            }
             player.sendRawMessage(Assault.assaultPrefix + "Not enough players! :(");
         }
         

@@ -26,7 +26,14 @@ public class LobbyUtil
     
     public static void joinQueue(Player player)
     {
-        player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
+        try
+        {
+            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
+        }
+        catch (Exception e)
+        {
+            player.playSound(player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 1.0F, 1.0F);
+        }
         
         if (Assault.gameInstances.size() > 0)
         {
@@ -69,7 +76,14 @@ public class LobbyUtil
                 else
                 {
                     worldPlayer.sendRawMessage(Assault.assaultPrefix + "A game is starting! Click the §dnether star§r to join!");
-                    player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
+                    try
+                    {
+                        player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
+                    }
+                    catch (Exception e)
+                    {
+                        player.playSound(player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 1.0F, 1.0F);
+                    }
                 }
             }
             
@@ -103,7 +117,14 @@ public class LobbyUtil
     
     public static void leaveQueue(Player player)
     {
-        player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+        try
+        {
+            player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
+        }
+        catch (Exception e)
+        {
+            player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
+        }
         
         queueList.remove(player);
         player.getInventory().setItem(8, new ItemStack(Material.AIR));
