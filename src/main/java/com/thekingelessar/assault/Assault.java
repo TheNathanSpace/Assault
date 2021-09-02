@@ -11,7 +11,10 @@ import com.thekingelessar.assault.game.world.WorldManager;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,8 +54,12 @@ public class Assault extends JavaPlugin
         lobbyWorld = Bukkit.getWorld(mainConfig.getString("lobby_world"));
         lobbySpawn = new Location(lobbyWorld, 0.5, 101.5, 0.5, 90, 0);
         
-        Map mapObject = MapConfig.loadWorldFromConfig("map_saloon.yml");
-        maps.put("map_saloon", mapObject);
+        List<String> mapList = (List<String>) mainConfig.getList("map_list");
+        for (String mapName : mapList)
+        {
+            Map mapObject = MapConfig.loadWorldFromConfig(mapName);
+            maps.put(mapName, mapObject);
+        }
         
         this.getCommand("help").setExecutor(new CommandHelp());
         this.getCommand("all").setExecutor(new CommandAll());
