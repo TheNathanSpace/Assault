@@ -36,8 +36,7 @@ public class PlayerItemDropHandler implements Listener
         
         if (itemStack != null)
         {
-            List<ItemStack> undroppable = Arrays.asList(LobbyUtil.joinGameStar, LobbyUtil.rulesBook, LobbyUtil.inQueueStar, LobbyUtil.leaveBarrier, GameInstance.gameModifierItemStack);
-            if (undroppable.contains(itemStack))
+            if (LobbyUtil.undroppable.contains(itemStack))
             {
                 playerDropItemEvent.setCancelled(true);
                 return;

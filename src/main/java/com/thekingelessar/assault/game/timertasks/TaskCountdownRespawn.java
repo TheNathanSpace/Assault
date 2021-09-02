@@ -63,6 +63,10 @@ public class TaskCountdownRespawn extends BukkitRunnable
         title.clearTitle(player);
         
         GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+        
+        System.out.println("--- RESPAWNING ---");
+        System.out.println("Player name: " + gamePlayer.player.getName());
+        System.out.println("Player team: " + gamePlayer.gameTeam.color);
         gamePlayer.spawn(PlayerMode.ATTACKING);  // todo: nullpointer
         
         gamePlayer.taskCountdownRespawn = null;

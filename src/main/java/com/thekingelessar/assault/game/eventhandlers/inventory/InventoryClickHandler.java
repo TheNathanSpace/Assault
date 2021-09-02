@@ -35,20 +35,23 @@ public class InventoryClickHandler implements Listener
         {
             if (player.getWorld().equals(Assault.lobbyWorld))
             {
-                if (itemStack != null)
+                if (Assault.forceLobbyInventory)
                 {
-                    if (itemStack.equals(LobbyUtil.joinGameStar))
+                    if (itemStack != null)
                     {
-                        LobbyUtil.joinQueue(player);
+                        if (itemStack.equals(LobbyUtil.joinGameStar))
+                        {
+                            LobbyUtil.joinQueue(player);
+                        }
+                        
+                        if (itemStack.getType().equals(Material.BARRIER))
+                        {
+                            LobbyUtil.leaveQueue(player);
+                        }
                     }
                     
-                    if (itemStack.getType().equals(Material.BARRIER))
-                    {
-                        LobbyUtil.leaveQueue(player);
-                    }
+                    inventoryClickEvent.setCancelled(true);
                 }
-                
-                inventoryClickEvent.setCancelled(true);
             }
             
             return;
@@ -107,7 +110,7 @@ public class InventoryClickHandler implements Listener
                 {
                     player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_OPEN"), 0.5F, 1.3F);
                 }
-    
+                
                 player.openInventory(playerTeam.secretStorage);
                 inventoryClickEvent.setCancelled(true);
                 return;
@@ -128,7 +131,7 @@ public class InventoryClickHandler implements Listener
                 {
                     player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_CLOSE"), 0.5F, 1.3F);
                 }
-    
+                
                 player.openInventory(gamePlayer.shopAttacking.inventory);
                 inventoryClickEvent.setCancelled(true);
                 return;

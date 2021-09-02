@@ -7,9 +7,8 @@ A fast paced minecraft minigame with the object of capturing the star to win
 
 - Names are all white
 - Drop sand in spawn area
+- can still get over wall barriers
 - nullpointer
-- Allow you to change the co-ords of lobby
-- Add a command to toggle building when in said lobby.
 - timer when stuck
 - Can you add a config option for the assault command /help to not override normal /help if you have a permission?
 - Add more game modifiers like First to 5 (stars) or Most stars in 8 minutes

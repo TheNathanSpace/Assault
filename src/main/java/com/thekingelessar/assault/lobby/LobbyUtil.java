@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,8 @@ public class LobbyUtil
     public static ItemStack inQueueStar = ItemInit.initInQueueStar();
     public static ItemStack leaveBarrier = ItemInit.initBarrier();
     public static ItemStack rulesBook = ItemInit.initBook();
+    
+    public static List<ItemStack> undroppable = Arrays.asList(LobbyUtil.joinGameStar, LobbyUtil.rulesBook, LobbyUtil.inQueueStar, LobbyUtil.leaveBarrier, GameInstance.gameModifierItemStack);
     
     public static List<Player> queueList = new ArrayList<>();
     
@@ -170,7 +173,7 @@ public class LobbyUtil
         player.setDisplayName(player.getName());
         player.setPlayerListName(player.getName());
         player.setCustomName(player.getName());
-        player.setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(Assault.lobbyGamemode);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
         LobbyUtil.giveStar(player);

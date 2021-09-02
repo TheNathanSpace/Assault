@@ -42,9 +42,10 @@ public class InventoryDragHandler implements Listener
         }
         
         inventoryDragEvent.setCancelled(true);
-//        handlePlacingTop(inventoryDragEvent);
+        //        handlePlacingTop(inventoryDragEvent);
     }
     
+    // Couldn't get working satisfactorily. Wanted to protect shop inventories while allowing dragging in player inventories.
     private void handlePlacingTop(InventoryDragEvent inventoryDragEvent)
     {
         Inventory destInvent = inventoryDragEvent.getInventory();
@@ -73,7 +74,7 @@ public class InventoryDragHandler implements Listener
             itemStack.setAmount(inventoryDragEvent.getOldCursor().getAmount() - payment);
             inventoryDragEvent.setCursor(itemStack);
         }
-    
+        
         System.out.println("This inventory has " + inventoryDragEvent.getInventory().getSize() + " slots!");
         for (Map.Entry<Integer, ItemStack> entry : newItems.entrySet())
         {
