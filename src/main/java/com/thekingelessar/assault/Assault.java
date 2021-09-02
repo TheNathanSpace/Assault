@@ -8,13 +8,11 @@ import com.thekingelessar.assault.game.map.BuffShopTrait;
 import com.thekingelessar.assault.game.map.ItemShopTrait;
 import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.world.WorldManager;
+import com.thekingelessar.assault.util.Coordinate;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +30,9 @@ public class Assault extends JavaPlugin
     static public FileConfiguration mainConfig = null;
     static public World lobbyWorld;
     static public Location lobbySpawn;
+    
+    static public GameMode lobbyGamemode = GameMode.ADVENTURE;
+    static public boolean forceLobbyInventory = true;
     
     static public final String ASSAULT_PREFIX = "§5§l[§d§lAssault§5§l] " + ChatColor.RESET;
     
@@ -52,7 +53,10 @@ public class Assault extends JavaPlugin
         this.saveDefaultConfig();
         mainConfig = this.getConfig();
         lobbyWorld = Bukkit.getWorld(mainConfig.getString("lobby_world"));
-        lobbySpawn = new Location(lobbyWorld, 0.5, 101.5, 0.5, 90, 0);
+        lobbySpawn = new Coordinate(mainConfig.getString("lobby_spawn")).toLocation(lobbyWorld);
+        
+        lobbyGamemode = GameMode.valueOf(mainConfig.getString("lobby_gamemode"));
+        forceLobbyInventory = mainConfig.getBoolean("force_lobby_inventory");
         
         List<String> mapList = (List<String>) mainConfig.getList("map_list");
         for (String mapName : mapList)

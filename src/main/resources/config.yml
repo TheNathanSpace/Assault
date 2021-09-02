@@ -1,7 +1,12 @@
 lobby_world: lobby_world
+lobby_spawn: 0.5 101.5 0.5 90 0
+lobby_gamemode: ADVENTURE
+
+# Allow players to rearrange their inventory while in the lobby
+force_lobby_inventory: true
 
 # References maps in the maps/ directory.
 # Map files should be in the form map_[name].yml.
-# Here, they can be either saloon, map_saloon, saloon.yml, or map_saloon.yml.
+# They can take these forms: saloon, map_saloon, saloon.yml, or map_saloon.yml.
 map_list:
   - map_saloon
