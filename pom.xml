@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.thekingelessar.assault</groupId>
     <artifactId>assault</artifactId>
-    <version>0.11.1</version>
+    <version>0.11.2</version>
     <packaging>jar</packaging>
     <name>Assault</name>
     <url>https://github.com/thekingelessar/assault</url>
