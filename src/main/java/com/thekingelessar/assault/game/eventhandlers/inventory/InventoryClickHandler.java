@@ -103,7 +103,7 @@ public class InventoryClickHandler implements Listener
                 {
                     player.playSound(player.getLocation(), Sound.CHEST_OPEN, 0.5F, 1.3F);
                 }
-                catch (Exception e)
+                catch (Throwable throwable)
                 {
                     player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_OPEN"), 0.5F, 1.3F);
                 }
@@ -124,7 +124,7 @@ public class InventoryClickHandler implements Listener
                 {
                     player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 0.5F, 1.3F);
                 }
-                catch (Exception e)
+                catch (Throwable throwable)
                 {
                     player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_CLOSE"), 0.5F, 1.3F);
                 }

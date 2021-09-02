@@ -140,7 +140,7 @@ public class GamePlayer
         {
             this.player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
         }
-        catch (Exception e)
+        catch (Throwable throwable)
         {
             this.player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
         }
@@ -305,7 +305,7 @@ public class GamePlayer
         {
             this.player.playSound(this.player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
         }
-        catch (Exception e)
+        catch (Throwable throwable)
         {
             this.player.playSound(this.player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 0.8F, 1.0F);
         }

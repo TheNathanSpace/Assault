@@ -67,7 +67,7 @@ public class TaskAttackTimer extends BukkitRunnable
                     {
                         player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1.5f, 2.0f);
                     }
-                    catch (Exception e)
+                    catch (Throwable throwable)
                     {
                         player.playSound(player.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_BASS"), 1.5f, 2.0f);
                     }

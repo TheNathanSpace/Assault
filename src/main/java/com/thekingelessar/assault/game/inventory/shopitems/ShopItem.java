@@ -55,7 +55,7 @@ public class ShopItem
             {
                 player.playSound(player.getLocation(), Sound.NOTE_PLING, 1.0F, 2.0F);
             }
-            catch (Exception e)
+            catch (Throwable throwable)
             {
                 player.playSound(player.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"), 1.0F, 2.0F);
             }
@@ -66,7 +66,7 @@ public class ShopItem
             {
                 player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
             }
-            catch (Exception e)
+            catch (Throwable throwable)
             {
                 player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
             }

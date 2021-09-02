@@ -154,7 +154,7 @@ public class PlayerAttackVictimHandler implements Listener
                         {
                             gameInstance.gameWorld.playSound(victim.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
                         }
-                        catch (Exception e)
+                        catch (Throwable throwable)
                         {
                             gameInstance.gameWorld.playSound(victim.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
                         }

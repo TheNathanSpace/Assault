@@ -727,7 +727,7 @@ public class GameInstance
             {
                 player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
             }
-            catch (Exception e)
+            catch (Throwable throwable)
             {
                 player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
             }

@@ -1,6 +1,5 @@
 ## Todo
 
-- Allow user to use their maps
 - Names are all white
 - Drop sand in spawn area
 - nullpointer

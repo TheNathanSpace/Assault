@@ -30,7 +30,7 @@ public class LobbyUtil
         {
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
         }
-        catch (Exception e)
+        catch (Throwable throwable)
         {
             player.playSound(player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 1.0F, 1.0F);
         }
@@ -80,7 +80,7 @@ public class LobbyUtil
                     {
                         player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
                     }
-                    catch (Exception e)
+                    catch (Throwable throwable)
                     {
                         player.playSound(player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 1.0F, 1.0F);
                     }
@@ -121,7 +121,7 @@ public class LobbyUtil
         {
             player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
         }
-        catch (Exception e)
+        catch (Throwable throwable)
         {
             player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
         }
