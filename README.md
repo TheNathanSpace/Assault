@@ -1,3 +1,8 @@
+# Assault
+A fast paced minecraft minigame with the object of capturing the star to win
+
+
+
 ## Todo
 
 - Names are all white
@@ -63,4 +68,3 @@ See? I get stuff done.
     - Armor
     - Strength team buff?
     - Map-specific items
-- Multiple maps
