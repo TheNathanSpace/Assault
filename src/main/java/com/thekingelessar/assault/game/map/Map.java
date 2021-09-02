@@ -32,7 +32,7 @@ public class Map
     
     public double maxY;
     
-    public double attackerBaseProtMinZ;
+    public double attackerBaseProtMaxZ;
     
     public List<MapBase> bases = new ArrayList<>();
     
@@ -54,7 +54,7 @@ public class Map
     
         maxZ = config.getDouble("max_z");
         minZ = config.getDouble("min_z");
-        attackerBaseProtMinZ = config.getDouble("attacker_block_prot_min_z");
+        attackerBaseProtMaxZ = config.getDouble("attacker_base_prot_max_z");
     
         maxY = config.getDouble("max_y");
     

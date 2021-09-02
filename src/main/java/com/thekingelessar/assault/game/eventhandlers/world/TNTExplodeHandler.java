@@ -2,7 +2,6 @@ package com.thekingelessar.assault.game.eventhandlers.world;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.map.MapBase;
-import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -32,7 +31,7 @@ public class TNTExplodeHandler implements Listener
                     blockList.remove(block);
                 }
     
-                if (block.getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+                if (block.getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
                 {
                     blockList.remove(block);
                 }

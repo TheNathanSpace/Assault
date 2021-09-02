@@ -129,7 +129,7 @@ public class PlayerAttackVictimHandler implements Listener
                     
                     Location victimLocation = victim.getLocation();
                     
-                    if (attackerTeam.teamStage.equals(TeamStage.DEFENDING) && victim.getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+                    if (attackerTeam.teamStage.equals(TeamStage.DEFENDING) && victim.getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
                     {
                         entityAttackEvent.setCancelled(true);
                         return;

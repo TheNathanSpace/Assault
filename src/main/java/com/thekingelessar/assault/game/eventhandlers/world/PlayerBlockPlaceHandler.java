@@ -45,7 +45,7 @@ public class PlayerBlockPlaceHandler implements Listener
                 return;
             }
             
-            if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+            if (blockPlaceEvent.getBlockPlaced().getLocation().getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
             {
                 GameTeam gameTeam = gameInstance.getPlayerTeam(player);
                 

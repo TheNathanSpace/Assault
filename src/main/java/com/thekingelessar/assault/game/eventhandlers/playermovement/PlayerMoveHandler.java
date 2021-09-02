@@ -40,7 +40,7 @@ public class PlayerMoveHandler implements Listener
             
             if (gameInstance.gameStage.equals(GameStage.BUILDING))
             {
-                if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+                if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
                 {
                     cancelMovement(playerMoveEvent);
                     return;
@@ -48,7 +48,7 @@ public class PlayerMoveHandler implements Listener
             }
             else if (gameInstance.getDefendingTeam().equals(gameInstance.getPlayerTeam(player)))
             {
-                if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMinZ)
+                if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
                 {
                     cancelMovement(playerMoveEvent);
                     return;

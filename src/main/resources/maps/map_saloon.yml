@@ -13,7 +13,7 @@ min_z: 2.
 
 max_y: 122.
 
-attacker_block_prot_min_z: 20.
+attacker_base_prot_max_z: 20.
 
 # This refers to the base that each team is DEFENDING.
 bases:
