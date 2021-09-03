@@ -29,8 +29,8 @@ commands:
     description: Dev command. Kinda sus...
     usage: |
       /assaultadmin attack
-      /assaultassaultadmin coins <amount to add>
-      /assaultassaultadmin gp <amount to add>
+      /assaultadmin coins <amount to add>
+      /assaultadmin gp <amount to add>
 permissions:
   assault.*:
     description: All Assault commands.
