@@ -139,7 +139,7 @@ public class PlayerAttackVictimHandler implements Listener
                     {
                         MapBase mapBase = gameTeam.mapBase;
                         
-                        if (Util.isInside(victimLocation, mapBase.defenderBoundingBox.get(0).toLocation(gameInstance.gameWorld), mapBase.defenderBoundingBox.get(1).toLocation(gameInstance.gameWorld)))
+                        if (mapBase.isInDefenderBoundingBox(victimLocation))
                         {
                             entityAttackEvent.setCancelled(true);
                             return;

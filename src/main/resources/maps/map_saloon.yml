@@ -18,25 +18,30 @@ attacker_base_prot_max_z: 20.
 # This refers to the base that each team is DEFENDING.
 bases:
   - RED:
-      defender_spawn: -27.5 111. 83.5 -180. 0.
+      defender_spawns:
+        - -27.5 111. 83.5 -180. 0.
       defender_shop: -29.5 111.06250 82.5 -65. 0.
-      defender_bounding_box:
-        - -31. 0. 85.
-        - -26. 255. 81.
+      # This is a list of lists. Each sub-list inside the main list is one bounding box, with two opposite corners.
+      defender_bounding_boxes:
+        - - -31. 0. 85.
+          - -26. 255. 81.
       objective: -21.5 111.5 74.5
-      attacker_spawn: -22.5 106. 11.5 0. 0.
+      attacker_spawns:
+        - -22.5 106. 11.5 0. 0.
       attacker_shop: -19.5 106. 12.5 90. 0.
       attacker_buff_shop: -19.5 106. 14. 90. 0.
       emerald_spawns:
         - -16.5 106.5 58.5
   - BLUE:
-      defender_spawn: 29. 111. 83.5 -180. 0.
+      defender_spawns:
+        - 29. 111. 83.5 -180. 0.
       defender_shop: 27.5 111.06250 82.5 -65. 0.
       defender_bounding_box:
-        - 26. 0. 85.
-        - 31. 255. 81.
+        - - 26. 0. 85.
+          - 31. 255. 81.
       objective: 35.5 111.5 74.5
-      attacker_spawn: 34.5 106. 11.5 0. 0.
+      attacker_spawns:
+        - 34.5 106. 11.5 0. 0.
       attacker_shop: 37.5 106. 12.5 90. 0.
       attacker_buff_shop: 37.5 106. 14. 90. 0.
       emerald_spawns:

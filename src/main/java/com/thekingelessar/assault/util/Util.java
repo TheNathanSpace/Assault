@@ -1,17 +1,12 @@
 package com.thekingelessar.assault.util;
 
-import com.thekingelessar.assault.game.player.GamePlayer;
-import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.game.team.TeamColor;
-import com.thekingelessar.assault.game.team.TeamStage;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.material.MaterialData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Util
 {

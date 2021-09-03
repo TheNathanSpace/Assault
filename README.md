@@ -15,7 +15,6 @@
 ### Features
 
 - Package maps with plugin
-- Options for multiple defender spawnpoints
 - Add more game modifiers like First to 5 (stars) or Most stars in 8 minutes
 - Can you add a config option for the assault command /help to not override normal /help if you have a permission?
 

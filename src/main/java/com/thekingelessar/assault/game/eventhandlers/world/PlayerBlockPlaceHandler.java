@@ -75,7 +75,7 @@ public class PlayerBlockPlaceHandler implements Listener
             for (GameTeam gameTeam : gameInstance.teams.values())
             {
                 MapBase mapBase = gameTeam.mapBase;
-                if (Util.isInside(placedLocation, mapBase.defenderBoundingBox.get(0).toLocation(gameInstance.gameWorld), mapBase.defenderBoundingBox.get(1).toLocation(gameInstance.gameWorld)))
+                if (mapBase.isInDefenderBoundingBox(placedLocation))
                 {
                     blockPlaceEvent.setCancelled(true);
                     return;

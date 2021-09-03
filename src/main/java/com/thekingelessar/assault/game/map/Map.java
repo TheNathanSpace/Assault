@@ -11,10 +11,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Map
 {
@@ -51,13 +48,13 @@ public class Map
         
         voidEnabled = config.getBoolean("void_enabled");
         voidLevel = config.getDouble("void_level");
-    
+        
         maxZ = config.getDouble("max_z");
         minZ = config.getDouble("min_z");
         attackerBaseProtMaxZ = config.getDouble("attacker_base_prot_max_z");
-    
+        
         maxY = config.getDouble("max_y");
-    
+        
         List<?> baseList = config.getList("bases");
         
         for (Object base : baseList)
@@ -68,14 +65,33 @@ public class Map
             TeamColor teamColor = TeamColor.valueOf(baseTeamString);
             
             HashMap<String, Object> baseSubMap = mappedBase.get(baseTeamString);
-            Coordinate defenderSpawn = new Coordinate((String) baseSubMap.get("defender_spawn"));
-            Coordinate attackerSpawn = new Coordinate((String) baseSubMap.get("attacker_spawn"));
             
-            List<Object> defenderBoundingBoxObject = (List<Object>) baseSubMap.get("defender_bounding_box");
-            List<Coordinate> defenderBoundingBox = new ArrayList<>();
-            for (Object boundingBox : defenderBoundingBoxObject)
+            List<Object> defenderSpawnsObject = (List<Object>) baseSubMap.get("defender_spawns");
+            List<Coordinate> defenderSpawns = new ArrayList<>();
+            for (Object spawn : defenderSpawnsObject)
             {
-                defenderBoundingBox.add(new Coordinate((String) boundingBox));
+                Coordinate spawnCoord = new Coordinate((String) spawn);
+                defenderSpawns.add(spawnCoord);
+            }
+            
+            List<Object> attackerSpawnsObject = (List<Object>) baseSubMap.get("attacker_spawns");
+            List<Coordinate> attackerSpawns = new ArrayList<>();
+            for (Object spawn : attackerSpawnsObject)
+            {
+                Coordinate spawnCoord = new Coordinate((String) spawn);
+                attackerSpawns.add(spawnCoord);
+            }
+            
+            List<Object> defenderBoundingBoxesParent = (List<Object>) baseSubMap.get("defender_bounding_boxes");
+            List<List<Object>> defenderBoundingBoxesGeneric = new ArrayList<>();
+            List<List<Coordinate>> defenderBoundingBoxes = new ArrayList<>();
+            for (Object boundingBox : defenderBoundingBoxesParent)
+            {
+                defenderBoundingBoxesGeneric.add((List<Object>) boundingBox);
+            }
+            for (Object boundingBox : defenderBoundingBoxesGeneric)
+            {
+                defenderBoundingBoxes.add((List<Coordinate>) boundingBox);
             }
             
             List<Object> emeraldSpawnsObject = (List<Object>) baseSubMap.get("emerald_spawns");
@@ -94,7 +110,7 @@ public class Map
             shops.add(new Coordinate((String) baseSubMap.get("defender_shop")));
             shops.add(new Coordinate((String) baseSubMap.get("attacker_shop")));
             
-            MapBase mapBase = new MapBase(teamColor, defenderSpawn, defenderBoundingBox, attackerSpawn, emeraldSpawns, objective, shops, buffShop);
+            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objective, shops, buffShop);
             bases.add(mapBase);
         }
         
@@ -144,12 +160,15 @@ public class Map
         
         if (playerTeamStage.equals(TeamStage.ATTACKING))
         {
-            return playerTeam.gameInstance.getDefendingTeam().mapBase.attackerSpawn;
+            Random rand = new Random();
+            MapBase defendingBase = playerTeam.gameInstance.getDefendingTeam().mapBase;
+            return defendingBase.attackerSpawns.get(rand.nextInt(defendingBase.attackerSpawns.size()));
         }
         
         if (playerTeamStage.equals(TeamStage.DEFENDING))
         {
-            return playerTeam.mapBase.defenderSpawn;
+            Random rand = new Random();
+            return playerTeam.mapBase.defenderSpawns.get(rand.nextInt(playerTeam.mapBase.defenderSpawns.size()));
         }
         
         return null;

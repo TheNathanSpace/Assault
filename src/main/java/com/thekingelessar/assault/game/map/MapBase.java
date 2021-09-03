@@ -5,6 +5,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.util.Coordinate;
+import com.thekingelessar.assault.util.Util;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
@@ -23,9 +24,9 @@ public class MapBase
     public static List<String> shopList = Arrays.asList("FrozenFruit", "TheKingElessar", "Willis644", "Mokabu456", "ForgeSmith", "TheAndvark", "pikaguy", "Dirko", "TheWindrunner", "d0bado", "Saanbu789", "Chadicus_Maximus", "Cyberes");
     
     public TeamColor teamColor;
-    public Coordinate defenderSpawn;
-    public List<Coordinate> defenderBoundingBox;
-    public Coordinate attackerSpawn;
+    public List<Coordinate> defenderSpawns;
+    public List<List<Coordinate>> defenderBoundingBoxes;
+    public List<Coordinate> attackerSpawns;
     public List<Coordinate> emeraldSpawns;
     
     public List<Coordinate> itemShopCoords;
@@ -36,12 +37,12 @@ public class MapBase
     
     public Coordinate objective;
     
-    public MapBase(TeamColor teamColor, Coordinate defenderSpawn, List<Coordinate> defenderBoundingBox, Coordinate attackerSpawn, List<Coordinate> emeraldSpawns, Coordinate objective, List<Coordinate> itemShopCoords, Coordinate teamBuffShopCoords)
+    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, Coordinate objective, List<Coordinate> itemShopCoords, Coordinate teamBuffShopCoords)
     {
         this.teamColor = teamColor;
-        this.defenderSpawn = defenderSpawn;
-        this.defenderBoundingBox = defenderBoundingBox;
-        this.attackerSpawn = attackerSpawn;
+        this.defenderSpawns = defenderSpawns;
+        this.defenderBoundingBoxes = defenderBoundingBoxes;
+        this.attackerSpawns = attackerSpawns;
         this.emeraldSpawns = emeraldSpawns;
         
         this.itemShopCoords = itemShopCoords;
@@ -140,5 +141,17 @@ public class MapBase
             this.teamBuffShopNPC.destroy();
             this.teamBuffShopNPC = null;
         }
+    }
+    
+    public boolean isInDefenderBoundingBox(Location location)
+    {
+        for (List<Coordinate> boundingBox : this.defenderBoundingBoxes)
+        {
+            if (Util.isInside(location, boundingBox.get(0).toLocation(null), boundingBox.get(1).toLocation(null)))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

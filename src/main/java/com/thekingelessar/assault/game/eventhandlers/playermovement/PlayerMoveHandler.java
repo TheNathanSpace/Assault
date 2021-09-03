@@ -7,7 +7,6 @@ import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.DeathType;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ public class PlayerMoveHandler implements Listener
             {
                 MapBase enemyMapBase = oppositeTeam.mapBase;
                 
-                if (Util.isInside(locTo, enemyMapBase.defenderBoundingBox.get(0).toLocation(gameInstance.gameWorld), enemyMapBase.defenderBoundingBox.get(1).toLocation(gameInstance.gameWorld)))
+                if (enemyMapBase.isInDefenderBoundingBox(locTo))
                 {
                     cancelMovement(playerMoveEvent);
                     return;
