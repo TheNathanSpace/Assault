@@ -30,14 +30,14 @@ public class MapBase
     public List<Coordinate> emeraldSpawns;
     
     public List<Coordinate> itemShopCoords;
-    public Coordinate teamBuffShopCoords;
+    public List<Coordinate> buffShopCoords;
     
     public List<NPC> itemShopNPCs = new ArrayList<>();
-    public NPC teamBuffShopNPC;
+    public List<NPC> teamBuffShopNPCs = new ArrayList<>();
     
     public Coordinate objective;
     
-    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, Coordinate objective, List<Coordinate> itemShopCoords, Coordinate teamBuffShopCoords)
+    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, Coordinate objective, List<Coordinate> itemShopCoords, List<Coordinate> buffShopCoords)
     {
         this.teamColor = teamColor;
         this.defenderSpawns = defenderSpawns;
@@ -46,7 +46,7 @@ public class MapBase
         this.emeraldSpawns = emeraldSpawns;
         
         this.itemShopCoords = itemShopCoords;
-        this.teamBuffShopCoords = teamBuffShopCoords;
+        this.buffShopCoords = buffShopCoords;
         
         this.objective = objective;
     }
@@ -88,35 +88,38 @@ public class MapBase
         
         if (gameInstance.gameStage.equals(GameStage.ATTACKING))
         {
-            Location buffShopLocation = teamBuffShopCoords.toLocation(gameInstance.gameWorld);
-            Random random = new Random();
-            String randomName = MapBase.shopList.get(random.nextInt(shopList.size()));
-            
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "Buff Shop");
-            npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, randomName);
-            npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
-            npc.addTrait(new BuffShopTrait());
-            
-            SkinLayers trait = npc.getTrait(SkinLayers.class);
-            trait.hideCape();
-            trait.setVisible(SkinLayers.Layer.CAPE, false);
-            
-            if (buffShopLocation == null)
+            for (Coordinate buffShop : buffShopCoords)
             {
-                System.out.println("Shop location is null! " + this.teamColor);
+                Location buffShopLocation = buffShop.toLocation(gameInstance.gameWorld);
+                Random random = new Random();
+                String randomName = MapBase.shopList.get(random.nextInt(shopList.size()));
+                
+                NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "Buff Shop");
+                npc.data().setPersistent(NPC.PLAYER_SKIN_UUID_METADATA, randomName);
+                npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
+                npc.addTrait(new BuffShopTrait());
+                
+                SkinLayers trait = npc.getTrait(SkinLayers.class);
+                trait.hideCape();
+                trait.setVisible(SkinLayers.Layer.CAPE, false);
+                
+                if (buffShopLocation == null)
+                {
+                    System.out.println("Shop location is null! " + this.teamColor);
+                }
+                
+                npc.spawn(buffShopLocation);
+                npc.getEntity().teleport(buffShopLocation);
+                this.teamBuffShopNPCs.add(npc);
+                
+                Entity npcEntity = npc.getEntity();
+                if (npcEntity instanceof SkinnableEntity)
+                {
+                    ((SkinnableEntity) npcEntity).getSkinTracker().notifySkinChange(true);
+                }
+                
+                Assault.gameNPCs.add(npc);
             }
-            
-            npc.spawn(buffShopLocation);
-            npc.getEntity().teleport(buffShopLocation);
-            this.teamBuffShopNPC = npc;
-            
-            Entity npcEntity = npc.getEntity();
-            if (npcEntity instanceof SkinnableEntity)
-            {
-                ((SkinnableEntity) npcEntity).getSkinTracker().notifySkinChange(true);
-            }
-            
-            Assault.gameNPCs.add(npc);
         }
     }
     
@@ -134,12 +137,15 @@ public class MapBase
         
         this.itemShopNPCs.removeAll(removedIndeces);
         
-        if (this.teamBuffShopNPC != null)
+        if (this.teamBuffShopNPCs.size() != 0)
         {
-            Assault.gameNPCs.remove(this.teamBuffShopNPC);
-            this.teamBuffShopNPC.despawn();
-            this.teamBuffShopNPC.destroy();
-            this.teamBuffShopNPC = null;
+            for (NPC npc : this.teamBuffShopNPCs)
+            {
+                Assault.gameNPCs.remove(npc);
+                npc.despawn();
+                npc.destroy();
+                this.teamBuffShopNPCs.remove(npc);
+            }
         }
     }
     

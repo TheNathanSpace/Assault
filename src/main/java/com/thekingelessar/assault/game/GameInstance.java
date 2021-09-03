@@ -905,12 +905,15 @@ public class GameInstance
                 }
             }
             
-            if (mapBase.teamBuffShopNPC != null)
+            if (mapBase.teamBuffShopNPCs.size() != 0)
             {
-                Entity npcEntity = mapBase.teamBuffShopNPC.getEntity();
-                if (npcEntity instanceof SkinnableEntity)
+                for (NPC npc : mapBase.teamBuffShopNPCs)
                 {
-                    ((SkinnableEntity) npcEntity).getSkinTracker().updateViewer(player);
+                    Entity npcEntity = npc.getEntity();
+                    if (npcEntity instanceof SkinnableEntity)
+                    {
+                        ((SkinnableEntity) npcEntity).getSkinTracker().updateViewer(player);
+                    }
                 }
             }
         }

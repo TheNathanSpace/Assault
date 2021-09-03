@@ -104,13 +104,23 @@ public class Map
             
             Coordinate objective = new Coordinate((String) baseSubMap.get("objective"));
             
-            Coordinate buffShop = new Coordinate((String) baseSubMap.get("attacker_buff_shop"));
+            List<Object> buffShopsObject = (List<Object>) baseSubMap.get("attacker_buff_shops");
+            List<Coordinate> buffShops = new ArrayList<>();
+            for (Object spawn : buffShopsObject)
+            {
+                Coordinate spawnCoord = new Coordinate((String) spawn);
+                buffShops.add(spawnCoord);
+            }
             
-            List<Coordinate> shops = new ArrayList<>();
-            shops.add(new Coordinate((String) baseSubMap.get("defender_shop")));
-            shops.add(new Coordinate((String) baseSubMap.get("attacker_shop")));
+            List<Object> itemShopsObject = (List<Object>) baseSubMap.get("item_shops");
+            List<Coordinate> itemShops = new ArrayList<>();
+            for (Object spawn : itemShopsObject)
+            {
+                Coordinate spawnCoord = new Coordinate((String) spawn);
+                itemShops.add(spawnCoord);
+            }
             
-            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objective, shops, buffShop);
+            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objective, itemShops, buffShops);
             bases.add(mapBase);
         }
         
