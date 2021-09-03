@@ -65,7 +65,7 @@ public class Assault extends JavaPlugin
             maps.put(mapName, mapObject);
         }
         
-        this.getCommand("help").setExecutor(new CommandHelp());
+        this.getCommand("assaulthelp").setExecutor(new CommandAssaultHelp());
         this.getCommand("all").setExecutor(new CommandAll());
         this.getCommand("respawn").setExecutor(new CommandRespawn());
         this.getCommand("forfeit").setExecutor(new CommandForfeit());

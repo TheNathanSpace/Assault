@@ -5,11 +5,11 @@ author: TheKingElessar
 softdepend: [ HolographicDisplays ]
 depend: [ Citizens ]
 commands:
-  help:
-    aliases: [ h, Help ]
+  assaulthelp:
+    aliases: [ ]
     description: Explanation of commands.
     usage: |
-      /help
+      /assaulthelp
   all:
     aliases: [ a, All ]
     description: Shows a chat message to all players in the game.
