@@ -69,7 +69,7 @@ public class Assault extends JavaPlugin
         this.getCommand("all").setExecutor(new CommandAll());
         this.getCommand("respawn").setExecutor(new CommandRespawn());
         this.getCommand("forfeit").setExecutor(new CommandForfeit());
-        this.getCommand("assaultadmin").setExecutor(new CommandAssault());
+        this.getCommand("assaultadmin").setExecutor(new CommandAssaultAdmin());
         
         RegisterHandlers.registerHandlers();
         
