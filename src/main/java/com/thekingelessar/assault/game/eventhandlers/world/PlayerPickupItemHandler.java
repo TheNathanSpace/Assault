@@ -1,10 +1,9 @@
 package com.thekingelessar.assault.game.eventhandlers.world;
 
-import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.game.timertasks.TaskCountdownSwapAttackers;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,27 +59,29 @@ public class PlayerPickupItemHandler implements Listener
                     return;
                 }
                 
-                gameInstance.finishRound(gameInstance.getAttackingTeam());
-                
-                for (GameTeam currentGameTeam : gameInstance.teams.values())
-                {
-                    if (currentGameTeam.getPlayers().size() == 0)
-                    {
-                        gameInstance.endPrematurely();
-                        return;
-                    }
-                }
+                gameInstance.endRound(false);
                 
                 if (gameInstance.teamsGone == 1)
                 {
-                    gameInstance.declareWinners(null, false);
-                }
-                else
-                {
-                    gameInstance.updateScoreboards();
+                    boolean onlyOneTeamLeft = false;
+                    for (GameTeam instanceGameTeam : gameInstance.teams.values())
+                    {
+                        if (instanceGameTeam.getPlayers().size() == 0)
+                        {
+                            onlyOneTeamLeft = true;
+                            break;
+                        }
+                    }
                     
-                    gameInstance.taskCountdownSwapAttackers = new TaskCountdownSwapAttackers(200, 0, 20, gameInstance);
-                    gameInstance.taskCountdownSwapAttackers.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownSwapAttackers.startDelay, gameInstance.taskCountdownSwapAttackers.tickDelay);
+                    if (onlyOneTeamLeft)
+                    {
+                        gameInstance.winningTeam = gameInstance.getRemainingTeam();
+                        gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.DEFENDERS_LEFT);
+                    }
+                    else
+                    {
+                        gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
+                    }
                 }
             }
         }

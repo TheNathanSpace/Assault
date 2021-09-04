@@ -1,9 +1,9 @@
 package com.thekingelessar.assault.commands;
 
-import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +21,7 @@ public class CommandForfeit implements CommandExecutor
                 sender.sendMessage(ChatColor.RED + "You don't have permission to use that command");
                 return true;
             }
-    
+            
             Player player = (Player) sender;
             GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
             
@@ -29,13 +29,13 @@ public class CommandForfeit implements CommandExecutor
             {
                 GameTeam gameTeam = gameInstance.getPlayerTeam(player);
                 
-                if (gameTeam.canForfeit() || (args != null && args.length != 0 && args[0].equalsIgnoreCase("force")))
+                if (gameTeam.canForfeit() || (args != null && args.length != 0 && args[0].equalsIgnoreCase("force") && player.hasPermission("assault.command.forceforfeit")))
                 {
                     gameTeam.toggleForfeit(player);
                 }
                 else
                 {
-                    player.sendRawMessage(Assault.ASSAULT_PREFIX + "Your team cannot forfeit right now! You probably need to wait longer.");
+                    player.sendRawMessage(Color.RED + "The defending team cannot forfeit!");
                     return true;
                 }
             }

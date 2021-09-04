@@ -56,7 +56,7 @@ public class ItemShopTrait extends Trait
                     case BUILDING:
                         inventoryView = player.openInventory(gameTeam.shopBuilding.inventory);
                         break;
-                    case ATTACKING:
+                    case ATTACK_ROUNDS:
                         System.out.println("--- OPENING ATTACK SHOP ---");
                         System.out.println("Player name: " + gamePlayer.player.getName());
                         System.out.println("Player team: " + gamePlayer.gameTeam.color);

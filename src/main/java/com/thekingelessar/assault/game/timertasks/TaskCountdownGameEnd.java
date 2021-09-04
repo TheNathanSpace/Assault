@@ -40,12 +40,12 @@ public class TaskCountdownGameEnd extends BukkitRunnable
             return;
         }
         
-        List<Player> players = gameInstance.getWinningTeam().getPlayers();
-        for (Player player : players)
+        List<Player> winningPlayers = gameInstance.winningTeam.getPlayers();
+        for (Player player : winningPlayers)
         {
             for (int i = 0; i < 5; i++)
             {
-                FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.getWinningTeam().color);
+                FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.winningTeam.color);
             }
         }
         
@@ -55,7 +55,7 @@ public class TaskCountdownGameEnd extends BukkitRunnable
     public void finishTimer()
     {
         this.gameInstance.taskCountdownGameEnd = null;
-        this.gameInstance.endGame();
+        this.gameInstance.gameEndManager.cleanupGameInstance();
         this.cancel();
     }
 }

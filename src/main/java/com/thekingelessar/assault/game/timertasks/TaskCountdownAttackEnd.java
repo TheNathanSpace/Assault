@@ -1,6 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
-import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
@@ -65,21 +65,13 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
     public void finishTimer()
     {
         this.gameInstance.taskCountdownAttackEnd = null;
+        this.gameInstance.getAttackingTeam().finalAttackingTime = this.gameInstance.gameMap.attackTimeLimit;
         
-        this.gameInstance.getAttackingTeam().finalAttackingTime = 480;
-    
-        this.gameInstance.finishRound(gameInstance.getAttackingTeam());
-    
-        if (gameInstance.teamsGone == 0)
+        this.gameInstance.endRound(false);
+        
+        if (gameInstance.teamsGone == 1)
         {
-            gameInstance.updateScoreboards();
-            
-            gameInstance.taskCountdownSwapAttackers = new TaskCountdownSwapAttackers(200, 0, 20, gameInstance);
-            gameInstance.taskCountdownSwapAttackers.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownSwapAttackers.startDelay, gameInstance.taskCountdownSwapAttackers.tickDelay);
-        }
-        else
-        {
-            gameInstance.declareWinners(null, false);
+            gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
         }
         
         this.cancel();

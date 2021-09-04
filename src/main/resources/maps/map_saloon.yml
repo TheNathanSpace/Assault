@@ -8,7 +8,10 @@ waiting_platform_bounding_box:
 void_enabled: true
 void_level: 70.
 
-max_z: 88.
+building_time: 180
+attack_time_limit: 480
+
+max_z: 86.
 min_z: 2.
 
 max_y: 122.

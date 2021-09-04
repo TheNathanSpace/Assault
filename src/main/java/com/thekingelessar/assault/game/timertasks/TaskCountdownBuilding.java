@@ -72,7 +72,7 @@ public class TaskCountdownBuilding extends BukkitRunnable
             return;
         }
         
-        if (ticksLeft < 201)
+        if (ticksLeft < (gameInstance.gameMap.buildingTime) * 20 + 1)
         {
             List<Player> players = gameInstance.getPlayers();
             for (Player player : players)
@@ -98,7 +98,7 @@ public class TaskCountdownBuilding extends BukkitRunnable
     public void finishTimer()
     {
         this.gameInstance.taskCountdownBuilding = null;
-        this.gameInstance.gameStage = GameStage.ATTACKING;
+        this.gameInstance.gameStage = GameStage.ATTACK_ROUNDS;
         
         this.gameInstance.startAttackMode();
         

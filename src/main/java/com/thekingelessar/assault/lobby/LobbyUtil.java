@@ -5,7 +5,6 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.util.ItemInit;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

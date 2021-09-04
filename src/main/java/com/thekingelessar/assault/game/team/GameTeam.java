@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
@@ -10,7 +11,6 @@ import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
-import com.thekingelessar.assault.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -154,8 +154,8 @@ public class GameTeam
             switch (gameInstance.gameStage)
             {
                 case BUILDING:
-                case ATTACKING:
-                    gameInstance.alertLastEnemyLeft(this.getOppositeTeam());
+                case ATTACK_ROUNDS:
+                    gameInstance.alertTeamleft(this.getOppositeTeam());
                     break;
             }
         }
@@ -222,16 +222,7 @@ public class GameTeam
     
     public boolean canForfeit()
     {
-        if (this.teamStage.equals(TeamStage.DEFENDING) || this.gameInstance.teamsGone == 0)
-        {
-            return false;
-        }
-        
-        GameTeam oppositeTeam = this.getOppositeTeam();
-        long nanosecondsTaken = System.nanoTime() - this.startAttackingTime;
-        double secondsTaken = nanosecondsTaken / 1000000000.;
-        
-        return oppositeTeam.finalAttackingTime < secondsTaken;
+        return !this.teamStage.equals(TeamStage.DEFENDING);
     }
     
     public void toggleForfeit(Player player)
@@ -244,7 +235,7 @@ public class GameTeam
         else
         {
             this.forfeitList.add(player);
-            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.RED + "forfeit" + ChatColor.RESET + "!");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.DARK_RED + "forfeit" + ChatColor.RESET + "!");
         }
         
         this.evaluateForfeit();
@@ -261,15 +252,21 @@ public class GameTeam
         {
             for (Player player : this.getPlayers())
             {
-                player.sendRawMessage(Assault.ASSAULT_PREFIX + "Your team " + ChatColor.RED + "forfeits" + ChatColor.RESET + "!");
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + this.color.chatColor + "Your team " + ChatColor.DARK_RED + "forfeits" + ChatColor.RESET + "!");
+            }
+            for (Player player : this.getOppositeTeam().getPlayers())
+            {
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + "The" + this.color.chatColor + " other team " + ChatColor.DARK_RED + "forfeits" + ChatColor.RESET + "!");
             }
             
-            gameInstance.finishRound(gameInstance.getDefendingTeam());
-            gameInstance.declareWinners(null, true);
-            
-            gameInstance.getAttackingTeam().finalAttackingTime = 481;
-            gameInstance.getAttackingTeam().displaySeconds = Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2);
+            gameInstance.endRound(true);
+            gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
         }
+    }
+    
+    public boolean didForfeit()
+    {
+        return this.displaySeconds == (double) -999;
     }
     
     public List<Inventory> getShopInventories()

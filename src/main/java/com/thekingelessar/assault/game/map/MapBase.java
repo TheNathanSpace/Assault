@@ -86,7 +86,7 @@ public class MapBase
             Assault.gameNPCs.add(npc);
         }
         
-        if (gameInstance.gameStage.equals(GameStage.ATTACKING))
+        if (gameInstance.gameStage.equals(GameStage.ATTACK_ROUNDS))
         {
             for (Coordinate buffShop : buffShopCoords)
             {

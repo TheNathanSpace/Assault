@@ -36,10 +36,12 @@ permissions:
     description: All Assault commands.
     children:
       assault.command.assaultadmin: true
+      assault.command.forceforfeit: true
       assault.help: true
       assault.all: true
       assault.respawn: true
       assault.forfeit: true
+    default: op
   assault.command.assaultadmin:
     description: A testing command, allowing you to skip the building phase and edit coin/GP values.
     default: op
@@ -55,3 +57,6 @@ permissions:
   assault.command.forfeit:
     description: Toggles your vote to forfeit.
     default: true
+  assault.command.forceforfeit:
+    description: Force team to forfeit.
+    default: op

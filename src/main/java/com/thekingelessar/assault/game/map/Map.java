@@ -24,6 +24,9 @@ public class Map
     public boolean voidEnabled;
     public double voidLevel;
     
+    public int buildingTime;
+    public int attackTimeLimit;
+    
     public double maxZ;
     public double minZ;
     
@@ -49,6 +52,9 @@ public class Map
         voidEnabled = config.getBoolean("void_enabled");
         voidLevel = config.getDouble("void_level");
         
+        buildingTime = config.getInt("building_time");
+        attackTimeLimit = config.getInt("attack_time_limit");
+    
         maxZ = config.getDouble("max_z");
         minZ = config.getDouble("min_z");
         attackerBaseProtMaxZ = config.getDouble("attacker_base_prot_max_z");
