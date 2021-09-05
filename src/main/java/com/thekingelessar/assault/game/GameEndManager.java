@@ -47,7 +47,7 @@ public class GameEndManager
         switch (winState)
         {
             case LOWEST_TIME:
-                subtitleString = "Time: " + ChatColor.LIGHT_PURPLE + Util.secondsToMinutes(Util.round(gameInstance.winningTeam.finalAttackingTime, 2), false) + ChatColor.WHITE + " seconds";
+                subtitleString = "Time: " + ChatColor.LIGHT_PURPLE + Util.secondsToMinutes(gameInstance.winningTeam.displaySeconds, true) + ChatColor.WHITE + " seconds";
                 break;
             
             case ATTACKERS_LEFT:
@@ -108,7 +108,10 @@ public class GameEndManager
         
         for (BukkitRunnable taskTimer : gameInstance.allTimers)
         {
-            taskTimer.cancel();
+            if (taskTimer != null)
+            {
+                taskTimer.cancel();
+            }
         }
         
         for (GameTeam gameTeam : gameInstance.teams.values())

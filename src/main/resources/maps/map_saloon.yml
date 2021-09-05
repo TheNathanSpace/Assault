@@ -41,7 +41,7 @@ bases:
   - BLUE:
       defender_spawns:
         - 29. 111. 83.5 -180. 0.
-      defender_bounding_box:
+      defender_bounding_boxes:
         - - 26. 0. 85.
           - 31. 255. 81.
       objective: 35.5 111.5 74.5

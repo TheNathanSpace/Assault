@@ -260,7 +260,11 @@ public class GameTeam
             }
             
             gameInstance.endRound(true);
-            gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
+            
+            if (this.gameInstance.teamsGone == 1)
+            {
+                gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
+            }
         }
     }
     

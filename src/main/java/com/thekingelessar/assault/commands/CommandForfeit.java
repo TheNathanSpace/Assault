@@ -3,7 +3,6 @@ package com.thekingelessar.assault.commands;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,7 +34,7 @@ public class CommandForfeit implements CommandExecutor
                 }
                 else
                 {
-                    player.sendRawMessage(Color.RED + "The defending team cannot forfeit!");
+                    player.sendRawMessage(ChatColor.RED + "The defending team cannot forfeit!");
                     return true;
                 }
             }

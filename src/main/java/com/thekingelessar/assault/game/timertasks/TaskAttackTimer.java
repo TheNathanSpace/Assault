@@ -4,8 +4,6 @@ import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Title;
-import com.thekingelessar.assault.util.Util;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
@@ -71,8 +69,6 @@ public class TaskAttackTimer extends BukkitRunnable
                     {
                         player.playSound(player.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_BASS"), 1.5f, 2.0f);
                     }
-                    
-                    player.sendRawMessage(Assault.ASSAULT_PREFIX + gameInstance.getAttackingTeam().color.chatColor + "Your team " + ChatColor.RESET + "can now forfeit! Use /forfeit.");
                 }
                 forfeitAlerted = true;
             }

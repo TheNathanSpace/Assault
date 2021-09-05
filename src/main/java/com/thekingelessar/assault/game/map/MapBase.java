@@ -134,23 +134,25 @@ public class MapBase
             npc.despawn();
             npc.destroy();
         }
-        
         this.itemShopNPCs.removeAll(removedIndeces);
         
         if (this.teamBuffShopNPCs.size() != 0)
         {
+            List<NPC> removeList = new ArrayList<>();
             for (NPC npc : this.teamBuffShopNPCs)
             {
                 Assault.gameNPCs.remove(npc);
                 npc.despawn();
                 npc.destroy();
-                this.teamBuffShopNPCs.remove(npc);
+                removeList.add(npc);
             }
+            this.teamBuffShopNPCs.removeAll(removeList);
         }
     }
     
     public boolean isInDefenderBoundingBox(Location location)
     {
+        int i = 0;
         for (List<Coordinate> boundingBox : this.defenderBoundingBoxes)
         {
             if (Util.isInside(location, boundingBox.get(0).toLocation(null), boundingBox.get(1).toLocation(null)))

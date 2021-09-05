@@ -72,18 +72,13 @@ public class TaskCountdownBuilding extends BukkitRunnable
             return;
         }
         
-        if (ticksLeft < (gameInstance.gameMap.buildingTime) * 20 + 1)
+        if (ticksLeft < 201)
         {
             List<Player> players = gameInstance.getPlayers();
+            title = new Title(" ", ChatColor.WHITE + "Building finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
             for (Player player : players)
             {
                 title.clearTitle(player);
-            }
-            
-            title = new Title(" ", ChatColor.WHITE + "Building finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
-            
-            for (Player player : players)
-            {
                 title.send(player);
             }
         }

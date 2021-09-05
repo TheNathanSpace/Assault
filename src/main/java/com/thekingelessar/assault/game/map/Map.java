@@ -54,7 +54,7 @@ public class Map
         
         buildingTime = config.getInt("building_time");
         attackTimeLimit = config.getInt("attack_time_limit");
-    
+        
         maxZ = config.getDouble("max_z");
         minZ = config.getDouble("min_z");
         attackerBaseProtMaxZ = config.getDouble("attacker_base_prot_max_z");
@@ -95,9 +95,14 @@ public class Map
             {
                 defenderBoundingBoxesGeneric.add((List<Object>) boundingBox);
             }
-            for (Object boundingBox : defenderBoundingBoxesGeneric)
+            for (List<Object> boundingBox : defenderBoundingBoxesGeneric)
             {
-                defenderBoundingBoxes.add((List<Coordinate>) boundingBox);
+                List<Coordinate> singleBoundCoord = new ArrayList<>();
+                for (Object singleBound : boundingBox)
+                {
+                    singleBoundCoord.add(new Coordinate((String) singleBound));
+                }
+                defenderBoundingBoxes.add(singleBoundCoord);
             }
             
             List<Object> emeraldSpawnsObject = (List<Object>) baseSubMap.get("emerald_spawns");

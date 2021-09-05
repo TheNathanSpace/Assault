@@ -566,12 +566,10 @@ public class GameInstance
         {
             long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
             this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
-            this.getAttackingTeam().displaySeconds = Util.round(this.getAttackingTeam().finalAttackingTime, 2);
         }
         
         this.getAttackingTeam().displaySeconds = Util.round(this.getAttackingTeam().finalAttackingTime, 2);
-    
-    
+        
         if (attackersForfeit)
         {
             this.getAttackingTeam().finalAttackingTime = Integer.MAX_VALUE;

@@ -1,10 +1,8 @@
 package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.Util;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,8 +50,8 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
             title.clearTitle(player);
         }
         
-        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(Util.round(gameInstance.getAttackingTeam().finalAttackingTime, 2), false);
-    
+        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(gameInstance.getAttackingTeam().displaySeconds, false);
+        
         title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         
         for (Player player : players)

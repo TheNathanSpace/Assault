@@ -33,7 +33,7 @@ public class Coordinate
     
     public Coordinate(String coordinates)
     {
-        Pattern pattern = Pattern.compile("^ *(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*) +(-?[0-9]+.?[0-9]*) *(-?[0-9]+.?[0-9]*)? ?(-?[0-9]+.?[0-9]*)?");
+        Pattern pattern = Pattern.compile("^ *(-?[0-9]+\\.?[0-9]*) +(-?[0-9]+\\.?[0-9]*) +(-?[0-9]+\\.?[0-9]*) *(-?[0-9]+\\.?[0-9]*)? *(-?[0-9]+\\.?[0-9]*)?");
         Matcher matchedPattern = pattern.matcher(coordinates);
         
         if (matchedPattern.find())
