@@ -6,6 +6,7 @@ import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.player.DeathType;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -73,9 +74,15 @@ public class PlayerMoveHandler implements Listener
                 }
                 else if ((System.nanoTime() - gamePlayer.startTimeInAir) / 1000000000. > 5)
                 {
-                    player.sendMessage(Assault.ASSAULT_PREFIX + "Looks like you're stuck—respawning!");
-                    gamePlayer.respawn(null, true, DeathType.DEATH);
-                    gamePlayer.startTimeInAir = 0;
+                    if (PlayerMode.getPlayerMode(player).equals(PlayerMode.SPECTATOR))
+                    {
+                        gamePlayer.startTimeInAir = 0;
+                    }
+                    else
+                    {
+                        player.sendMessage(Assault.ASSAULT_PREFIX + "Looks like you're stuck—respawning!");
+                        gamePlayer.respawn(null, true, DeathType.DEATH);
+                    }
                 }
                 
                 if (((Entity) player).isOnGround() && !gamePlayer.flightReset)

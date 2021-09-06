@@ -26,7 +26,6 @@ public class BuffSpeed implements IBuff
                     return;
                 }
             }
-            System.out.println("Adding potion effect!");
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 1, true, true));
         }
     }
