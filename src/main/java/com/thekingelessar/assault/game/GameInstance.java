@@ -138,8 +138,6 @@ public class GameInstance
             
             player.getInventory().setItem(8, GameInstance.gameModifierItemStack.clone());
             this.modifierShopMap.put(player, new PlayerShopModifiers(this, player));
-            
-            System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());
         }
         
         if (spectators != null)
@@ -274,6 +272,7 @@ public class GameInstance
         
         if (this.gameStage.equals(GameStage.BUILDING))
         {
+            this.winningTeam = this.getRemainingTeam();
             this.gameEndManager.declareWinners(GameEndManager.WinState.BUILDING_LEFT);
         }
         
@@ -286,7 +285,7 @@ public class GameInstance
                 Title title = new Title(this.getDefendingTeam().color.chatColor + "Defending" + ChatColor.RESET + " team left!", "Someone may rejoin, so keep going!", 0, 5, 1);
                 title.clearTitle(player);
                 title.send(player);
-            } // todo: handle when defenders leave
+            }
         }
         else
         {
@@ -294,6 +293,19 @@ public class GameInstance
             this.endRound(true);
             this.gameEndManager.declareWinners(GameEndManager.WinState.ATTACKERS_LEFT);
         }
+    }
+    
+    public boolean isOneTeamRemaining()
+    {
+        boolean teamLeft = false;
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.getPlayers().size() == 0)
+            {
+                teamLeft = true;
+            }
+        }
+        return teamLeft;
     }
     
     public GameTeam getRemainingTeam()
@@ -545,6 +557,34 @@ public class GameInstance
         this.currentObjective.put(getDefendingTeam(), objectiveEntity);
     }
     
+    public boolean isTie()
+    {
+        int triedTeam = 0;
+        double firstTime = 0;
+    
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.finalAttackingTime == 0)
+            {
+                return false;
+            }
+            if (triedTeam == 0)
+            {
+                firstTime = gameTeam.finalAttackingTime;
+                triedTeam++;
+            }
+            else
+            {
+                if (firstTime == gameTeam.finalAttackingTime)
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
     public void endRound(boolean attackersForfeit)
     {
         if (this.taskAttackTimer != null)
@@ -561,7 +601,7 @@ public class GameInstance
         {
             this.taskTickTimer.cancel();
         }
-    
+        
         if (this.getAttackingTeam().finalAttackingTime != this.gameMap.attackTimeLimit)
         {
             long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
@@ -621,6 +661,10 @@ public class GameInstance
             }
             
             this.winningTeam = lowestTeam;
+        }
+        else if (this.isOneTeamRemaining())
+        {
+            this.winningTeam = this.getRemainingTeam();
         }
         else
         {
@@ -709,7 +753,6 @@ public class GameInstance
         }
         return null;
     }
-    
     
     public void removePlayer(Player player)
     {

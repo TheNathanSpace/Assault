@@ -13,6 +13,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameEndManager
 {
     GameInstance gameInstance;
@@ -31,7 +34,8 @@ public class GameEndManager
         LOWEST_TIME,
         ATTACKERS_LEFT,
         DEFENDERS_LEFT,
-        BUILDING_LEFT;
+        BUILDING_LEFT,
+        TIE;
     }
     
     
@@ -64,6 +68,13 @@ public class GameEndManager
                 subtitleString = "The " + disconnectedTeam.color.chatColor + "enemy team" + ChatColor.RESET + " disconnected!";
                 break;
             
+            case TIE:
+                List<GameTeam> teamList = new ArrayList<>(gameInstance.teams.values());
+                winnerTitleString = "IT'S A TIE!";
+                loserTitleString = "IT'S A TIE!";
+                subtitleString = teamList.get(0).color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " and " + teamList.get(1).color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " tied!";
+                break;
+            
             default:
                 throw new IllegalStateException("Unexpected value: " + winState);
         }
@@ -86,6 +97,14 @@ public class GameEndManager
         
         for (Player player : gameInstance.winningTeam.getOppositeTeam().getPlayers())
         {
+            if (gameInstance.isTie())
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.winningTeam.getOppositeTeam().color);
+                }
+            }
+            
             loserTitle.clearTitle(player);
             loserTitle.send(player);
             

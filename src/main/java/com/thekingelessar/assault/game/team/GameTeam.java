@@ -89,7 +89,6 @@ public class GameTeam
     private void createScoreboard()
     {
         teamScoreboard = gameInstance.scoreboard.registerNewTeam(color.toString());
-        teamScoreboard.setPrefix(color.chatColor + ChatColor.BOLD.toString() + " " + color.toString().charAt(0));
         teamScoreboard.setAllowFriendlyFire(false);
         teamScoreboard.setCanSeeFriendlyInvisibles(true);
         teamScoreboard.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OTHER_TEAMS);
@@ -121,11 +120,9 @@ public class GameTeam
         }
         
         members.add(gamePlayer);
-        teamScoreboard.addPlayer(player);
+        teamScoreboard.addEntry(player.getName());
         
-        player.setDisplayName(this.color.chatColor + player.getName() + ChatColor.RESET);
-        player.setCustomName(player.getDisplayName() + ChatColor.RESET);
-        player.setPlayerListName(player.getDisplayName() + ChatColor.RESET);
+        player.setPlayerListName(color.chatColor + ChatColor.BOLD.toString() + "[" + color.toString().charAt(0) + "]" + ChatColor.RESET + " " + this.color.chatColor + player.getName() + ChatColor.RESET);
         
         gamePlayer.swapReset();
         player.getInventory().clear();
@@ -147,7 +144,7 @@ public class GameTeam
     public void removeMember(Player player)
     {
         members.remove(this.getGamePlayer(player));
-        teamScoreboard.removePlayer(player);
+        teamScoreboard.removeEntry(player.getName());
         
         if (members.size() == 0)
         {

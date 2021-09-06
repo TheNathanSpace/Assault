@@ -61,27 +61,20 @@ public class PlayerPickupItemHandler implements Listener
                 
                 gameInstance.endRound(false);
                 
+                if (gameInstance.isOneTeamRemaining())
+                {
+                    gameInstance.winningTeam = gameInstance.getRemainingTeam();
+                    gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.DEFENDERS_LEFT);
+                    return;
+                }
+                
                 if (gameInstance.teamsGone == 1)
                 {
-                    boolean onlyOneTeamLeft = false;
-                    for (GameTeam instanceGameTeam : gameInstance.teams.values())
+                    if (gameInstance.isTie())
                     {
-                        if (instanceGameTeam.getPlayers().size() == 0)
-                        {
-                            onlyOneTeamLeft = true;
-                            break;
-                        }
+                        gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.TIE);
                     }
-                    
-                    if (onlyOneTeamLeft)
-                    {
-                        gameInstance.winningTeam = gameInstance.getRemainingTeam();
-                        gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.DEFENDERS_LEFT);
-                    }
-                    else
-                    {
-                        gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
-                    }
+                    gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
                 }
             }
         }

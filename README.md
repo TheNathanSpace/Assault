@@ -2,20 +2,15 @@
 
 ### Bugs
 
-- **Names are all white**
+- Buff shops not registering purchases
 - can still get over wall barriers
-- `NullPointerException` with `GamePlayer`
+- `NullPointerException` with `GamePlayer` when leave and rejoin
 - Defending team logging out times are weird
 - Running out clock times are weird?
-- Name colors aren't updating when new games start.
-- Team buff effects are sometimes persisting in-between rounds(/games?)
-- Double "join" message
-- Some instances start where coins don't decrease when buying stuff
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features
 
-- Ties
 - Package maps with plugin
 - Add more game modifiers like First to 5 (stars) or Most stars in 8 minutes
 

@@ -71,7 +71,14 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
         
         if (gameInstance.teamsGone == 1)
         {
-            gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
+            if (gameInstance.isTie())
+            {
+                gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.TIE);
+            }
+            else
+            {
+                gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.LOWEST_TIME);
+            }
         }
         
         this.cancel();
