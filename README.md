@@ -2,11 +2,8 @@
 
 ### Bugs
 
-- Buff shops not registering purchases
 - can still get over wall barriers
 - `NullPointerException` with `GamePlayer` when leave and rejoin
-- Defending team logging out times are weird
-- Running out clock times are weird?
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features

@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
+import java.util.logging.Level;
 
 public class Map
 {
@@ -41,94 +42,272 @@ public class Map
     
     public Map(YamlConfiguration config)
     {
-        mapName = config.getString("world_name");
-        waitingSpawn = new Coordinate(config.getString("waiting_spawn"));
-        
-        for (Object boundingBox : config.getList("waiting_platform_bounding_box"))
+        try
         {
-            waitingPlatformBoundingBox.add(new Coordinate((String) boundingBox));
+            mapName = config.getString("world_name");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "world_name invalid");
+            throw exception;
         }
         
-        voidEnabled = config.getBoolean("void_enabled");
-        voidLevel = config.getDouble("void_level");
+        try
+        {
+            waitingSpawn = new Coordinate(config.getString("waiting_spawn"));
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "waiting_spawn invalid");
+            throw exception;
+        }
         
-        buildingTime = config.getInt("building_time");
-        attackTimeLimit = config.getInt("attack_time_limit");
+        try
+        {
+            for (Object boundingBox : config.getList("waiting_platform_bounding_box"))
+            {
+                waitingPlatformBoundingBox.add(new Coordinate((String) boundingBox));
+            }
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "waiting_platform_bounding_box invalid");
+            throw exception;
+        }
         
-        maxZ = config.getDouble("max_z");
-        minZ = config.getDouble("min_z");
-        attackerBaseProtMaxZ = config.getDouble("attacker_base_prot_max_z");
+        try
+        {
+            voidEnabled = config.getBoolean("void_enabled");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "void_enabled invalid");
+            throw exception;
+        }
         
-        maxY = config.getDouble("max_y");
+        try
+        {
+            voidLevel = config.getDouble("void_level");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "void_level invalid");
+            throw exception;
+        }
         
-        List<?> baseList = config.getList("bases");
+        try
+        {
+            buildingTime = config.getInt("building_time");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "building_time invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            attackTimeLimit = config.getInt("attack_time_limit");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "attack_time_limit invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            maxZ = config.getDouble("max_z");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "max_z invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            minZ = config.getDouble("min_z");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "min_z invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            attackerBaseProtMaxZ = config.getDouble("attacker_base_prot_max_z");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_base_prot_max_z invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            maxY = config.getDouble("max_y");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "max_y invalid");
+            throw exception;
+        }
+        
+        List<?> baseList;
+        try
+        {
+            baseList = config.getList("bases");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "bases invalid");
+            throw exception;
+        }
         
         for (Object base : baseList)
         {
-            HashMap<String, HashMap<String, Object>> mappedBase = (HashMap<String, HashMap<String, Object>>) base;
-            Set<String> baseTeamSet = mappedBase.keySet();
-            String baseTeamString = baseTeamSet.iterator().next();
-            TeamColor teamColor = TeamColor.valueOf(baseTeamString);
+            HashMap<String, HashMap<String, Object>> mappedBase;
+            Set<String> baseTeamSet;
+            String baseTeamString;
+            TeamColor teamColor;
+            HashMap<String, Object> baseSubMap;
             
-            HashMap<String, Object> baseSubMap = mappedBase.get(baseTeamString);
-            
-            List<Object> defenderSpawnsObject = (List<Object>) baseSubMap.get("defender_spawns");
-            List<Coordinate> defenderSpawns = new ArrayList<>();
-            for (Object spawn : defenderSpawnsObject)
+            try
             {
-                Coordinate spawnCoord = new Coordinate((String) spawn);
-                defenderSpawns.add(spawnCoord);
+                mappedBase = (HashMap<String, HashMap<String, Object>>) base;
+                baseTeamSet = mappedBase.keySet();
+                baseTeamString = baseTeamSet.iterator().next();
+                teamColor = TeamColor.valueOf(baseTeamString);
+                baseSubMap = mappedBase.get(baseTeamString);
             }
-            
-            List<Object> attackerSpawnsObject = (List<Object>) baseSubMap.get("attacker_spawns");
-            List<Coordinate> attackerSpawns = new ArrayList<>();
-            for (Object spawn : attackerSpawnsObject)
+            catch (Exception exception)
             {
-                Coordinate spawnCoord = new Coordinate((String) spawn);
-                attackerSpawns.add(spawnCoord);
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "Base structure invalid");
+                throw exception;
             }
-            
-            List<Object> defenderBoundingBoxesParent = (List<Object>) baseSubMap.get("defender_bounding_boxes");
-            List<List<Object>> defenderBoundingBoxesGeneric = new ArrayList<>();
-            List<List<Coordinate>> defenderBoundingBoxes = new ArrayList<>();
-            for (Object boundingBox : defenderBoundingBoxesParent)
+    
+            List<Coordinate> defenderSpawns;
+            try
             {
-                defenderBoundingBoxesGeneric.add((List<Object>) boundingBox);
-            }
-            for (List<Object> boundingBox : defenderBoundingBoxesGeneric)
-            {
-                List<Coordinate> singleBoundCoord = new ArrayList<>();
-                for (Object singleBound : boundingBox)
+                List<Object> defenderSpawnsObject = (List<Object>) baseSubMap.get("defender_spawns");
+                defenderSpawns = new ArrayList<>();
+                for (Object spawn : defenderSpawnsObject)
                 {
-                    singleBoundCoord.add(new Coordinate((String) singleBound));
+                    Coordinate spawnCoord = new Coordinate((String) spawn);
+                    defenderSpawns.add(spawnCoord);
                 }
-                defenderBoundingBoxes.add(singleBoundCoord);
             }
-            
-            List<Object> emeraldSpawnsObject = (List<Object>) baseSubMap.get("emerald_spawns");
-            List<Coordinate> emeraldSpawns = new ArrayList<>();
-            for (Object spawn : emeraldSpawnsObject)
+            catch (Exception exception)
             {
-                Coordinate spawnCoord = new Coordinate((String) spawn);
-                emeraldSpawns.add(spawnCoord);
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "defender_spawns invalid");
+                throw exception;
             }
-            
-            Coordinate objective = new Coordinate((String) baseSubMap.get("objective"));
-            
-            List<Object> buffShopsObject = (List<Object>) baseSubMap.get("attacker_buff_shops");
-            List<Coordinate> buffShops = new ArrayList<>();
-            for (Object spawn : buffShopsObject)
+    
+            List<Coordinate> attackerSpawns;
+            try
             {
-                Coordinate spawnCoord = new Coordinate((String) spawn);
-                buffShops.add(spawnCoord);
+                List<Object> attackerSpawnsObject = (List<Object>) baseSubMap.get("attacker_spawns");
+                attackerSpawns = new ArrayList<>();
+                for (Object spawn : attackerSpawnsObject)
+                {
+                    Coordinate spawnCoord = new Coordinate((String) spawn);
+                    attackerSpawns.add(spawnCoord);
+                }
             }
-            
-            List<Object> itemShopsObject = (List<Object>) baseSubMap.get("item_shops");
-            List<Coordinate> itemShops = new ArrayList<>();
-            for (Object spawn : itemShopsObject)
+            catch (Exception exception)
             {
-                Coordinate spawnCoord = new Coordinate((String) spawn);
-                itemShops.add(spawnCoord);
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_spawns invalid");
+                throw exception;
+            }
+    
+            List<List<Coordinate>> defenderBoundingBoxes;
+            try
+            {
+                List<Object> defenderBoundingBoxesParent = (List<Object>) baseSubMap.get("defender_bounding_boxes");
+                List<List<Object>> defenderBoundingBoxesGeneric = new ArrayList<>();
+                defenderBoundingBoxes = new ArrayList<>();
+                for (Object boundingBox : defenderBoundingBoxesParent)
+                {
+                    defenderBoundingBoxesGeneric.add((List<Object>) boundingBox);
+                }
+                for (List<Object> boundingBox : defenderBoundingBoxesGeneric)
+                {
+                    List<Coordinate> singleBoundCoord = new ArrayList<>();
+                    for (Object singleBound : boundingBox)
+                    {
+                        singleBoundCoord.add(new Coordinate((String) singleBound));
+                    }
+                    defenderBoundingBoxes.add(singleBoundCoord);
+                }
+            }
+            catch (Exception exception)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "defender_bounding_boxes invalid");
+                throw exception;
+            }
+    
+            List<Coordinate> emeraldSpawns;
+            try
+            {
+                List<Object> emeraldSpawnsObject = (List<Object>) baseSubMap.get("emerald_spawns");
+                emeraldSpawns = new ArrayList<>();
+                for (Object spawn : emeraldSpawnsObject)
+                {
+                    Coordinate spawnCoord = new Coordinate((String) spawn);
+                    emeraldSpawns.add(spawnCoord);
+                }
+            }
+            catch (Exception exception)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "emerald_spawns invalid");
+                throw exception;
+            }
+    
+            Coordinate objective;
+            try
+            {
+                objective = new Coordinate((String) baseSubMap.get("objective"));
+            }
+            catch (Exception exception)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "objective invalid");
+                throw exception;
+            }
+    
+            List<Coordinate> buffShops;
+            try
+            {
+                List<Object> buffShopsObject = (List<Object>) baseSubMap.get("attacker_buff_shops");
+                buffShops = new ArrayList<>();
+                for (Object spawn : buffShopsObject)
+                {
+                    Coordinate spawnCoord = new Coordinate((String) spawn);
+                    buffShops.add(spawnCoord);
+                }
+            }
+            catch (Exception exception)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_buff_shops invalid");
+                throw exception;
+            }
+    
+            List<Coordinate> itemShops;
+            try
+            {
+                List<Object> itemShopsObject = (List<Object>) baseSubMap.get("item_shops");
+                itemShops = new ArrayList<>();
+                for (Object spawn : itemShopsObject)
+                {
+                    Coordinate spawnCoord = new Coordinate((String) spawn);
+                    itemShops.add(spawnCoord);
+                }
+            }
+            catch (Exception exception)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "item_shops invalid");
+                throw exception;
             }
             
             MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objective, itemShops, buffShops);

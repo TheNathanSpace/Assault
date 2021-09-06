@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 public class Assault extends JavaPlugin
 {
@@ -52,17 +53,60 @@ public class Assault extends JavaPlugin
         
         this.saveDefaultConfig();
         mainConfig = this.getConfig();
-        lobbyWorld = Bukkit.getWorld(mainConfig.getString("lobby_world"));
-        lobbySpawn = new Coordinate(mainConfig.getString("lobby_spawn")).toLocation(lobbyWorld);
-        
-        lobbyGamemode = GameMode.valueOf(mainConfig.getString("lobby_gamemode"));
-        forceLobbyInventory = mainConfig.getBoolean("force_lobby_inventory");
-        
-        List<String> mapList = (List<String>) mainConfig.getList("map_list");
-        for (String mapName : mapList)
+        try
         {
-            Map mapObject = MapConfig.loadWorldFromConfig(mapName);
-            maps.put(mapName, mapObject);
+            lobbyWorld = Bukkit.getWorld(mainConfig.getString("lobby_world"));
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "lobby_world invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            lobbySpawn = new Coordinate(mainConfig.getString("lobby_spawn")).toLocation(lobbyWorld);
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "lobby_spawn invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            lobbyGamemode = GameMode.valueOf(mainConfig.getString("lobby_gamemode"));
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "lobby_gamemode invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            forceLobbyInventory = mainConfig.getBoolean("force_lobby_inventory");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "force_lobby_inventory invalid");
+            throw exception;
+        }
+        
+        try
+        {
+            
+            List<String> mapList = (List<String>) mainConfig.getList("map_list");
+            for (String mapName : mapList)
+            {
+                Map mapObject = MapConfig.loadWorldFromConfig(mapName);
+                maps.put(mapName, mapObject);
+            }
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "map_list invalid");
+            throw exception;
         }
         
         this.getCommand("assaulthelp").setExecutor(new CommandAssaultHelp());

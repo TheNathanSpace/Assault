@@ -123,6 +123,7 @@ public class GameTeam
         teamScoreboard.addEntry(player.getName());
         
         player.setPlayerListName(color.chatColor + ChatColor.BOLD.toString() + "[" + color.toString().charAt(0) + "]" + ChatColor.RESET + " " + this.color.chatColor + player.getName() + ChatColor.RESET);
+        player.setDisplayName(color.chatColor + player.getName() + ChatColor.RESET);
         
         gamePlayer.swapReset();
         player.getInventory().clear();
