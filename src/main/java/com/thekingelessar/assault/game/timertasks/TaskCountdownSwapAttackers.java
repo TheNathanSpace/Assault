@@ -44,18 +44,13 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
             return;
         }
         
+        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(gameInstance.getAttackingTeam().displaySeconds, false);
+        title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
+    
         List<Player> players = gameInstance.gameWorld.getPlayers();
         for (Player player : players)
         {
             title.clearTitle(player);
-        }
-        
-        String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(gameInstance.getAttackingTeam().displaySeconds, false);
-        
-        title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
-        
-        for (Player player : players)
-        {
             title.send(player);
         }
         

@@ -43,7 +43,8 @@ public class PlayerShopModifiers implements IShop
         
         inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "Game Modifiers");
         
-        constructShopItemModifier(new ItemStack(Material.WATCH, 0), gameInstance.modInfiniteTime, "Infinite Time", "Removes the time limit of 8 minutes.", false);
+        constructShopItemModifier(new ItemStack(Material.WATCH, 0), gameInstance.modInfiniteTime, gameInstance.modInfiniteTime.name, gameInstance.modInfiniteTime.description, false);
+        constructShopItemModifier(new ItemStack(Material.QUARTZ, 0), gameInstance.modFirstToFive, gameInstance.modFirstToFive.name, gameInstance.modFirstToFive.description, false);
     }
     
     private void constructShopItemModifier(ItemStack notVotedItemStack, GameModifier gameModifier, String name, String description, boolean newRow)

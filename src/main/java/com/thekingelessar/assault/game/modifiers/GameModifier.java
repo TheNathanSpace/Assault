@@ -13,11 +13,13 @@ public class GameModifier
     public boolean enabled = false;
     
     public String name;
+    public String description;
     
-    public GameModifier(GameInstance gameInstance, String name)
+    public GameModifier(GameInstance gameInstance, String name, String description)
     {
         this.gameInstance = gameInstance;
         this.name = name;
+        this.description = description;
     }
     
     public boolean setEnabled()

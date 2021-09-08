@@ -3,7 +3,10 @@ package com.thekingelessar.assault.game.eventhandlers.world;
 import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.util.Title;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,6 +60,25 @@ public class PlayerPickupItemHandler implements Listener
                 {
                     playerPickupItemEvent.setCancelled(true);
                     return;
+                }
+                
+                if (gameInstance.modFirstToFive.enabled && gameTeam.starsPickedUp != 5)
+                {
+                    gameTeam.starsPickedUp += 1;
+                    GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+                    gamePlayer.spawn(gameInstance.getPlayerMode(player), true);
+                    
+                    String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " reached a star!";
+                    Title title = new Title(mainTitle, String.format("Stars remaining: %s★", 5 - gameTeam.starsPickedUp));
+                    
+                    List<Player> players = gameInstance.gameWorld.getPlayers();
+                    for (Player player1 : players)
+                    {
+                        title.clearTitle(player1);
+                        title.send(player1);
+                    }
+                    
+                    playerPickupItemEvent.setCancelled(true);
                 }
                 
                 gameInstance.endRound(false);

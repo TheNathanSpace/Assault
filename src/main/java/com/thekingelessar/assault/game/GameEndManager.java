@@ -32,6 +32,7 @@ public class GameEndManager
     public enum WinState
     {
         LOWEST_TIME,
+        MOST_STARS,
         ATTACKERS_LEFT,
         DEFENDERS_LEFT,
         BUILDING_LEFT,
@@ -52,6 +53,10 @@ public class GameEndManager
         {
             case LOWEST_TIME:
                 subtitleString = "Time: " + ChatColor.LIGHT_PURPLE + Util.secondsToMinutes(gameInstance.winningTeam.displaySeconds, true) + ChatColor.WHITE + " seconds";
+                break;
+            
+            case MOST_STARS:
+                subtitleString = "Stars: " + ChatColor.LIGHT_PURPLE + String.format("%s★", 5 - gameInstance.winningTeam.starsPickedUp);
                 break;
             
             case ATTACKERS_LEFT:

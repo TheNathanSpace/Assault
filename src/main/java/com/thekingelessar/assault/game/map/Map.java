@@ -29,6 +29,7 @@ public class Map
     public int buildingCoins = 100;
     
     public int attackTimeLimit = 480;
+    public int firstToFiveStarsTimeLimit = 480;
     
     public double maxZ = 86;
     public double minZ = 2;
@@ -103,7 +104,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "building_time invalid; defaulting to 180");
         }
-    
+        
         try
         {
             buildingCoins = config.getInt("building_coins");
@@ -112,7 +113,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "building_coins invalid; defaulting to 100");
         }
-    
+        
         try
         {
             attackTimeLimit = config.getInt("attack_time_limit");
@@ -120,6 +121,15 @@ public class Map
         catch (Exception exception)
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "attack_time_limit invalid; defaulting to 480");
+        }
+        
+        try
+        {
+            firstToFiveStarsTimeLimit = config.getInt("first_to_five_stars_time_limit");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "first_to_five_stars_time_limit invalid; defaulting to 480");
         }
         
         try
@@ -190,7 +200,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "Base structure invalid");
                 throw exception;
             }
-    
+            
             List<Coordinate> defenderSpawns;
             try
             {
@@ -207,7 +217,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "defender_spawns invalid");
                 throw exception;
             }
-    
+            
             List<Coordinate> attackerSpawns;
             try
             {
@@ -224,7 +234,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_spawns invalid");
                 throw exception;
             }
-    
+            
             List<List<Coordinate>> defenderBoundingBoxes;
             try
             {
@@ -250,7 +260,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "defender_bounding_boxes invalid");
                 throw exception;
             }
-    
+            
             List<Coordinate> emeraldSpawns;
             try
             {
@@ -267,7 +277,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "emerald_spawns invalid");
                 throw exception;
             }
-    
+            
             Coordinate objective;
             try
             {
@@ -278,7 +288,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "objective invalid");
                 throw exception;
             }
-    
+            
             List<Coordinate> buffShops;
             try
             {
@@ -295,7 +305,7 @@ public class Map
                 Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_buff_shops invalid");
                 throw exception;
             }
-    
+            
             List<Coordinate> itemShops;
             try
             {

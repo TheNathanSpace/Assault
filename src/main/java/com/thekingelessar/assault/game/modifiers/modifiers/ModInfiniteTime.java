@@ -8,6 +8,6 @@ public class ModInfiniteTime extends GameModifier
     
     public ModInfiniteTime(GameInstance gameInstance)
     {
-        super(gameInstance, "Infinite Time");
+        super(gameInstance, "Infinite Time", "Removes the attacking round time limit of 8 minutes.");
     }
 }

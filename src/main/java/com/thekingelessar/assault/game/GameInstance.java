@@ -8,6 +8,7 @@ import com.thekingelessar.assault.game.map.Map;
 import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.modifiers.GameModifier;
 import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
+import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstToFive;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
@@ -47,10 +48,12 @@ public class GameInstance
     private final List<Player> players;
     private final List<Player> spectators;
     
+    public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
+    public ModFirstToFive modFirstToFive = new ModFirstToFive(this);
+    
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
-    public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
-    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime);
+    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstToFive);
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
@@ -387,7 +390,7 @@ public class GameInstance
                 buildingCoinsRemaining.put(player, 100);
                 
                 GameTeam gameTeam = getPlayerTeam(player);
-                gamePlayer.spawn(PlayerMode.BUILDING);
+                gamePlayer.spawn(PlayerMode.BUILDING, false);
                 
                 Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
                 title.clearTitle(player);
@@ -527,7 +530,7 @@ public class GameInstance
                 gamePlayer.swapReset();
                 
                 PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
-                gameTeam.getGamePlayer(player).spawn(mode);
+                gameTeam.getGamePlayer(player).spawn(mode, false);
             }
         }
         
@@ -558,6 +561,8 @@ public class GameInstance
     
     public boolean isTie()
     {
+        boolean isTimeTie = false;
+        
         int triedTeam = 0;
         double firstTime = 0;
         
@@ -565,7 +570,8 @@ public class GameInstance
         {
             if (gameTeam.finalAttackingTime == 0)
             {
-                return false;
+                isTimeTie = false;
+                break;
             }
             if (triedTeam == 0)
             {
@@ -576,12 +582,66 @@ public class GameInstance
             {
                 if (firstTime == gameTeam.finalAttackingTime)
                 {
-                    return true;
+                    isTimeTie = true;
                 }
             }
         }
         
-        return false;
+        boolean isStarTie = false;
+        if (isTimeTie && this.modFirstToFive.enabled)
+        {
+            triedTeam = 0;
+            int firstStars = 0;
+            
+            for (GameTeam gameTeam : this.teams.values())
+            {
+                if (triedTeam == 0)
+                {
+                    firstStars = gameTeam.starsPickedUp;
+                    triedTeam++;
+                }
+                else
+                {
+                    if (firstStars == gameTeam.starsPickedUp)
+                    {
+                        isStarTie = true;
+                    }
+                }
+            }
+        }
+        
+        return isTimeTie && isStarTie;
+    }
+    
+    public boolean isTimeTie()
+    {
+        boolean isTimeTie = false;
+        
+        int triedTeam = 0;
+        double firstTime = 0;
+        
+        for (GameTeam gameTeam : this.teams.values())
+        {
+            if (gameTeam.finalAttackingTime == 0)
+            {
+                isTimeTie = false;
+                break;
+            }
+            if (triedTeam == 0)
+            {
+                firstTime = gameTeam.finalAttackingTime;
+                triedTeam++;
+            }
+            else
+            {
+                if (firstTime == gameTeam.finalAttackingTime)
+                {
+                    isTimeTie = true;
+                }
+            }
+        }
+        
+        return isTimeTie;
     }
     
     public void endRound(boolean attackersForfeit)
@@ -601,7 +661,7 @@ public class GameInstance
             this.taskTickTimer.cancel();
         }
         
-        if (this.getAttackingTeam().finalAttackingTime != this.gameMap.attackTimeLimit)
+        if (this.getAttackingTeam().finalAttackingTime != this.gameMap.attackTimeLimit && this.getAttackingTeam().finalAttackingTime != this.gameMap.firstToFiveStarsTimeLimit)
         {
             long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
             this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
@@ -660,6 +720,23 @@ public class GameInstance
             }
             
             this.winningTeam = lowestTeam;
+            
+            if (this.modFirstToFive.enabled && this.isTie())
+            {
+                int mostStars = Integer.MIN_VALUE;
+                GameTeam mostStarsTeam = null;
+                
+                for (GameTeam gameTeam : this.teams.values())
+                {
+                    if (gameTeam.starsPickedUp > mostStars)
+                    {
+                        mostStarsTeam = gameTeam;
+                        mostStars = gameTeam.starsPickedUp;
+                    }
+                }
+                
+                this.winningTeam = mostStarsTeam;
+            }
         }
         else if (this.isOneTeamRemaining())
         {

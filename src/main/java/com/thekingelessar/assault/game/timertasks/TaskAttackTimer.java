@@ -46,12 +46,26 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (gameInstance.getAttackingTeam().displaySeconds == 464)
+        if (gameInstance.modFirstToFive.enabled)
         {
-            if (!gameInstance.modInfiniteTime.enabled)
+            if (gameInstance.getAttackingTeam().displaySeconds == gameInstance.gameMap.firstToFiveStarsTimeLimit - 16)
             {
-                gameInstance.taskCountdownAttackEnd = new TaskCountdownAttackEnd(300, 0, 20, gameInstance);
-                gameInstance.taskCountdownAttackEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownAttackEnd.startDelay, gameInstance.taskCountdownAttackEnd.tickDelay);
+                if (!gameInstance.modInfiniteTime.enabled)
+                {
+                    gameInstance.taskCountdownAttackEnd = new TaskCountdownAttackEnd(300, 0, 20, gameInstance);
+                    gameInstance.taskCountdownAttackEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownAttackEnd.startDelay, gameInstance.taskCountdownAttackEnd.tickDelay);
+                }
+            }
+        }
+        else
+        {
+            if (gameInstance.getAttackingTeam().displaySeconds == gameInstance.gameMap.attackTimeLimit - 16)
+            {
+                if (!gameInstance.modInfiniteTime.enabled)
+                {
+                    gameInstance.taskCountdownAttackEnd = new TaskCountdownAttackEnd(300, 0, 20, gameInstance);
+                    gameInstance.taskCountdownAttackEnd.runTaskTimer(Assault.INSTANCE, gameInstance.taskCountdownAttackEnd.startDelay, gameInstance.taskCountdownAttackEnd.tickDelay);
+                }
             }
         }
         

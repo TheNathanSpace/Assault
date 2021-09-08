@@ -12,6 +12,7 @@ building_time: 180
 building_coins: 100
 
 attack_time_limit: 480
+first_to_five_stars_time_limit: 480
 
 max_z: 86.
 min_z: 2.

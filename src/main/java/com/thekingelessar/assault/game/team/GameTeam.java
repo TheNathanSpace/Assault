@@ -48,6 +48,8 @@ public class GameTeam
     
     public List<IBuff> buffList = new ArrayList<>();
     
+    public int starsPickedUp = 0;
+    
     public double displaySeconds = 0;
     public long startAttackingTime = 0; // in nanoseconds
     public double finalAttackingTime = 0; // in seconds
@@ -126,8 +128,7 @@ public class GameTeam
         player.setDisplayName(color.chatColor + player.getName() + ChatColor.RESET);
         
         gamePlayer.swapReset();
-        player.getInventory().clear();
-        gamePlayer.spawn(PlayerMode.getTeamMode(this));
+        gamePlayer.spawn(PlayerMode.getTeamMode(this), false);
         
         gameInstance.updateShopSkins(player);
         

@@ -100,7 +100,7 @@ public class GamePlayer
         spawnItems.add(spawnItem);
     }
     
-    public void spawn(PlayerMode playerMode)
+    public void spawn(PlayerMode playerMode, boolean keepInventory)
     {
         GameTeam playerTeam = gameInstance.getPlayerTeam(player);
         PlayerMode mode = PlayerMode.setPlayerMode(player, playerMode, gameInstance);
@@ -114,6 +114,12 @@ public class GamePlayer
         
         player.teleport(gameInstance.gameMap.getSpawn(playerTeam, null).toLocation(gameInstance.gameWorld));
         player.setHealth(player.getMaxHealth());
+        
+        if (keepInventory)
+        {
+            player.getInventory().setArmorContents(spawnArmor.toArray(new ItemStack[0]));
+            return;
+        }
         
         if (!playerMode.equals(PlayerMode.BUILDING))
         {
@@ -191,7 +197,7 @@ public class GamePlayer
         
         if (playerMode.equals(PlayerMode.BUILDING))
         {
-            this.spawn(playerMode);
+            this.spawn(playerMode, false);
             return;
         }
         
@@ -206,7 +212,7 @@ public class GamePlayer
         }
         else
         {
-            this.spawn(playerMode);
+            this.spawn(playerMode, false);
         }
     }
     
@@ -427,23 +433,35 @@ public class GamePlayer
         }
         else
         {
+            String timeBlue = "";
+            String timeRed = "";
+            
             if (gameInstance.teams.get(TeamColor.BLUE).didForfeit())
             {
-                lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": Forfeit");
+                timeBlue = "Forfeit";
             }
             else
             {
-                lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.BLUE).displaySeconds, true));
+                timeRed = Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.BLUE).displaySeconds, true);
             }
             
             if (gameInstance.teams.get(TeamColor.RED).didForfeit())
             {
-                lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": Forfeit");
+                timeBlue = "Forfeit";
             }
             else
             {
-                lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.RED).displaySeconds, true));
+                timeRed = Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.RED).displaySeconds, true);
             }
+            
+            if (gameInstance.modFirstToFive.enabled)
+            {
+                timeBlue += String.format(" ★ x%s", gameInstance.teams.get(TeamColor.BLUE).starsPickedUp);
+                timeRed += String.format(" ★ x%s", gameInstance.teams.get(TeamColor.RED).starsPickedUp);
+            }
+            
+            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + timeBlue);
+            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + timeRed);
         }
         
         lines.add("");
