@@ -35,6 +35,8 @@ public class Assault extends JavaPlugin
     static public GameMode lobbyGamemode = GameMode.ADVENTURE;
     static public boolean forceLobbyInventory = true;
     
+    static public int gameStartCountdown = 20;
+    
     static public final String ASSAULT_PREFIX = "§5§l[§d§lAssault§5§l] " + ChatColor.RESET;
     
     static public HashMap<String, Map> maps = new HashMap<>();
@@ -91,6 +93,15 @@ public class Assault extends JavaPlugin
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "force_lobby_inventory invalid");
             throw exception;
+        }
+        
+        try
+        {
+            gameStartCountdown = mainConfig.getInt("game_start_countdown");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "game_start_countdown invalid, using 20 sec");
         }
         
         try

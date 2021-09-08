@@ -20,10 +20,7 @@ import com.thekingelessar.assault.util.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -87,6 +84,8 @@ public class GameInstance
     public HashMap<FallingBlock, Player> fallingBlockPlayerMap = new HashMap<>();
     public HashMap<String, Player> fallingBlockCoordinateMap = new HashMap<>();
     
+    public List<ThrownPotion> fixedPotions = new ArrayList<>();
+    
     public HashMap<GameTeam, Item> guidingObjectives = new HashMap<>();
     public HashMap<GameTeam, Item> currentObjective = new HashMap<>();
     
@@ -149,7 +148,7 @@ public class GameInstance
             }
         }
         
-        taskCountdownGameStart = new TaskCountdownGameStart(400, 20, 20, this);
+        taskCountdownGameStart = new TaskCountdownGameStart(Assault.gameStartCountdown * 20, 20, 20, this);
         taskCountdownGameStart.runTaskTimer(Assault.INSTANCE, taskCountdownGameStart.startDelay, taskCountdownGameStart.tickDelay);
     }
     
@@ -561,7 +560,7 @@ public class GameInstance
     {
         int triedTeam = 0;
         double firstTime = 0;
-    
+        
         for (GameTeam gameTeam : this.teams.values())
         {
             if (gameTeam.finalAttackingTime == 0)

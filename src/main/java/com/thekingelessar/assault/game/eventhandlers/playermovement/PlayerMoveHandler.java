@@ -96,13 +96,12 @@ public class PlayerMoveHandler implements Listener
         Location newLocation = playerMoveEvent.getTo();
         double voidY = newLocation.getY();
         
-        if (voidY < 70)
+        if (gameInstance == null)
         {
-            if (gameInstance == null)
-            {
-                return;
-            }
-            
+            return;
+        }
+        if (voidY < gameInstance.gameMap.voidLevel && gameInstance.gameMap.voidEnabled)
+        {
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
             gamePlayer.respawn(null, true, DeathType.VOID);
         }

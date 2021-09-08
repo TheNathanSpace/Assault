@@ -1,8 +1,10 @@
 package com.thekingelessar.assault.commands;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,6 +28,12 @@ public class CommandAssaultAdmin implements CommandExecutor
             GameInstance testInstance = GameInstance.getPlayerGameInstance(player);
             if (testInstance != null)
             {
+                if (!testInstance.gameStage.equals(GameStage.BUILDING))
+                {
+                    player.sendRawMessage(ChatColor.RED + "Wait until the game starts!");
+                    return true;
+                }
+                
                 GameTeam gameTeam = testInstance.getPlayerTeam(player);
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 switch (args[0])

@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.ChatColor;
@@ -7,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.util.logging.Level;
 
 public class PlayerChatHandler implements Listener
 {
@@ -27,6 +30,8 @@ public class PlayerChatHandler implements Listener
                 {
                     teamPlayer.sendMessage(message);
                 }
+                
+                Assault.INSTANCE.getLogger().log(Level.INFO, String.format("TEAMCHAT [%s]: %s", gameInstance.gameUUID, message));
                 
                 playerChatEvent.setCancelled(true);
             }

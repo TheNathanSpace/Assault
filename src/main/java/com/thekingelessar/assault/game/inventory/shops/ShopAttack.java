@@ -13,11 +13,19 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.Arrays;
 
 public class ShopAttack extends ShopItemShop implements IShop
 {
+    public static final PotionEffect JUMP_30_5 = new PotionEffect(PotionEffectType.JUMP, 20 * 30, 4, true, true);
+    public static final PotionEffect INVIS_30_1 = new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 30, 0, true, true);
+    public static final PotionEffect POISON_6_2 = new PotionEffect(PotionEffectType.POISON, 20 * 6 + 12, 1, true, true);
+    
     GamePlayer gamePlayer;
     
     public ItemStack storageItem;
@@ -64,6 +72,9 @@ public class ShopAttack extends ShopItemShop implements IShop
         
         constructShopItem(new ItemStack(Material.OBSIDIAN, 4), "Obsidian", 4, Currency.EMERALDS, true);
         constructShopItem(new ItemStack(Material.TNT, 1), "TNT", 4, Currency.EMERALDS, false);
+        constructShopItem(new Potion(PotionType.JUMP).toItemStack(1), "Jump Boost Potion (30 sec)", 1, Currency.EMERALDS, false);
+        constructShopItem(new Potion(PotionType.INVISIBILITY).toItemStack(1), "Invisibility Potion (30 sec)", 2, Currency.EMERALDS, false);
+        constructShopItem(new Potion(PotionType.POISON).splash().toItemStack(1), "Splash Potion of Poison (4 hearts)", 1, Currency.EMERALDS, false);
         
         storageItem = new ItemStack(Material.CHEST);
         ItemMeta chestMeta = storageItem.getItemMeta();

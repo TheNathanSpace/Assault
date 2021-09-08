@@ -22,18 +22,20 @@ public class Map
     public Coordinate waitingSpawn;
     public List<Coordinate> waitingPlatformBoundingBox = new ArrayList<>();
     
-    public boolean voidEnabled;
-    public double voidLevel;
+    public boolean voidEnabled = true;
+    public double voidLevel = 70;
     
-    public int buildingTime;
-    public int attackTimeLimit;
+    public int buildingTime = 180;
+    public int buildingCoins = 100;
     
-    public double maxZ;
-    public double minZ;
+    public int attackTimeLimit = 480;
     
-    public double maxY;
+    public double maxZ = 86;
+    public double minZ = 2;
     
-    public double attackerBaseProtMaxZ;
+    public double maxY = 122;
+    
+    public double attackerBaseProtMaxZ = 20;
     
     public List<MapBase> bases = new ArrayList<>();
     
@@ -81,8 +83,7 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "void_enabled invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "void_enabled invalid; defaulting to true");
         }
         
         try
@@ -91,8 +92,7 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "void_level invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "void_level invalid; defaulting to 70");
         }
         
         try
@@ -101,18 +101,25 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "building_time invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "building_time invalid; defaulting to 180");
         }
-        
+    
+        try
+        {
+            buildingCoins = config.getInt("building_coins");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "building_coins invalid; defaulting to 100");
+        }
+    
         try
         {
             attackTimeLimit = config.getInt("attack_time_limit");
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "attack_time_limit invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "attack_time_limit invalid; defaulting to 480");
         }
         
         try
@@ -121,8 +128,7 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "max_z invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "max_z invalid; defaulting to 86");
         }
         
         try
@@ -131,8 +137,7 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "min_z invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "min_z invalid; defaulting to 2");
         }
         
         try
@@ -141,8 +146,7 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_base_prot_max_z invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_base_prot_max_z invalid; defaulting to 20");
         }
         
         try
@@ -151,8 +155,7 @@ public class Map
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "max_y invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "max_y invalid; defaulting to 122");
         }
         
         List<?> baseList;

@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.commands;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.ChatColor;
@@ -7,6 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.logging.Level;
 
 public class CommandAll implements CommandExecutor
 {
@@ -39,7 +42,9 @@ public class CommandAll implements CommandExecutor
                     {
                         gamePlayer.sendMessage(message);
                     }
-                    
+    
+                    Assault.INSTANCE.getLogger().log(Level.INFO, String.format("ALLCHAT [%s]: %s", gameInstance.gameUUID, message));
+    
                     return true;
                 }
             }

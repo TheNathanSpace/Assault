@@ -9,6 +9,8 @@ void_enabled: true
 void_level: 70.
 
 building_time: 180
+building_coins: 100
+
 attack_time_limit: 480
 
 max_z: 86.

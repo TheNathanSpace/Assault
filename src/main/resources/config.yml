@@ -5,6 +5,8 @@ lobby_gamemode: ADVENTURE
 # Allow players to rearrange their inventory while in the lobby
 force_lobby_inventory: true
 
+game_start_countdown: 5
+
 # References maps in the maps/ directory.
 # Map files should be in the form map_[name].yml.
 # They can take these forms: saloon, map_saloon, saloon.yml, or map_saloon.yml.

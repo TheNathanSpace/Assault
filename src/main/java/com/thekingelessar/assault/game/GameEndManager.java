@@ -97,7 +97,7 @@ public class GameEndManager
         
         for (Player player : gameInstance.winningTeam.getOppositeTeam().getPlayers())
         {
-            if (gameInstance.isTie())
+            if (winState.equals(WinState.TIE))
             {
                 for (int i = 0; i < 5; i++)
                 {

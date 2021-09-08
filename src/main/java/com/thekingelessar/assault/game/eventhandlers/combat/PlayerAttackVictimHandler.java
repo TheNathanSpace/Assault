@@ -7,7 +7,6 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
-import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
@@ -15,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+import java.util.logging.Level;
 
 public class PlayerAttackVictimHandler implements Listener
 {
@@ -165,7 +166,8 @@ public class PlayerAttackVictimHandler implements Listener
                         
                         if (arrow != null)
                         {
-                            victimPlayer.addBowDeathFeed(attacker);
+                            String deathMessage = victimPlayer.addBowDeathFeed(attacker);
+                            Assault.INSTANCE.getLogger().log(Level.INFO, String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage));
                             attackerPlayer.killPlayer(victim, true);
                         }
                         else

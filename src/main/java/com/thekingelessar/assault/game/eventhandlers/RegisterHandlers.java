@@ -3,6 +3,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.eventhandlers.combat.PlayerAttackVictimHandler;
 import com.thekingelessar.assault.game.eventhandlers.combat.PlayerDamageHandler;
+import com.thekingelessar.assault.game.eventhandlers.combat.PotionThrowHandler;
 import com.thekingelessar.assault.game.eventhandlers.inventory.InventoryClickHandler;
 import com.thekingelessar.assault.game.eventhandlers.inventory.InventoryCloseHandler;
 import com.thekingelessar.assault.game.eventhandlers.inventory.InventoryDragHandler;
@@ -34,6 +35,7 @@ public class RegisterHandlers
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerPickupItemHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerToggleFlightHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new VanillaWorldHandler(), Assault.INSTANCE);
-        
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerConsumeItemHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new PotionThrowHandler(), Assault.INSTANCE);
     }
 }

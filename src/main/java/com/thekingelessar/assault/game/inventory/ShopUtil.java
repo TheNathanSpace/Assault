@@ -70,6 +70,7 @@ public class ShopUtil
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.RESET + name);
+        itemMeta.setLore(null);
         
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "Cost: " + ChatColor.RESET + cost + " " + currency.name);

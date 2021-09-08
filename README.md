@@ -9,8 +9,11 @@
 ### Features
 
 - Package maps with plugin
-- Add more game modifiers like First to 5 (stars) or Most stars in 8 minutes
-
+- Add more game modifiers:
+    - First to 5 stars
+    - Most stars in 8 minutes
+    - Swap team on death
+  
 - Actual documentation
 
 ## Roadmap

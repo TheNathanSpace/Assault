@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -178,6 +179,10 @@ public class LobbyUtil
         LobbyUtil.giveStar(player);
         LobbyUtil.giveBook(player);
         player.getInventory().setHeldItemSlot(0);
+        for (PotionEffect effect : player.getActivePotionEffects())
+        {
+            player.removePotionEffect(effect.getType());
+        }
     }
     
     private static void giveGlass(Player player)

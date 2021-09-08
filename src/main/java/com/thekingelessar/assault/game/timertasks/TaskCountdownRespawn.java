@@ -49,7 +49,7 @@ public class TaskCountdownRespawn extends BukkitRunnable
         
         title.clearTitle(player);
         
-        String initialTitle = "You have " + ChatColor.RED + "died" + ChatColor.RESET + "!";
+        String initialTitle = "You have " + ChatColor.DARK_RED + "died" + ChatColor.RESET + "!";
         
         title = new Title(initialTitle, "Respawning in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         

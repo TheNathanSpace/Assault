@@ -25,6 +25,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class GamePlayer
 {
@@ -213,34 +214,36 @@ public class GamePlayer
     {
         Player attacker = gameInstance.lastDamagedBy.get(player);
         
+        String deathMessage = "";
         switch (deathType)
         {
             case VOID:
                 if (attacker != null)
                 {
-                    this.addVoidDeathFeed(attacker);
+                    deathMessage = this.addVoidDeathFeed(attacker);
                 }
                 else
                 {
-                    this.addVoidFallFeed();
+                    deathMessage = this.addVoidFallFeed();
                 }
                 break;
             case CONTACT:
-                this.addContactDeathFeed();
+                deathMessage = this.addContactDeathFeed();
                 break;
             case FALL:
-                this.addFallDeathFeed();
+                deathMessage = this.addFallDeathFeed();
                 break;
             case DROWNING:
-                this.addDrownDeathFeed();
+                deathMessage = this.addDrownDeathFeed();
                 break;
             case EXPLOSION:
-                this.addExplosionDeathFeed();
+                deathMessage = this.addExplosionDeathFeed();
                 break;
             case DEATH:
-                this.addDeathFeed();
+                deathMessage = this.addDeathFeed();
                 break;
         }
+        Assault.INSTANCE.getLogger().log(Level.INFO, String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage));
         
         if (attacker != null)
         {
@@ -298,7 +301,8 @@ public class GamePlayer
         
         if (!arrow)
         {
-            victimPlayer.addSwordDeathFeed(this.player);
+            String deathMessage = victimPlayer.addSwordDeathFeed(this.player);
+            Assault.INSTANCE.getLogger().log(Level.INFO, String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage));
         }
         
         this.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
@@ -315,76 +319,94 @@ public class GamePlayer
         this.updateScoreboard();
     }
     
-    public void addSwordDeathFeed(Player killer)
+    public String addSwordDeathFeed(Player killer)
     {
+        String message = killer.getDisplayName() + ChatColor.RESET + " stabbed " + this.player.getDisplayName() + ChatColor.RESET + " to death";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(killer.getDisplayName() + ChatColor.RESET + " stabbed " + this.player.getDisplayName() + ChatColor.RESET + " to death");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addBowDeathFeed(Player killer)
+    public String addBowDeathFeed(Player killer)
     {
+        String message = killer.getDisplayName() + ChatColor.RESET + " shot " + this.player.getDisplayName() + ChatColor.RESET + " to death";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(killer.getDisplayName() + ChatColor.RESET + " shot " + this.player.getDisplayName() + ChatColor.RESET + " to death");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addVoidFallFeed()
+    public String addVoidFallFeed()
     {
+        String message = this.player.getDisplayName() + ChatColor.RESET + " fell into the void";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " fell into the void");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addVoidDeathFeed(Player killer)
+    public String addVoidDeathFeed(Player killer)
     {
+        String message = killer.getDisplayName() + ChatColor.RESET + " knocked " + this.player.getDisplayName() + ChatColor.RESET + " into the void";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(killer.getDisplayName() + ChatColor.RESET + " knocked " + this.player.getDisplayName() + ChatColor.RESET + " into the void");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addDeathFeed()
+    public String addDeathFeed()
     {
+        String message = this.player.getDisplayName() + ChatColor.RESET + " died";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " died");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addContactDeathFeed()
+    public String addContactDeathFeed()
     {
+        String message = this.player.getDisplayName() + ChatColor.RESET + " was pricked to death";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " was pricked to death");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addFallDeathFeed()
+    public String addFallDeathFeed()
     {
+        String message = this.player.getDisplayName() + ChatColor.RESET + " fell to their death";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " fell to their death");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addDrownDeathFeed()
+    public String addDrownDeathFeed()
     {
+        String message = this.player.getDisplayName() + ChatColor.RESET + " drowned";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " drowned");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
-    public void addExplosionDeathFeed()
+    public String addExplosionDeathFeed()
     {
+        String message = this.player.getDisplayName() + ChatColor.RESET + " blew up";
         for (Player player : this.gameInstance.getPlayers())
         {
-            player.sendRawMessage(this.player.getDisplayName() + ChatColor.RESET + " blew up");
+            player.sendRawMessage(message);
         }
+        return message;
     }
     
     public void updateScoreboard()
@@ -436,6 +458,19 @@ public class GamePlayer
     
     public boolean purchaseItem(int cost, Currency currency)
     {
+        boolean emptySlot = false;
+        PlayerInventory inventory = this.player.getInventory();
+        for (ItemStack slot : inventory.getContents())
+        {
+            if (slot == null)
+            {
+                emptySlot = true;
+                break;
+            }
+        }
+        
+        if (!emptySlot) return false;
+        
         switch (currency)
         {
             case COINS:
@@ -452,7 +487,7 @@ public class GamePlayer
                 }
                 break;
             case EMERALDS:
-                ItemStack[] inventoryContents = this.player.getInventory().getContents();
+                ItemStack[] inventoryContents = inventory.getContents();
                 int emeraldCount = 0;
                 
                 for (ItemStack itemStack : inventoryContents)

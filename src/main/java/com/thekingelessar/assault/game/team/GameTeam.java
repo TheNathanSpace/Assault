@@ -114,8 +114,8 @@ public class GameTeam
             }
             else
             {
-                gamePlayer.playerBank.coins += 100;
-                gameInstance.buildingCoinsRemaining.put(player, 100);
+                gamePlayer.playerBank.coins += gameInstance.gameMap.buildingCoins;
+                gameInstance.buildingCoinsRemaining.put(player, gameInstance.gameMap.buildingCoins);
             }
         }
         
