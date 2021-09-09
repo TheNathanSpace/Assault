@@ -11,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import javax.persistence.Lob;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class PlayerItemDropHandler implements Listener
                 return;
             }
             
-            if (ShopItemTool.axes.contains(itemStack.getType()) || ShopItemTool.pickaxes.contains(itemStack.getType()))
+            if (ShopItemTool.axes.contains(itemStack.getType()) || ShopItemTool.pickaxes.contains(itemStack.getType()) || itemStack.getType().equals(Material.SHEARS))
             {
                 playerDropItemEvent.setCancelled(true);
                 return;
