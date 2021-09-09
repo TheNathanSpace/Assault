@@ -114,6 +114,11 @@ public class PlayerMoveHandler implements Listener
             return;
         }
         
+        if (PlayerMode.getPlayerMode(player) != null && PlayerMode.getPlayerMode(player).equals(PlayerMode.SPECTATOR))
+        {
+            return;
+        }
+        
         if (gameInstance.gameStage.equals(GameStage.BUILDING))
         {
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
@@ -122,7 +127,7 @@ public class PlayerMoveHandler implements Listener
                 if (newLocation.getX() > gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.x < gameInstance.gameMap.borderX)
                 {
                     cancelMovement(playerMoveEvent);
-    
+                    
                     player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
                     return;
                 }
@@ -130,7 +135,7 @@ public class PlayerMoveHandler implements Listener
                 if (newLocation.getX() < gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.x > gameInstance.gameMap.borderX)
                 {
                     cancelMovement(playerMoveEvent);
-    
+                    
                     player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
                     return;
                 }
