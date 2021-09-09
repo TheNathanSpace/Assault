@@ -2,11 +2,12 @@ package com.thekingelessar.assault.game.eventhandlers.combat;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.map.MapBase;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
@@ -167,7 +168,7 @@ public class PlayerAttackVictimHandler implements Listener
                         if (arrow != null)
                         {
                             String deathMessage = victimPlayer.addBowDeathFeed(attacker);
-                            Assault.INSTANCE.getLogger().log(Level.INFO, String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage));
+                            Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage)));
                             attackerPlayer.killPlayer(victim, true);
                         }
                         else

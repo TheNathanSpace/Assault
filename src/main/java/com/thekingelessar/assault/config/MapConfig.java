@@ -1,7 +1,7 @@
 package com.thekingelessar.assault.config;
 
 import com.thekingelessar.assault.Assault;
-import com.thekingelessar.assault.game.map.Map;
+import com.thekingelessar.assault.game.world.map.Map;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 

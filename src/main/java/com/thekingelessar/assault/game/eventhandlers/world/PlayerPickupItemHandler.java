@@ -5,6 +5,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -62,14 +63,24 @@ public class PlayerPickupItemHandler implements Listener
                     return;
                 }
                 
+                gameTeam.starsPickedUp += 1;
                 if (gameInstance.modFirstToFive.enabled && gameTeam.starsPickedUp != 5)
                 {
-                    gameTeam.starsPickedUp += 1;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.getAttackingTeam().color);
+                    }
+                    
                     GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
                     gamePlayer.spawn(gameInstance.getPlayerMode(player), true);
                     
+                    for (int i = 0; i < 2; i++)
+                    {
+                        FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.getAttackingTeam().color);
+                    }
+                    
                     String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " reached a star!";
-                    Title title = new Title(mainTitle, String.format("Stars remaining: %s★", 5 - gameTeam.starsPickedUp));
+                    Title title = new Title(mainTitle, String.format("%s%s✬%s remaining!", ChatColor.BOLD, 5 - gameTeam.starsPickedUp, ChatColor.RESET));
                     
                     List<Player> players = gameInstance.gameWorld.getPlayers();
                     for (Player player1 : players)
@@ -79,6 +90,8 @@ public class PlayerPickupItemHandler implements Listener
                     }
                     
                     playerPickupItemEvent.setCancelled(true);
+                    
+                    return;
                 }
                 
                 gameInstance.endRound(false);

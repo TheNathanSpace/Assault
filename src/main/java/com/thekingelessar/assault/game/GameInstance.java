@@ -4,8 +4,6 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
-import com.thekingelessar.assault.game.map.Map;
-import com.thekingelessar.assault.game.map.MapBase;
 import com.thekingelessar.assault.game.modifiers.GameModifier;
 import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstToFive;
@@ -17,6 +15,8 @@ import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
+import com.thekingelessar.assault.game.world.map.Map;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.util.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
@@ -661,10 +661,13 @@ public class GameInstance
             this.taskTickTimer.cancel();
         }
         
-        if (this.getAttackingTeam().finalAttackingTime != this.gameMap.attackTimeLimit && this.getAttackingTeam().finalAttackingTime != this.gameMap.firstToFiveStarsTimeLimit)
+        if (this.getAttackingTeam() != null)
         {
-            long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
-            this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+            if (this.getAttackingTeam().finalAttackingTime != this.gameMap.attackTimeLimit && this.getAttackingTeam().finalAttackingTime != this.gameMap.firstToFiveStarsTimeLimit)
+            {
+                long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
+                this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+            }
         }
         
         this.getAttackingTeam().displaySeconds = Util.round(this.getAttackingTeam().finalAttackingTime, 2);
@@ -804,6 +807,16 @@ public class GameInstance
             }
         }
         return null;
+    }
+    
+    public GameTeam getRedTeam()
+    {
+        return this.teams.get(TeamColor.RED);
+    }
+    
+    public GameTeam getBlueTeam()
+    {
+        return this.teams.get(TeamColor.BLUE);
     }
     
     public GameTeam getOppositeTeam(Player player)

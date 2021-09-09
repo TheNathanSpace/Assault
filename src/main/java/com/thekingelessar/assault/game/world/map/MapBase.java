@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.map;
+package com.thekingelessar.assault.game.world.map;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;

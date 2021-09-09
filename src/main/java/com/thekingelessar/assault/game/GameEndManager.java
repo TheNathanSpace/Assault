@@ -56,7 +56,7 @@ public class GameEndManager
                 break;
             
             case MOST_STARS:
-                subtitleString = "Stars: " + ChatColor.LIGHT_PURPLE + String.format("%s★", 5 - gameInstance.winningTeam.starsPickedUp);
+                subtitleString = "Stars: " + ChatColor.LIGHT_PURPLE + String.format("%s✬", 5 - gameInstance.winningTeam.starsPickedUp);
                 break;
             
             case ATTACKERS_LEFT:

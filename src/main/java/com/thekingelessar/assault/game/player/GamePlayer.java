@@ -6,7 +6,6 @@ import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
 import com.thekingelessar.assault.util.Util;
@@ -249,7 +248,7 @@ public class GamePlayer
                 deathMessage = this.addDeathFeed();
                 break;
         }
-        Assault.INSTANCE.getLogger().log(Level.INFO, String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage));
+        Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage)));
         
         if (attacker != null)
         {
@@ -308,7 +307,7 @@ public class GamePlayer
         if (!arrow)
         {
             String deathMessage = victimPlayer.addSwordDeathFeed(this.player);
-            Assault.INSTANCE.getLogger().log(Level.INFO, String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage));
+            Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage)));
         }
         
         this.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
@@ -436,28 +435,28 @@ public class GamePlayer
             String timeBlue = "";
             String timeRed = "";
             
-            if (gameInstance.teams.get(TeamColor.BLUE).didForfeit())
+            if (gameInstance.getBlueTeam().didForfeit())
             {
                 timeBlue = "Forfeit";
             }
             else
             {
-                timeRed = Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.BLUE).displaySeconds, true);
+                timeBlue = Util.secondsToMinutes((int) gameInstance.getBlueTeam().displaySeconds, true);
             }
             
-            if (gameInstance.teams.get(TeamColor.RED).didForfeit())
+            if (gameInstance.getRedTeam().didForfeit())
             {
-                timeBlue = "Forfeit";
+                timeRed = "Forfeit";
             }
             else
             {
-                timeRed = Util.secondsToMinutes((int) gameInstance.teams.get(TeamColor.RED).displaySeconds, true);
+                timeRed = Util.secondsToMinutes((int) gameInstance.getRedTeam().displaySeconds, true);
             }
             
             if (gameInstance.modFirstToFive.enabled)
             {
-                timeBlue += String.format(" ★ x%s", gameInstance.teams.get(TeamColor.BLUE).starsPickedUp);
-                timeRed += String.format(" ★ x%s", gameInstance.teams.get(TeamColor.RED).starsPickedUp);
+                timeBlue += String.format(" %s%s✬", gameInstance.getBlueTeam().starsPickedUp, ChatColor.WHITE);
+                timeRed += String.format(" %s%s✬", gameInstance.getRedTeam().starsPickedUp, ChatColor.WHITE);
             }
             
             lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + timeBlue);

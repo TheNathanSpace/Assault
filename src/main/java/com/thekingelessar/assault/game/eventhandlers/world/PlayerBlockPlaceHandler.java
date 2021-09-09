@@ -1,7 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers.world;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.map.MapBase;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;

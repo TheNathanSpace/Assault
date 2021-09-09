@@ -3,7 +3,7 @@ package com.thekingelessar.assault.game.eventhandlers.playermovement;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
-import com.thekingelessar.assault.game.map.MapBase;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.DeathType;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;

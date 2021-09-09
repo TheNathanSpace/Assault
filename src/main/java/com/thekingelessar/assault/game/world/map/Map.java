@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.map;
+package com.thekingelessar.assault.game.world.map;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -344,7 +344,7 @@ public class Map
             }
             catch (IllegalArgumentException exception)
             {
-                Assault.INSTANCE.getLogger().warning("Invalid material in map configuration: " + object.toString());
+                Assault.INSTANCE.getLogger().warning("Invalid material in breakable_blocks: " + object.toString());
             }
         }
         
@@ -359,7 +359,7 @@ public class Map
             }
             catch (IllegalArgumentException exception)
             {
-                Assault.INSTANCE.getLogger().warning("Invalid material in map configuration: " + object.toString());
+                Assault.INSTANCE.getLogger().warning("Invalid material in placeable_blocks: " + object.toString());
             }
         }
     }

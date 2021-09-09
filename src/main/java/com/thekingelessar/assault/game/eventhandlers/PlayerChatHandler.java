@@ -31,7 +31,7 @@ public class PlayerChatHandler implements Listener
                     teamPlayer.sendMessage(message);
                 }
                 
-                Assault.INSTANCE.getLogger().log(Level.INFO, String.format("TEAMCHAT [%s]: %s", gameInstance.gameUUID, message));
+                Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("TEAMCHAT [%s]: %s", gameInstance.gameUUID, message)));
                 
                 playerChatEvent.setCancelled(true);
             }

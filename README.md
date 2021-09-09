@@ -8,7 +8,7 @@
 
 ### Features
 
-Modifier: First to Five Stars
+### Modifier: First to Five Stars
 
 - ~~Make new modifier~~
 - ~~Keep track of times picked up~~
@@ -18,6 +18,9 @@ Modifier: First to Five Stars
 - ~~Different 480 time when enabled~~
 - Test (especially ties)
 
+### Other
+
+- Multiverse support
 - Package maps with plugin
 - Add more game modifiers:
     - First to 5 stars

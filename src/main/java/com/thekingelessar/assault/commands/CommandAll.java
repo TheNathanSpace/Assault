@@ -43,7 +43,7 @@ public class CommandAll implements CommandExecutor
                         gamePlayer.sendMessage(message);
                     }
     
-                    Assault.INSTANCE.getLogger().log(Level.INFO, String.format("ALLCHAT [%s]: %s", gameInstance.gameUUID, message));
+                    Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("ALLCHAT [%s]: %s", gameInstance.gameUUID, message)));
     
                     return true;
                 }

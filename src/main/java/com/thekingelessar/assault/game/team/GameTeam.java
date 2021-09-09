@@ -8,7 +8,7 @@ import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
-import com.thekingelessar.assault.game.map.MapBase;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import org.bukkit.Bukkit;

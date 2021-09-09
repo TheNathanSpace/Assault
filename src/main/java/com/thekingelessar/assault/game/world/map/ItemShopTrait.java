@@ -1,7 +1,8 @@
-package com.thekingelessar.assault.game.map;
+package com.thekingelessar.assault.game.world.map;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import net.citizensnpcs.api.trait.Trait;
 import org.bukkit.entity.Player;
@@ -11,11 +12,11 @@ import org.bukkit.inventory.InventoryView;
 //This is your trait that will be applied to a npc using the /trait mytraitname command. Each NPC gets its own instance of this class.
 //the Trait class has a reference to the attached NPC class through the protected field 'npc' or getNPC().
 //The Trait class also implements Listener so you can add EventHandlers directly to your trait.
-public class BuffShopTrait extends Trait
+public class ItemShopTrait extends Trait
 {
-    public BuffShopTrait()
+    public ItemShopTrait()
     {
-        super("buffshoptrait");
+        super("itemshoptrait");
         plugin = Assault.INSTANCE;
     }
     
@@ -46,9 +47,22 @@ public class BuffShopTrait extends Trait
         if (gameInstance != null)
         {
             GameTeam gameTeam = gameInstance.getPlayerTeam(player);
-            if (gameTeam != null && gameTeam.equals(gameInstance.getAttackingTeam()))
+            if (gameTeam != null)
             {
-                InventoryView inventoryView = player.openInventory(gameTeam.shopTeamBuffs.inventory);
+                GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
+                InventoryView inventoryView;
+                switch (gameInstance.gameStage)
+                {
+                    case BUILDING:
+                        inventoryView = player.openInventory(gameTeam.shopBuilding.inventory);
+                        break;
+                    case ATTACK_ROUNDS:
+                        System.out.println("--- OPENING ATTACK SHOP ---");
+                        System.out.println("Player name: " + gamePlayer.player.getName());
+                        System.out.println("Player team: " + gamePlayer.gameTeam.color);
+                        inventoryView = player.openInventory(gamePlayer.shopAttacking.inventory); // todo: nullpointer
+                        break;
+                }
             }
         }
     }
