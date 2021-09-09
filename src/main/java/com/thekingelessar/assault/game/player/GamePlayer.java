@@ -99,7 +99,7 @@ public class GamePlayer
         spawnItems.add(spawnItem);
     }
     
-    public void spawn(PlayerMode playerMode, boolean keepInventory)
+    public void spawn(PlayerMode playerMode, boolean keepInventory) // keepInventory and checking if GameStage is BUILDING is a little redundant
     {
         GameTeam playerTeam = gameInstance.getPlayerTeam(player);
         PlayerMode mode = PlayerMode.setPlayerMode(player, playerMode, gameInstance);

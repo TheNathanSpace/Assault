@@ -3,11 +3,11 @@ package com.thekingelessar.assault.game.eventhandlers.playermovement;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
-import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.DeathType;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -103,8 +103,63 @@ public class PlayerMoveHandler implements Listener
         if (voidY < gameInstance.gameMap.voidLevel && gameInstance.gameMap.voidEnabled)
         {
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
-            gamePlayer.respawn(null, true, DeathType.VOID);
+            if (gamePlayer != null)
+            {
+                gamePlayer.respawn(null, true, DeathType.VOID);
+            }
         }
+        
+        if (gameInstance.gameStage.equals(GameStage.PREGAME))
+        {
+            return;
+        }
+        
+        if (gameInstance.gameStage.equals(GameStage.BUILDING))
+        {
+            GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+            if (gamePlayer != null)
+            {
+                if (newLocation.getX() > gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.x < gameInstance.gameMap.borderX)
+                {
+                    cancelMovement(playerMoveEvent);
+    
+                    player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
+                    return;
+                }
+                
+                if (newLocation.getX() < gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.x > gameInstance.gameMap.borderX)
+                {
+                    cancelMovement(playerMoveEvent);
+    
+                    player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
+                    return;
+                }
+            }
+            
+            return;
+        }
+        
+        if (newLocation.getX() > gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objective.x < gameInstance.gameMap.borderX)
+        {
+            player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
+            GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+            if (gamePlayer != null)
+            {
+                cancelMovement(playerMoveEvent);
+                return;
+            }
+        }
+        
+        if (newLocation.getX() < gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objective.x > gameInstance.gameMap.borderX)
+        {
+            player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
+            GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+            if (gamePlayer != null)
+            {
+                cancelMovement(playerMoveEvent);
+            }
+        }
+        
     }
     
     private void cancelMovement(PlayerMoveEvent playerMoveEvent)

@@ -31,6 +31,8 @@ public class Map
     public int attackTimeLimit = 480;
     public int firstToFiveStarsTimeLimit = 480;
     
+    public double borderX = 0;
+    
     public double maxZ = 86;
     public double minZ = 2;
     
@@ -130,6 +132,15 @@ public class Map
         catch (Exception exception)
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "first_to_five_stars_time_limit invalid; defaulting to 480");
+        }
+        
+        try
+        {
+            borderX = config.getDouble("border_x");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "border_x invalid; defaulting to 0");
         }
         
         try
