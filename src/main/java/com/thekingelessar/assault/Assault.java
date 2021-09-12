@@ -4,10 +4,10 @@ import com.thekingelessar.assault.commands.*;
 import com.thekingelessar.assault.config.MapConfig;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
+import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.game.world.map.BuffShopTrait;
 import com.thekingelessar.assault.game.world.map.ItemShopTrait;
 import com.thekingelessar.assault.game.world.map.Map;
-import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.Coordinate;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
@@ -33,7 +33,7 @@ public class Assault extends JavaPlugin
     static public Location lobbySpawn;
     
     static public GameMode lobbyGamemode = GameMode.ADVENTURE;
-    static public boolean forceLobbyInventory = true;
+    static public boolean allowLobbyInventoryEditing = true;
     
     static public int gameStartCountdown = 20;
     
@@ -81,18 +81,24 @@ public class Assault extends JavaPlugin
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "lobby_gamemode invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "lobby_gamemode invalid; defaulting to ADVENTURE");
         }
         
         try
         {
-            forceLobbyInventory = mainConfig.getBoolean("force_lobby_inventory");
+            allowLobbyInventoryEditing = mainConfig.getBoolean("allow_lobby_inventory_editing");
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "force_lobby_inventory invalid");
-            throw exception;
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "allow_lobby_inventory_editing invalid; defaulting to false");
+            try
+            {
+                allowLobbyInventoryEditing = !mainConfig.getBoolean("force_lobby_inventory");
+            }
+            catch (Exception exception1)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "force_lobby_inventory invalid; defaulting to true");
+            }
         }
         
         try
@@ -101,7 +107,7 @@ public class Assault extends JavaPlugin
         }
         catch (Exception exception)
         {
-            Assault.INSTANCE.getLogger().log(Level.WARNING, "game_start_countdown invalid, using 20 sec");
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "game_start_countdown invalid; defaulting to 20");
         }
         
         try

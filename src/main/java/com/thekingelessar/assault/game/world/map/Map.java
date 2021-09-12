@@ -20,6 +20,7 @@ public class Map
     public String mapName;
     
     public Coordinate waitingSpawn;
+    public boolean deleteWaitingPlatform = true;
     public List<Coordinate> waitingPlatformBoundingBox = new ArrayList<>();
     
     public boolean voidEnabled = true;
@@ -39,6 +40,8 @@ public class Map
     public double maxY = 122;
     
     public double attackerBaseProtMaxZ = 20;
+    
+    public int emeraldSpawnDelay = 20;
     
     public List<MapBase> bases = new ArrayList<>();
     
@@ -69,6 +72,15 @@ public class Map
         
         try
         {
+            deleteWaitingPlatform = config.getBoolean("delete_waiting_platform");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "delete_waiting_platform invalid; defaulting to true");
+        }
+        
+        try
+        {
             for (Object boundingBox : config.getList("waiting_platform_bounding_box"))
             {
                 waitingPlatformBoundingBox.add(new Coordinate((String) boundingBox));
@@ -77,7 +89,6 @@ public class Map
         catch (Exception exception)
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "waiting_platform_bounding_box invalid");
-            throw exception;
         }
         
         try
@@ -169,7 +180,16 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_base_prot_max_z invalid; defaulting to 20");
         }
-        
+    
+        try
+        {
+            emeraldSpawnDelay = config.getInt("emerald_spawn_delay");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "emerald_spawn_delay invalid; defaulting to 20");
+        }
+    
         try
         {
             maxY = config.getDouble("max_y");
@@ -400,11 +420,14 @@ public class Map
     
     public void clearWaitingPlatform(World world)
     {
-        List<Block> blocks = Util.selectBoundingBox(waitingPlatformBoundingBox.get(0).toLocation(world), waitingPlatformBoundingBox.get(1).toLocation(world), world);
-        
-        for (Block block : blocks)
+        if (this.deleteWaitingPlatform)
         {
-            block.setType(Material.AIR);
+            List<Block> blocks = Util.selectBoundingBox(waitingPlatformBoundingBox.get(0).toLocation(world), waitingPlatformBoundingBox.get(1).toLocation(world), world);
+            
+            for (Block block : blocks)
+            {
+                block.setType(Material.AIR);
+            }
         }
     }
     

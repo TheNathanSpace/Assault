@@ -228,7 +228,6 @@ public class GameInstance
             player.getInventory().clear();
             GamePlayer gamePlayer = this.getGamePlayer(player);
             gamePlayer.swapReset();
-            System.out.println("Player " + player.getName() + " has formatted name: " + player.getDisplayName());
         }
     }
     
@@ -475,7 +474,7 @@ public class GameInstance
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);
         taskAttackTimer.runTaskTimer(Assault.INSTANCE, taskAttackTimer.startDelay, taskAttackTimer.tickDelay);
         
-        emeraldSpawnTimer = new TaskEmeraldSpawnTimer(0, 0, 1, this, 20);
+        emeraldSpawnTimer = new TaskEmeraldSpawnTimer(0, 0, 1, this, this.gameMap.emeraldSpawnDelay);
         emeraldSpawnTimer.runTaskTimer(Assault.INSTANCE, emeraldSpawnTimer.startDelay, emeraldSpawnTimer.tickDelay);
         
         if (Assault.useHolographicDisplays)

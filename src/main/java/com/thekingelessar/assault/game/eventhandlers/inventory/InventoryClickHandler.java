@@ -35,7 +35,7 @@ public class InventoryClickHandler implements Listener
         {
             if (player.getWorld().equals(Assault.lobbyWorld))
             {
-                if (Assault.forceLobbyInventory)
+                if (!Assault.allowLobbyInventoryEditing)
                 {
                     if (itemStack != null)
                     {

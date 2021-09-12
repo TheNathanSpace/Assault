@@ -37,5 +37,6 @@ public class RegisterHandlers
         Bukkit.getServer().getPluginManager().registerEvents(new VanillaWorldHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerConsumeItemHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PotionThrowHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new TNTExplodeHandler(), Assault.INSTANCE);
     }
 }

@@ -54,6 +54,18 @@ public class PlayerMoveHandler implements Listener
                     cancelMovement(playerMoveEvent);
                     return;
                 }
+                
+                if (locTo.getZ() > gameInstance.gameMap.maxZ)
+                {
+                    cancelMovement(playerMoveEvent);
+                    return;
+                }
+                
+                if (locTo.getZ() < gameInstance.gameMap.minZ)
+                {
+                    cancelMovement(playerMoveEvent);
+                    return;
+                }
             }
             
             GameTeam gameTeam = gameInstance.getPlayerTeam(player);

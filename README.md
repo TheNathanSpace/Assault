@@ -10,6 +10,8 @@
 ### Features
 
 - Multiverse support
+- Allow different team color combinations
+- Statistics (local database or simple json files)
 - Package maps with plugin
 - Add more game modifiers:
     - First to 5 stars

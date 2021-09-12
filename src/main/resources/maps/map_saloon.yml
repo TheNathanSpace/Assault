@@ -1,6 +1,7 @@
 world_name: saloon
 
 waiting_spawn: 0.5 128. 45.5
+delete_waiting_platform: true
 waiting_platform_bounding_box:
   - 3. 129. 42.
   - -3. 126. 48.
@@ -22,6 +23,25 @@ min_z: 2.
 max_y: 122.
 
 attacker_base_prot_max_z: 20.
+
+emerald_spawn_delay: 20
+
+# https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
+placeable_blocks:
+  - WOOL
+  - STAINED_CLAY
+  - STAINED_GLASS
+  - WOOD
+  - COBBLESTONE
+  - WEB
+  - GRAVEL
+  - CACTUS
+
+breakable_blocks:
+  - DEAD_BUSH
+  - CACTUS
+  - RED_ROSE
+  - WEB
 
 # This refers to the base that each team is DEFENDING.
 bases:
@@ -59,20 +79,3 @@ bases:
         - 27.5 111.06250 82.5 -65. 0.
       emerald_spawns:
         - 40.5 106.5 58.5
-
-# https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
-placeable_blocks:
-  - WOOL
-  - STAINED_CLAY
-  - STAINED_GLASS
-  - WOOD
-  - COBBLESTONE
-  - WEB
-  - GRAVEL
-  - CACTUS
-
-breakable_blocks:
-  - DEAD_BUSH
-  - CACTUS
-  - RED_ROSE
-  - WEB
