@@ -21,9 +21,9 @@ public class FireworkUtils
         
         final Firework firework = (Firework) randomLocation.getWorld().spawnEntity(randomLocation, EntityType.FIREWORK);
         final FireworkMeta fireworkMeta = firework.getFireworkMeta();
-    
+        
         final Random random = new Random();
-    
+        
         final FireworkEffect effect = FireworkEffect.builder().flicker(random.nextBoolean()).withColor(getColor(teamColor)).withFade(getColor(teamColor)).with(Type.values()[random.nextInt(Type.values().length)]).trail(random.nextBoolean()).build();
         
         fireworkMeta.addEffect(effect);
@@ -215,4 +215,6 @@ public class FireworkUtils
                 
                 return null;
         }
+        return null;
     }
+}
