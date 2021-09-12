@@ -209,7 +209,7 @@ public class GameTeam
     
     public GameTeam getOppositeTeam()
     {
-        for (GameTeam listTeam : gameInstance.teams.values())
+        for (GameTeam listTeam : gameInstance.teams)
         {
             if (!this.equals(listTeam))
             {

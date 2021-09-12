@@ -110,7 +110,7 @@ public class TaskAttackTimer extends BukkitRunnable
         double attackingTime = gameInstance.getAttackingTeam().displaySeconds;
         attackingTime += 1.;
         
-        gameInstance.teams.get(gameInstance.attackingTeam).displaySeconds = attackingTime;
+        gameInstance.attackingTeam.displaySeconds = attackingTime;
         
         gameInstance.updateScoreboards();
     }

@@ -137,7 +137,7 @@ public class PlayerAttackVictimHandler implements Listener
                         return;
                     }
                     
-                    for (GameTeam gameTeam : gameInstance.teams.values())
+                    for (GameTeam gameTeam : gameInstance.teams)
                     {
                         MapBase mapBase = gameTeam.mapBase;
                         

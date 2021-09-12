@@ -180,7 +180,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "attacker_base_prot_max_z invalid; defaulting to 20");
         }
-    
+        
         try
         {
             emeraldSpawnDelay = config.getInt("emerald_spawn_delay");
@@ -189,7 +189,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "emerald_spawn_delay invalid; defaulting to 20");
         }
-    
+        
         try
         {
             maxY = config.getDouble("max_y");
@@ -416,6 +416,16 @@ public class Map
         }
         
         return null;
+    }
+    
+    public MapBase getTeamOne()
+    {
+        return this.bases.get(0);
+    }
+    
+    public MapBase getTeamTwo()
+    {
+        return this.bases.get(1);
     }
     
     public void clearWaitingPlatform(World world)

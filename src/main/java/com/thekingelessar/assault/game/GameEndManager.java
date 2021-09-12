@@ -74,7 +74,7 @@ public class GameEndManager
                 break;
             
             case TIE:
-                List<GameTeam> teamList = new ArrayList<>(gameInstance.teams.values());
+                List<GameTeam> teamList = new ArrayList<>(gameInstance.teams);
                 winnerTitleString = "IT'S A TIE!";
                 loserTitleString = "IT'S A TIE!";
                 subtitleString = teamList.get(0).color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " and " + teamList.get(1).color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " tied!";
@@ -125,7 +125,7 @@ public class GameEndManager
     
     public void cleanupGameInstance()
     {
-        for (GameTeam gameTeam : gameInstance.teams.values())
+        for (GameTeam gameTeam : gameInstance.teams)
         {
             gameTeam.mapBase.destroyShops();
         }
@@ -138,7 +138,7 @@ public class GameEndManager
             }
         }
         
-        for (GameTeam gameTeam : gameInstance.teams.values())
+        for (GameTeam gameTeam : gameInstance.teams)
         {
             gameTeam.buffList.clear();
             

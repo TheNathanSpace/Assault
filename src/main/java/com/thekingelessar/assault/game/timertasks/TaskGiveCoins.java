@@ -29,7 +29,7 @@ public class TaskGiveCoins extends BukkitRunnable
     
     public void advanceTimer()
     {
-        for (GameTeam gameTeam : gameInstance.teams.values())
+        for (GameTeam gameTeam : gameInstance.teams)
         {
             for (GamePlayer player : gameTeam.members)
             {

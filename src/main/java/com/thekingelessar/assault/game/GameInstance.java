@@ -42,7 +42,7 @@ public class GameInstance
     public Map gameMap;
     public World gameWorld;
     
-    public HashMap<TeamColor, GameTeam> teams = new HashMap<>();
+    public List<GameTeam> teams = new ArrayList<>();
     public Scoreboard scoreboard;
     
     private final List<Player> players;
@@ -69,7 +69,7 @@ public class GameInstance
     public Hologram emeraldSpawnHologram;
     public TextLine line2;
     
-    public TeamColor attackingTeam;
+    public GameTeam attackingTeam;
     
     public GameTeam winningTeam = null;
     public GameEndManager gameEndManager;
@@ -187,16 +187,16 @@ public class GameInstance
     
     public void createTeams()
     {
-        GameTeam redTeam = new GameTeam(TeamColor.RED, this);
-        redTeam.setTeamMapBase();
-        redTeam.teamStage = TeamStage.DEFENDING;
+        GameTeam teamOne = new GameTeam(this.gameMap.getTeamOne().teamColor, this);
+        teamOne.setTeamMapBase();
+        teamOne.teamStage = TeamStage.DEFENDING;
         
-        GameTeam blueTeam = new GameTeam(TeamColor.BLUE, this);
-        blueTeam.setTeamMapBase();
-        blueTeam.teamStage = TeamStage.DEFENDING;
+        GameTeam teamTwo = new GameTeam(this.gameMap.getTeamTwo().teamColor, this);
+        teamTwo.setTeamMapBase();
+        teamTwo.teamStage = TeamStage.DEFENDING;
         
-        teams.put(TeamColor.RED, redTeam);
-        teams.put(TeamColor.BLUE, blueTeam);
+        teams.add(teamOne);
+        teams.add(teamTwo);
         
         Collections.shuffle(this.players);
         
@@ -215,7 +215,7 @@ public class GameInstance
             teamLists.add(sublist);
         }
         
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             gameTeam.addMembers(teamLists.remove(0));
         }
@@ -233,7 +233,7 @@ public class GameInstance
     
     public GameTeam getPlayerTeam(Player player)
     {
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             
             for (Player teamPlayer : gameTeam.getPlayers())
@@ -299,7 +299,7 @@ public class GameInstance
     public boolean isOneTeamRemaining()
     {
         boolean teamLeft = false;
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (gameTeam.getPlayers().size() == 0)
             {
@@ -314,7 +314,7 @@ public class GameInstance
         GameTeam remainingTeam = null;
         GameTeam disconnectedTeam = null;
         
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (gameTeam.getPlayers().size() > 0)
             {
@@ -365,7 +365,7 @@ public class GameInstance
             }
         }
         
-        for (GameTeam team : teams.values())
+        for (GameTeam team : teams)
         {
             Location objectiveLocation = team.mapBase.objective.toLocation(this.gameWorld);
             objectiveLocation.add(0, 0.5, 0);
@@ -424,14 +424,14 @@ public class GameInstance
         
         this.gameStage = GameStage.ATTACK_ROUNDS;
         
-        List<TeamColor> randomList = new ArrayList<>(teams.keySet());
+        List<GameTeam> randomList = new ArrayList<>(teams);
         Collections.shuffle(randomList);
         
         this.attackingTeam = randomList.get(0);
-        this.teams.get(this.attackingTeam).teamStage = TeamStage.ATTACKING;
-        this.teams.get(randomList.get(1)).teamStage = TeamStage.DEFENDING;
+        this.attackingTeam.teamStage = TeamStage.ATTACKING;
+        randomList.get(1).teamStage = TeamStage.DEFENDING;
         
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             gameTeam.mapBase.destroyShops();
             gameTeam.mapBase.spawnShops(this);
@@ -445,7 +445,7 @@ public class GameInstance
     {
         teamsGone++;
         
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             gameTeam.buffList.clear();
         }
@@ -458,8 +458,8 @@ public class GameInstance
             }
         }
         
-        TeamColor oldDefenders = this.getDefendingTeam().color;
-        this.teams.get(this.attackingTeam).teamStage = TeamStage.DEFENDING;
+        GameTeam oldDefenders = this.getDefendingTeam();
+        this.attackingTeam.teamStage = TeamStage.DEFENDING;
         this.attackingTeam = oldDefenders;
         this.getAttackingTeam().teamStage = TeamStage.ATTACKING;
         
@@ -487,7 +487,7 @@ public class GameInstance
             line2 = emeraldSpawnHologram.appendTextLine("§rSpawning in §d%s§r seconds!");
         }
         
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             switch (gameTeam.teamStage)
             {
@@ -516,7 +516,7 @@ public class GameInstance
         
         this.getAttackingTeam().startAttackingTime = System.nanoTime();
         
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             gameTeam.gamerPoints = 0;
             
@@ -533,7 +533,7 @@ public class GameInstance
             }
         }
         
-        for (GameTeam gameTeam : teams.values())
+        for (GameTeam gameTeam : teams)
         {
             gameTeam.mapBase.destroyShops();
         }
@@ -565,7 +565,7 @@ public class GameInstance
         int triedTeam = 0;
         double firstTime = 0;
         
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (gameTeam.finalAttackingTime == 0)
             {
@@ -592,7 +592,7 @@ public class GameInstance
             triedTeam = 0;
             int firstStars = 0;
             
-            for (GameTeam gameTeam : this.teams.values())
+            for (GameTeam gameTeam : this.teams)
             {
                 if (triedTeam == 0)
                 {
@@ -619,7 +619,7 @@ public class GameInstance
         int triedTeam = 0;
         double firstTime = 0;
         
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (gameTeam.finalAttackingTime == 0)
             {
@@ -712,7 +712,7 @@ public class GameInstance
             double lowestTime = Integer.MAX_VALUE;
             GameTeam lowestTeam = null;
             
-            for (GameTeam gameTeam : this.teams.values())
+            for (GameTeam gameTeam : this.teams)
             {
                 if (gameTeam.finalAttackingTime < lowestTime)
                 {
@@ -728,7 +728,7 @@ public class GameInstance
                 int mostStars = Integer.MIN_VALUE;
                 GameTeam mostStarsTeam = null;
                 
-                for (GameTeam gameTeam : this.teams.values())
+                for (GameTeam gameTeam : this.teams)
                 {
                     if (gameTeam.starsPickedUp > mostStars)
                     {
@@ -756,9 +756,9 @@ public class GameInstance
     public List<Player> getPlayers()
     {
         List<Player> players = new ArrayList<>();
-        for (java.util.Map.Entry<TeamColor, GameTeam> entry : this.teams.entrySet())
+        for (GameTeam gameTeam : this.teams)
         {
-            players.addAll(entry.getValue().getPlayers());
+            players.addAll(gameTeam.getPlayers());
         }
         
         return players;
@@ -774,7 +774,7 @@ public class GameInstance
     
     public void doBuffs()
     {
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             gameTeam.doBuffs();
         }
@@ -782,7 +782,7 @@ public class GameInstance
     
     public void updateScoreboards()
     {
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             for (GamePlayer player : gameTeam.members)
             {
@@ -793,14 +793,14 @@ public class GameInstance
     
     public GameTeam getAttackingTeam()
     {
-        return teams.get(this.attackingTeam);
+        return this.attackingTeam;
     }
     
     public GameTeam getDefendingTeam()
     {
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
-            if (!gameTeam.color.equals(this.attackingTeam))
+            if (!gameTeam.equals(this.attackingTeam))
             {
                 return gameTeam;
             }
@@ -808,19 +808,19 @@ public class GameInstance
         return null;
     }
     
-    public GameTeam getRedTeam()
+    public GameTeam getTeamOne()
     {
-        return this.teams.get(TeamColor.RED);
+        return this.teams.get(0);
     }
     
-    public GameTeam getBlueTeam()
+    public GameTeam getTeamTwo()
     {
-        return this.teams.get(TeamColor.BLUE);
+        return this.teams.get(1);
     }
     
     public GameTeam getOppositeTeam(Player player)
     {
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (!gameTeam.equals(this.getPlayerTeam(player)))
             {
@@ -832,7 +832,7 @@ public class GameInstance
     
     public GameTeam getOppositeTeam(GameTeam gameTeam)
     {
-        for (GameTeam overTeam : this.teams.values())
+        for (GameTeam overTeam : this.teams)
         {
             if (!overTeam.equals(gameTeam))
             {
@@ -844,7 +844,7 @@ public class GameInstance
     
     public void removePlayer(Player player)
     {
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (gameTeam.getPlayers().contains(player))
             {
@@ -876,7 +876,7 @@ public class GameInstance
         GameTeam smallestTeam = null;
         int smallestNumber = Integer.MAX_VALUE;
         
-        for (GameTeam gameTeam : this.teams.values())
+        for (GameTeam gameTeam : this.teams)
         {
             if (gameTeam.getPlayers().size() < smallestNumber)
             {

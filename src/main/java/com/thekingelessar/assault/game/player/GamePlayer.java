@@ -435,28 +435,28 @@ public class GamePlayer
             String timeBlue = "";
             String timeRed = "";
             
-            if (gameInstance.getBlueTeam().didForfeit())
+            if (gameInstance.getTeamOne().didForfeit())
             {
                 timeBlue = "Forfeit";
             }
             else
             {
-                timeBlue = Util.secondsToMinutes((int) gameInstance.getBlueTeam().displaySeconds, true);
+                timeBlue = Util.secondsToMinutes((int) gameInstance.getTeamOne().displaySeconds, true);
             }
             
-            if (gameInstance.getRedTeam().didForfeit())
+            if (gameInstance.getTeamTwo().didForfeit())
             {
                 timeRed = "Forfeit";
             }
             else
             {
-                timeRed = Util.secondsToMinutes((int) gameInstance.getRedTeam().displaySeconds, true);
+                timeRed = Util.secondsToMinutes((int) gameInstance.getTeamTwo().displaySeconds, true);
             }
             
             if (gameInstance.modFirstToFive.enabled)
             {
-                timeBlue += String.format(" %s%s✬", gameInstance.getBlueTeam().starsPickedUp, ChatColor.WHITE);
-                timeRed += String.format(" %s%s✬", gameInstance.getRedTeam().starsPickedUp, ChatColor.WHITE);
+                timeBlue += String.format(" %s%s✬", gameInstance.getTeamOne().starsPickedUp, ChatColor.WHITE);
+                timeRed += String.format(" %s%s✬", gameInstance.getTeamTwo().starsPickedUp, ChatColor.WHITE);
             }
             
             lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + timeBlue);

@@ -72,7 +72,7 @@ public class PlayerBlockPlaceHandler implements Listener
         {
             Location placedLocation = blockPlaceEvent.getBlock().getLocation();
             
-            for (GameTeam gameTeam : gameInstance.teams.values())
+            for (GameTeam gameTeam : gameInstance.teams)
             {
                 MapBase mapBase = gameTeam.mapBase;
                 if (mapBase.isInDefenderBoundingBox(placedLocation))
