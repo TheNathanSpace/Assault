@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.inventory.teambuffs;
+package com.thekingelessar.assault.game.teambuffs;
 
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.enchantments.Enchantment;

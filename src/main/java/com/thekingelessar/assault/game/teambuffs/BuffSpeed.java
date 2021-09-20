@@ -1,15 +1,15 @@
-package com.thekingelessar.assault.game.inventory.teambuffs;
+package com.thekingelessar.assault.game.teambuffs;
 
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class BuffHealing implements IBuff
+public class BuffSpeed implements IBuff
 {
     public GameTeam gameTeam;
     
-    public BuffHealing(GameTeam gameTeam)
+    public BuffSpeed(GameTeam gameTeam)
     {
         this.gameTeam = gameTeam;
     }
@@ -21,13 +21,12 @@ public class BuffHealing implements IBuff
         {
             for (PotionEffect potionEffect : player.getActivePotionEffects())
             {
-                if (potionEffect.getType().equals(PotionEffectType.REGENERATION))
+                if (potionEffect.getType().equals(PotionEffectType.SPEED))
                 {
                     return;
                 }
             }
-            
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 1000000, 1, true, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1000000, 1, true, true));
         }
     }
 }

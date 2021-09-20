@@ -5,7 +5,7 @@ import com.thekingelessar.assault.game.inventory.IShop;
 import com.thekingelessar.assault.game.inventory.ShopUtil;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemBuff;
-import com.thekingelessar.assault.game.inventory.teambuffs.*;
+import com.thekingelessar.assault.game.teambuffs.*;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
