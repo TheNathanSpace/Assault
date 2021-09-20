@@ -66,9 +66,11 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
     {
         this.gameInstance.taskCountdownAttackEnd = null;
         this.gameInstance.getAttackingTeam().finalAttackingTime = this.gameInstance.gameMap.attackTimeLimit;
+        this.gameInstance.getAttackingTeam().storedFinalAttackingTime = this.gameInstance.getAttackingTeam().finalAttackingTime;
         if (this.gameInstance.modFirstToFive.enabled)
         {
             this.gameInstance.getAttackingTeam().finalAttackingTime = this.gameInstance.gameMap.firstToFiveStarsTimeLimit;
+            this.gameInstance.getAttackingTeam().storedFinalAttackingTime = this.gameInstance.getAttackingTeam().finalAttackingTime;
         }
         
         this.gameInstance.endRound(false);

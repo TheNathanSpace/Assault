@@ -48,7 +48,7 @@ public class Map
     public List<Material> placeableBlocks = new ArrayList<>();
     public List<Material> breakableBlocks = new ArrayList<>();
     
-    public Map(YamlConfiguration config)
+    public Map(YamlConfiguration config) throws Exception
     {
         try
         {
@@ -223,7 +223,12 @@ public class Map
                 mappedBase = (HashMap<String, HashMap<String, Object>>) base;
                 baseTeamSet = mappedBase.keySet();
                 baseTeamString = baseTeamSet.iterator().next();
-                teamColor = TeamColor.valueOf(baseTeamString);
+                teamColor = TeamColor.valueOfCaseInsensitive(baseTeamString);
+                if (teamColor == null)
+                {
+                    Assault.INSTANCE.getLogger().log(Level.WARNING, "Team color invalid");
+                    throw new Exception();
+                }
                 baseSubMap = mappedBase.get(baseTeamString);
             }
             catch (Exception exception)

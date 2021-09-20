@@ -2,6 +2,7 @@ package com.thekingelessar.assault;
 
 import com.thekingelessar.assault.commands.*;
 import com.thekingelessar.assault.config.MapConfig;
+import com.thekingelessar.assault.database.AssaultTableManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.eventhandlers.RegisterHandlers;
 import com.thekingelessar.assault.game.world.WorldManager;
@@ -123,7 +124,7 @@ public class Assault extends JavaPlugin
         catch (Exception exception)
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "map_list invalid");
-            throw exception;
+            exception.printStackTrace();
         }
         
         this.getCommand("assaulthelp").setExecutor(new CommandAssaultHelp());
@@ -136,6 +137,8 @@ public class Assault extends JavaPlugin
         
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(BuffShopTrait.class).withName("buffshoptrait"));
+        
+        AssaultTableManager.getInstance().createTable();
         
         super.onEnable();
     }

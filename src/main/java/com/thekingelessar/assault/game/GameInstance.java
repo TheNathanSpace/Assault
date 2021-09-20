@@ -11,7 +11,6 @@ import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
-import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
@@ -666,6 +665,7 @@ public class GameInstance
             {
                 long nanosecondsTaken = System.nanoTime() - this.getAttackingTeam().startAttackingTime;
                 this.getAttackingTeam().finalAttackingTime = nanosecondsTaken / 1000000000.;
+                this.getAttackingTeam().storedFinalAttackingTime = this.getAttackingTeam().finalAttackingTime;
             }
         }
         

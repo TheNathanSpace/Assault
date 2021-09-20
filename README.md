@@ -10,11 +10,9 @@
 ### Features
 
 - Multiverse support
-- Allow different team color combinations
-- Statistics (local database or simple json files)
+- Statistics (MySQL or SQLite)
 - Package maps with plugin
 - Add more game modifiers:
-    - First to 5 stars
     - Most stars in 8 minutes
     - Swap team on death
 

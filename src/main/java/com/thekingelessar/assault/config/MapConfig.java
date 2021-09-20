@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class MapConfig
 {
-    public static Map loadWorldFromConfig(String map)
+    public static Map loadWorldFromConfig(String map) throws Exception
     {
         if (!map.startsWith("map_"))
         {
