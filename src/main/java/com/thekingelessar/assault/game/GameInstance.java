@@ -6,7 +6,7 @@ import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.modifiers.GameModifier;
 import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
-import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstToFive;
+import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstTo5Stars;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
@@ -48,11 +48,11 @@ public class GameInstance
     private final List<Player> spectators;
     
     public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
-    public ModFirstToFive modFirstToFive = new ModFirstToFive(this);
+    public ModFirstTo5Stars modFirstTo5Stars = new ModFirstTo5Stars(this);
     
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
-    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstToFive);
+    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars);
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
@@ -586,7 +586,7 @@ public class GameInstance
         }
         
         boolean isStarTie = false;
-        if (isTimeTie && this.modFirstToFive.enabled)
+        if (isTimeTie && this.modFirstTo5Stars.enabled)
         {
             triedTeam = 0;
             int firstStars = 0;
@@ -723,7 +723,7 @@ public class GameInstance
             
             this.winningTeam = lowestTeam;
             
-            if (this.modFirstToFive.enabled && this.isTie())
+            if (this.modFirstTo5Stars.enabled && this.isTie())
             {
                 int mostStars = Integer.MIN_VALUE;
                 GameTeam mostStarsTeam = null;

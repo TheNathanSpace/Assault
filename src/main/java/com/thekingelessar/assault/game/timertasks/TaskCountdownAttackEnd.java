@@ -67,7 +67,8 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
         this.gameInstance.taskCountdownAttackEnd = null;
         this.gameInstance.getAttackingTeam().finalAttackingTime = this.gameInstance.gameMap.attackTimeLimit;
         this.gameInstance.getAttackingTeam().storedFinalAttackingTime = this.gameInstance.getAttackingTeam().finalAttackingTime;
-        if (this.gameInstance.modFirstToFive.enabled)
+       
+        if (this.gameInstance.modFirstTo5Stars.enabled)
         {
             this.gameInstance.getAttackingTeam().finalAttackingTime = this.gameInstance.gameMap.firstToFiveStarsTimeLimit;
             this.gameInstance.getAttackingTeam().storedFinalAttackingTime = this.gameInstance.getAttackingTeam().finalAttackingTime;
@@ -81,7 +82,7 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
             {
                 gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.TIE);
             }
-            else if (gameInstance.isTimeTie() && gameInstance.modFirstToFive.enabled)
+            else if (gameInstance.isTimeTie() && gameInstance.modFirstTo5Stars.enabled)
             {
                 gameInstance.gameEndManager.declareWinners(GameEndManager.WinState.MOST_STARS);
             }

@@ -68,7 +68,7 @@ public class PlayerPickupItemHandler implements Listener
                 AssaultTableManager.getInstance().incrementValue(player, Statistic.STARS);
     
                 gameTeam.starsPickedUp += 1;
-                if (gameInstance.modFirstToFive.enabled && gameTeam.starsPickedUp != 5)
+                if (gameInstance.modFirstTo5Stars.enabled && gameTeam.starsPickedUp != 5)
                 {
                     for (int i = 0; i < 2; i++)
                     {

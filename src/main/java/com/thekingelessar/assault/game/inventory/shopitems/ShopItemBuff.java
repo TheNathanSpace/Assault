@@ -3,7 +3,7 @@ package com.thekingelessar.assault.game.inventory.shopitems;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
-import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
+import com.thekingelessar.assault.game.teambuffs.IBuff;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

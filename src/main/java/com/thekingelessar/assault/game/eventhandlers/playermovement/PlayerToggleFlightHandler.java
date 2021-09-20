@@ -1,8 +1,8 @@
 package com.thekingelessar.assault.game.eventhandlers.playermovement;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.inventory.teambuffs.BuffDoubleJump;
-import com.thekingelessar.assault.game.inventory.teambuffs.IBuff;
+import com.thekingelessar.assault.game.teambuffs.BuffDoubleJump;
+import com.thekingelessar.assault.game.teambuffs.IBuff;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import org.bukkit.entity.Player;

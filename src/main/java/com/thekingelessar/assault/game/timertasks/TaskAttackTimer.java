@@ -46,7 +46,7 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (gameInstance.modFirstToFive.enabled)
+        if (gameInstance.modFirstTo5Stars.enabled)
         {
             if (gameInstance.getAttackingTeam().displaySeconds == gameInstance.gameMap.firstToFiveStarsTimeLimit - 16)
             {
