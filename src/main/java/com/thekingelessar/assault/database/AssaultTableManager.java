@@ -30,8 +30,8 @@ public class AssaultTableManager
         try
         {
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
-            statement.executeUpdate(new StringBuilder()
-                    .append(String.format("CREATE TABLE [IF NOT EXISTS] %s.statistics (", DatabaseClient.getInstance().getDBName()))
+            String createTableCommand = new StringBuilder()
+                    .append("CREATE TABLE IF NOT EXISTS statistics (")
                     .append("PLAYER_UUID TEXT PRIMARY KEY NOT NULL,")
                     .append("GAMES_FINISHED INTEGER DEFAULT 0,")
                     .append("KILLS INTEGER DEFAULT 0,")
@@ -40,9 +40,10 @@ public class AssaultTableManager
                     .append("FASTEST_TIME REAL DEFAULT -1.0,")
                     .append("MOST_KILLS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
                     .append("MOST_DEATHS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
-                    .append("MOST_STARS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
-                    .append(") [WITHOUT ROWID];")
-                    .toString());
+                    .append("MOST_STARS_IN_SINGLE_GAME INTEGER DEFAULT 0")
+                    .append(");")
+                    .toString();
+            statement.executeUpdate(createTableCommand);
         }
         catch (SQLException throwables)
         {
@@ -59,7 +60,7 @@ public class AssaultTableManager
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             statement.executeUpdate(new StringBuilder()
                     .append("INSERT INTO statistics (PLAYER_UUID) ")
-                    .append(String.format("VALUES (%s);", uniqueId))
+                    .append(String.format("VALUES ('%s');", uniqueId))
                     .toString());
         }
         catch (SQLException throwables)
@@ -74,10 +75,15 @@ public class AssaultTableManager
         UUID uniqueId = player.getUniqueId();
         try
         {
+            if (this.getValue(uniqueId, Statistic.PLAYER_UUID) == null)
+            {
+                return;
+            }
+            
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             statement.executeUpdate(new StringBuilder()
                     .append(String.format("INSERT INTO statistics (PLAYER_UUID, %s) ", statistic))
-                    .append(String.format("VALUES (%s, %s);", uniqueId, value))
+                    .append(String.format("VALUES ('%s', %s);", uniqueId, value))
                     .toString());
         }
         catch (SQLException throwables)
@@ -101,10 +107,9 @@ public class AssaultTableManager
         {
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             ResultSet rs = statement.executeQuery(new StringBuilder()
-                    .append(String.format("SELECT PLAYER_UUID, %s FROM statistics", statistic))
-                    .append(String.format("WHERE PLAYER_UUID=%s", uuid))
+                    .append(String.format(String.format("SELECT PLAYER_UUID, %s FROM statistics", statistic)))
+                    .append(String.format("WHERE PLAYER_UUID='%s'", uuid))
                     .toString());
-            
             if (rs.next())
             {
                 return rs.getObject(statistic.toString());

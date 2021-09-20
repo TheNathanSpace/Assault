@@ -183,6 +183,7 @@ public class GamePlayer
                 break;
             case CONTACT:
             case FALL:
+            case DEATH:
                 this.indirectKill(deathType, true);
                 break;
             case DROWNING:
@@ -190,9 +191,6 @@ public class GamePlayer
                 break;
             case EXPLOSION:
                 this.addExplosionDeathFeed();
-                break;
-            case DEATH:
-                this.indirectKill(deathType, true);
                 break;
         }
     

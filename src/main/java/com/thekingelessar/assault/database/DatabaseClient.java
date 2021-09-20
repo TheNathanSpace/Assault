@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseClient
 {
-    private static final String DB_NAME = "assault_statistics.db";
+    private static final String DB_NAME = "plugins/Assault/assault_statistics.db";
     private static volatile DatabaseClient instance;
     private Connection connection;
     

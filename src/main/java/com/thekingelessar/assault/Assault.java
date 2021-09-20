@@ -137,7 +137,15 @@ public class Assault extends JavaPlugin
         
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(BuffShopTrait.class).withName("buffshoptrait"));
-        
+    
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+        }
+        catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
         AssaultTableManager.getInstance().createTable();
         
         super.onEnable();
