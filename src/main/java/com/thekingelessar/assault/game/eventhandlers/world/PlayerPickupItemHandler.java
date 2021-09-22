@@ -1,5 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers.world;
 
+import com.thekingelessar.assault.database.AssaultTableManager;
+import com.thekingelessar.assault.database.Statistic;
 import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
@@ -62,7 +64,9 @@ public class PlayerPickupItemHandler implements Listener
                     playerPickupItemEvent.setCancelled(true);
                     return;
                 }
-                
+    
+                AssaultTableManager.getInstance().incrementValue(player, Statistic.STARS);
+    
                 gameTeam.starsPickedUp += 1;
                 if (gameInstance.modFirstTo5Stars.enabled && gameTeam.starsPickedUp != 5)
                 {

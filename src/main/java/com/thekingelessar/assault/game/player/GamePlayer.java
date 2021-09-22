@@ -1,6 +1,8 @@
 package com.thekingelessar.assault.game.player;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.database.AssaultTableManager;
+import com.thekingelessar.assault.database.Statistic;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.Currency;
@@ -181,6 +183,7 @@ public class GamePlayer
                 break;
             case CONTACT:
             case FALL:
+            case DEATH:
                 this.indirectKill(deathType, true);
                 break;
             case DROWNING:
@@ -189,11 +192,9 @@ public class GamePlayer
             case EXPLOSION:
                 this.addExplosionDeathFeed();
                 break;
-            case DEATH:
-                this.indirectKill(deathType, true);
-                break;
         }
-
+    
+        AssaultTableManager.getInstance().incrementValue(this.player, Statistic.DEATHS);
         if (playerMode.equals(PlayerMode.BUILDING))
         {
             this.spawn(playerMode, false);
@@ -304,6 +305,7 @@ public class GamePlayer
 
     public void killPlayer(Player victim, boolean arrow)
     {
+        AssaultTableManager.getInstance().incrementValue(this.player, Statistic.KILLS);
         if (this.gameTeam.teamStage.equals(TeamStage.ATTACKING))
         {
             gameTeam.gamerPoints += 1;

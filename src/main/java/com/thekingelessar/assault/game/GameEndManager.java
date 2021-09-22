@@ -1,6 +1,8 @@
 package com.thekingelessar.assault.game;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.database.AssaultTableManager;
+import com.thekingelessar.assault.database.Statistic;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -42,6 +44,20 @@ public class GameEndManager
     
     public void declareWinners(WinState winState)
     {
+        for (Player player : this.gameInstance.getPlayers())
+        {
+            AssaultTableManager.getInstance().incrementValue(player, Statistic.GAMES_FINISHED);
+            float oldFastest = (float) AssaultTableManager.getInstance().getValue(player.getUniqueId(), Statistic.FASTEST_TIME);
+            
+            GameTeam playerTeam = gameInstance.getPlayerTeam(player);
+            if (oldFastest == -1.0 || playerTeam.storedFinalAttackingTime < oldFastest)
+            {
+                AssaultTableManager.getInstance().insertValue(player, Statistic.FASTEST_TIME, playerTeam.storedFinalAttackingTime);
+            }
+        }
+        
+        // todo: add more statistics, most kills in single game, etc.
+        
         gameInstance.gameStage = GameStage.FINISHED;
         
         String winnerTitleString = gameInstance.winningTeam.color.chatColor + ChatColor.BOLD.toString() + "YOU" + ChatColor.WHITE + " WIN!";

@@ -53,6 +53,7 @@ public class GameTeam
     public double displaySeconds = 0;
     public long startAttackingTime = 0; // in nanoseconds
     public double finalAttackingTime = 0; // in seconds
+    public double storedFinalAttackingTime = 0;
     
     public List<Player> forfeitList = new ArrayList<>();
     

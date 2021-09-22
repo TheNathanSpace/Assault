@@ -4,7 +4,7 @@
   <groupId>com.thekingelessar.assault</groupId>
   <artifactId>assault</artifactId>
   <name>Assault</name>
-  <version>0.12.5</version>
+  <version>0.12.7</version>
   <description>Still in development</description>
   <url>https://github.com/thekingelessar/assault</url>
   <build>
@@ -32,6 +32,13 @@
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <resource>META-INF/services/java.sql.Driver</resource>
+                </transformer>
+              </transformers>
+            </configuration>
           </execution>
         </executions>
         <configuration>

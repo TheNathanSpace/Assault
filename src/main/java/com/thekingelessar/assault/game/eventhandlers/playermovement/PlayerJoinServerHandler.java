@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers.playermovement;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.database.AssaultTableManager;
 import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,7 @@ public class PlayerJoinServerHandler implements Listener
     {
         Player player = playerJoinEvent.getPlayer();
         LobbyUtil.joinLobby(player);
+        AssaultTableManager.getInstance().insertPlayer(player);
     }
     
     @EventHandler

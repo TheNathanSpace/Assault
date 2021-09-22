@@ -59,6 +59,18 @@ public enum TeamColor
         return this.chatColor + fixedName;
     }
     
+    public static TeamColor valueOfCaseInsensitive(String name)
+    {
+        for (TeamColor status : TeamColor.values())
+        {
+            if (status.name().equalsIgnoreCase(name))
+            {
+                return status;
+            }
+        }
+        return null;
+    }
+    
     public static List<TeamColor> findByDataValue(int i)
     {
         List<TeamColor> returnedColors = new ArrayList<>();
