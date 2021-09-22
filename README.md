@@ -8,13 +8,10 @@
 
 ### Features
 
-- `give_coin_delay` config option
-- `give_coin_count` config option
 - `gp_on_kill` config option
 - Killing people gives flat coin bonus instead of 1/5 their coins?
 - Coin cap
 - Multiverse support
-- Allow different team color combinations
 - Statistics (local database or simple json files)
 - Package maps with plugin
 - Add more game modifiers:

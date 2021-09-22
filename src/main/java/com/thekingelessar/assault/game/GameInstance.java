@@ -467,7 +467,7 @@ public class GameInstance
     
     public void startRound()
     {
-        taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
+        taskGiveCoins = new TaskGiveCoins(0, (int) (this.gameMap.giveCoinDelay * 20), this, this.gameMap.giveCoinAmount);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
         
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);

@@ -12,6 +12,9 @@ void_level: 70.
 building_time: 180
 building_coins: 100
 
+give_coin_delay: 5.0
+give_coin_amount: 8
+
 attack_time_limit: 480
 first_to_five_stars_time_limit: 480
 
