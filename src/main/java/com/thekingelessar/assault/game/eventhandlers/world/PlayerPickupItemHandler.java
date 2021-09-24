@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerPickupItemHandler implements Listener
 {
@@ -66,6 +67,26 @@ public class PlayerPickupItemHandler implements Listener
                 }
     
                 AssaultTableManager.getInstance().incrementValue(player, Statistic.STARS);
+                UUID uuid = player.getUniqueId();
+                if (gameInstance.starsInGame.containsKey(uuid))
+                {
+                    int oldStars = gameInstance.starsInGame.get(uuid);
+                    gameInstance.starsInGame.put(uuid, oldStars + 1);
+                }
+                else
+                {
+                    gameInstance.starsInGame.put(uuid, 1);
+                }
+    
+                int mostStarsOld = (int) AssaultTableManager.getInstance().getValue(uuid, Statistic.MOST_STARS_IN_SINGLE_GAME);
+                if (gameInstance.starsInGame.containsKey(uuid))
+                {
+                    int mostStarsNew = gameInstance.starsInGame.get(uuid);
+                    if (mostStarsNew > mostStarsOld)
+                    {
+                        AssaultTableManager.getInstance().insertValue(player, Statistic.MOST_STARS_IN_SINGLE_GAME, mostStarsNew);
+                    }
+                }
     
                 gameTeam.starsPickedUp += 1;
                 if (gameInstance.modFirstTo5Stars.enabled && gameTeam.starsPickedUp != 5)

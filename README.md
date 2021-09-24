@@ -26,14 +26,12 @@ phase and Attacking phase.
 
 ### Features
 
-- License
 - Forfeit times weird
-- `give_coin_delay` config option
-- `give_coin_count` config option
 - `gp_on_kill` config option
 - Killing people gives flat coin bonus instead of 1/5 their coins?
 - Coin cap
 - Multiverse support
+- Statistics (local database or simple json files)
 - Package maps with plugin
 - Add more game modifiers:
     - Most stars in 8 minutes

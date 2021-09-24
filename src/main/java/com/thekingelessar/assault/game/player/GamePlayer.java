@@ -26,6 +26,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class GamePlayer
@@ -196,6 +197,27 @@ public class GamePlayer
         
         AssaultTableManager.getInstance().incrementValue(this.player, Statistic.DEATHS);
         
+        UUID uuid = player.getUniqueId();
+        if (this.gameInstance.deathsInGame.containsKey(uuid))
+        {
+            int oldDeaths = this.gameInstance.deathsInGame.get(uuid);
+            this.gameInstance.deathsInGame.put(uuid, oldDeaths + 1);
+        }
+        else
+        {
+            this.gameInstance.deathsInGame.put(uuid, 1);
+        }
+    
+        int mostDeathsOld = (int) AssaultTableManager.getInstance().getValue(uuid, Statistic.MOST_DEATHS_IN_SINGLE_GAME);
+        if (gameInstance.deathsInGame.containsKey(uuid))
+        {
+            int mostDeathsNew = gameInstance.deathsInGame.get(uuid);
+            if (mostDeathsNew > mostDeathsOld)
+            {
+                AssaultTableManager.getInstance().insertValue(player, Statistic.MOST_DEATHS_IN_SINGLE_GAME, mostDeathsNew);
+            }
+        }
+    
         if (playerMode.equals(PlayerMode.BUILDING))
         {
             this.spawn(playerMode, false);
@@ -307,13 +329,28 @@ public class GamePlayer
     public void killPlayer(Player victim, boolean arrow)
     {
         AssaultTableManager.getInstance().incrementValue(this.player, Statistic.KILLS);
-        if (!this.gameInstance.gameKills.containsKey(this.player.getUniqueId()))
+    
+        UUID uuid = player.getUniqueId();
+        if (this.gameInstance.killsInGame.containsKey(uuid))
         {
-            this.gameInstance.gameKills.put(this.player.getUniqueId(), 0);
+            int oldKills = this.gameInstance.killsInGame.get(uuid);
+            this.gameInstance.killsInGame.put(uuid, oldKills + 1);
         }
-        int gameKills = this.gameInstance.gameKills.get(this.player.getUniqueId());
-        this.gameInstance.gameKills.put(this.player.getUniqueId(), gameKills += 1);
-        
+        else
+        {
+            this.gameInstance.killsInGame.put(uuid, 1);
+        }
+    
+        int mostKillsOld = (int) AssaultTableManager.getInstance().getValue(uuid, Statistic.MOST_KILLS_IN_SINGLE_GAME);
+        if (gameInstance.killsInGame.containsKey(uuid))
+        {
+            int mostKillsNew = gameInstance.killsInGame.get(uuid);
+            if (mostKillsNew > mostKillsOld)
+            {
+                AssaultTableManager.getInstance().insertValue(player, Statistic.MOST_KILLS_IN_SINGLE_GAME, mostKillsNew);
+            }
+        }
+    
         if (this.gameTeam.teamStage.equals(TeamStage.ATTACKING))
         {
             gameTeam.gamerPoints += 1;

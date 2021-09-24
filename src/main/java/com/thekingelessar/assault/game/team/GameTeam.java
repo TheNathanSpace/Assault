@@ -1,6 +1,8 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.database.AssaultTableManager;
+import com.thekingelessar.assault.database.Statistic;
 import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
@@ -21,8 +23,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class GameTeam
@@ -159,6 +164,9 @@ public class GameTeam
                     break;
             }
         }
+        
+        long timeNow = Instant.now().toEpochMilli();
+        AssaultTableManager.getInstance().insertValue(player, Statistic.LAST_PLAYED, timeNow);
         
         this.evaluateForfeit();
     }

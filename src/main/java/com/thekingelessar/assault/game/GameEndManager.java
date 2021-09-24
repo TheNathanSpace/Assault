@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GameEndManager
 {
@@ -55,8 +56,6 @@ public class GameEndManager
                 AssaultTableManager.getInstance().insertValue(player, Statistic.FASTEST_TIME, playerTeam.storedFinalAttackingTime);
             }
         }
-        
-        // todo: add more statistics, most kills in single game, etc.
         
         gameInstance.gameStage = GameStage.FINISHED;
         

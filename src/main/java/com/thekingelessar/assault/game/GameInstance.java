@@ -93,6 +93,10 @@ public class GameInstance
     
     public HashMap<Player, Player> lastDamagedBy = new HashMap<>();
     
+    public HashMap<UUID, Integer> killsInGame = new HashMap<>();
+    public HashMap<UUID, Integer> deathsInGame = new HashMap<>();
+    public HashMap<UUID, Integer> starsInGame = new HashMap<>();
+    
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
         if (!mapName.startsWith("map_"))
@@ -467,7 +471,7 @@ public class GameInstance
     
     public void startRound()
     {
-        taskGiveCoins = new TaskGiveCoins(0, 100, this, 8);
+        taskGiveCoins = new TaskGiveCoins(0, (int) (this.gameMap.giveCoinDelay * 20), this, this.gameMap.giveCoinAmount);
         taskGiveCoins.runTaskTimer(Assault.INSTANCE, taskGiveCoins.startDelay, taskGiveCoins.tickDelay);
         
         taskAttackTimer = new TaskAttackTimer(0, 20, 20, this);

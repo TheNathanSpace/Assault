@@ -44,7 +44,7 @@ public class PotionThrowHandler implements Listener
                 Collection<PotionEffect> potionEffects = thrownPotion.getEffects();
                 List<PotionEffect> potionEffectList = new ArrayList<>(potionEffects);
                 
-                switch (PotionType.getByEffect(potionEffectList.get(0).getType())) // todo: nothing
+                switch (PotionType.getByEffect(potionEffectList.get(0).getType()))
                 {
                     case POISON:
                         projectileLaunchEvent.setCancelled(true);

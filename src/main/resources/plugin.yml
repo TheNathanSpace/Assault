@@ -26,11 +26,12 @@ commands:
     usage: |
       /forfeit
   assaultadmin:
-    description: Dev command. Kinda sus...
+    description: Admin command.
     usage: |
-      /assaultadmin attack
-      /assaultadmin coins <amount to add>
-      /assaultadmin gp <amount to add>
+      /assaultadmin attack: Starts the Attacking phase while in the building phase.
+      /assaultadmin coins <amount to add>: Adds coins to the player.
+      /assaultadmin gp <amount to add>: Adds GP to the player.
+      /assaultadmin export <filename (optional)>: Exports statistics to a JSON file.
 permissions:
   assault.*:
     description: All Assault commands.

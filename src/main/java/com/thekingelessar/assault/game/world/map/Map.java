@@ -29,6 +29,9 @@ public class Map
     public int buildingTime = 180;
     public int buildingCoins = 100;
     
+    public double giveCoinDelay = 5.0;
+    public int giveCoinAmount = 8;
+    
     public int attackTimeLimit = 480;
     public int firstToFiveStarsTimeLimit = 480;
     
@@ -126,7 +129,25 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "building_coins invalid; defaulting to 100");
         }
-        
+    
+        try
+        {
+            giveCoinDelay = config.getDouble("give_coin_delay");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "give_coin_delay invalid; defaulting to 5.0");
+        }
+    
+        try
+        {
+            giveCoinAmount = config.getInt("give_coin_amount");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "give_coin_amount invalid; defaulting to 8");
+        }
+    
         try
         {
             attackTimeLimit = config.getInt("attack_time_limit");
