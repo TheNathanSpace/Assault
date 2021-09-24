@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import java.io.*;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -34,7 +35,7 @@ public class AssaultTableManager
     public void createTable()
     {
         try
-        { // todo: add missing columns when update
+        
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             String createTableCommand = new StringBuilder()
                     .append(String.format("CREATE TABLE IF NOT EXISTS %s (", TABLE_NAME))
@@ -47,10 +48,28 @@ public class AssaultTableManager
                     .append("MOST_KILLS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
                     .append("MOST_DEATHS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
                     .append("MOST_STARS_IN_SINGLE_GAME INTEGER DEFAULT 0")
-                    .append("LAST_PLAYED INT DEFAULT 0")
+                    .append("LAST_PLAYED INTEGER DEFAULT 0")
                     .append(");")
                     .toString();
             statement.executeUpdate(createTableCommand);
+            
+            ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM %s;", TABLE_NAME));
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            
+            List<Statistic> missingList = Arrays.asList(Statistic.values());
+            for (int i = 0; i <= resultSetMetaData.getColumnCount(); i++)
+            {
+                String columnName = resultSetMetaData.getColumnName(i);
+                missingList.remove(Statistic.valueOf(columnName));
+            }
+            
+            for (Statistic missingStatistic : missingList)
+            {
+                String createColumnStatement = String.format("ALTER TABLE %s ADD COLUMN %s %s;", TABLE_NAME, missingStatistic, missingStatistic.getType());
+                statement.executeUpdate(createColumnStatement);
+                Assault.INSTANCE.getLogger().log(Level.INFO, "Added column " + missingStatistic + " to statistics database");
+            }
+            
         }
         catch (SQLException throwables)
         {
