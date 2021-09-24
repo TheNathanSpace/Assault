@@ -2,11 +2,11 @@ package com.thekingelessar.assault.game.eventhandlers.combat;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -150,7 +150,7 @@ public class PlayerAttackVictimHandler implements Listener
                     
                     gameInstance.lastDamagedBy.put(victim, attacker);
                     
-                    if (victim.getHealth() - entityAttackEvent.getDamage() < 1)
+                    if (victim.getHealth() - entityAttackEvent.getFinalDamage() <= 0)
                     {
                         try
                         {

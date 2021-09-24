@@ -107,12 +107,12 @@ public class AssaultTableManager
         {
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             ResultSet rs = statement.executeQuery(new StringBuilder()
-                    .append(String.format(String.format("SELECT PLAYER_UUID, %s FROM statistics", statistic)))
-                    .append(String.format("WHERE PLAYER_UUID='%s'", uuid))
+                    .append(String.format(String.format("SELECT PLAYER_UUID, %s FROM statistics ", statistic)))
+                    .append(String.format("WHERE PLAYER_UUID='%s';", uuid))
                     .toString());
             if (rs.next())
             {
-                return rs.getObject(statistic.toString());
+                return rs.getObject(rs.findColumn(statistic.toString()));
             }
         }
         catch (SQLException throwables)

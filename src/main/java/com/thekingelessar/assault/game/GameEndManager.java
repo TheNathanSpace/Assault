@@ -47,7 +47,7 @@ public class GameEndManager
         for (Player player : this.gameInstance.getPlayers())
         {
             AssaultTableManager.getInstance().incrementValue(player, Statistic.GAMES_FINISHED);
-            float oldFastest = (float) AssaultTableManager.getInstance().getValue(player.getUniqueId(), Statistic.FASTEST_TIME);
+            double oldFastest = (double) AssaultTableManager.getInstance().getValue(player.getUniqueId(), Statistic.FASTEST_TIME);
             
             GameTeam playerTeam = gameInstance.getPlayerTeam(player);
             if (oldFastest == -1.0 || playerTeam.storedFinalAttackingTime < oldFastest)

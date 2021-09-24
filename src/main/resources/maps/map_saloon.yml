@@ -36,12 +36,14 @@ placeable_blocks:
   - WEB
   - GRAVEL
   - CACTUS
+  - TORCH
 
 breakable_blocks:
   - DEAD_BUSH
   - CACTUS
   - RED_ROSE
   - WEB
+  - TORCH
 
 # This refers to the base that each team is DEFENDING.
 bases:

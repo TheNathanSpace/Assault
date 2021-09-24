@@ -723,7 +723,7 @@ public class GameInstance
             
             this.winningTeam = lowestTeam;
             
-            if (this.modFirstTo5Stars.enabled && this.isTie())
+            if (this.modFirstTo5Stars.enabled && this.isTie()) // todo: here
             {
                 int mostStars = Integer.MIN_VALUE;
                 GameTeam mostStarsTeam = null;

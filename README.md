@@ -1,20 +1,39 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+# Assault
+
+Assault is a custom-programmed Minecraft minigame centered around building, defending, and attacking team’s bases. Join
+the server at **mc.thenathan.space**!
+
+The premise of Assault is two opposing teams build defenses around their base, then take turns assaulting each other’s
+bases. When the game starts, you’ll be assigned to one of two teams. The game takes place over two phases, the Building
+phase and Attacking phase.
+
+## [How to Play](https://github.com/TheKingElessar/Assault/wiki/How-to-Play)
+
+## [Server Configuration](https://github.com/TheKingElessar/Assault/wiki/Plugin-Configuration)
+
+## [Custom Map Configuration](https://github.com/TheKingElessar/Assault/wiki/Map-Configuration)
+
 ## To-Do
 
 ### Bugs
 
-- Bugs probably exist surrounding the FT5S mode, especially with ties
+- FT5S mode: both get zero stars?
+- `isTie` not set to properly declare non-FT5S ties?
 - `NullPointerException` with `GamePlayer` when leave and rejoin
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features
 
+- License
+- Forfeit times weird
 - `give_coin_delay` config option
 - `give_coin_count` config option
 - `gp_on_kill` config option
 - Killing people gives flat coin bonus instead of 1/5 their coins?
 - Coin cap
 - Multiverse support
-- Statistics (MySQL or SQLite)
 - Package maps with plugin
 - Add more game modifiers:
     - Most stars in 8 minutes
