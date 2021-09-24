@@ -93,6 +93,10 @@ public class GameInstance
     
     public HashMap<Player, Player> lastDamagedBy = new HashMap<>();
     
+    public HashMap<UUID, Integer> killsInGame = new HashMap<>();
+    public HashMap<UUID, Integer> deathsInGame = new HashMap<>();
+    public HashMap<UUID, Integer> starsInGame = new HashMap<>();
+    
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
         if (!mapName.startsWith("map_"))
