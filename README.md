@@ -19,13 +19,19 @@ phase and Attacking phase.
 
 ### Bugs
 
+- Kills not finishing properly (gamerpoints, database)
+- Mixed teams when leaving and rejoining:
+  - Wrong nametag color
+  - Wrong scoreboard coins
 - FT5S mode: both get zero stars?
 - `isTie` not set to properly declare non-FT5S ties?
-- `NullPointerException` with `GamePlayer` when leave and rejoin
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features
 
+- Save team when leave and rejoin
+- Modifier to place star yourself
+- Procedurally generated terrain map
 - Forfeit times weird
 - `gp_on_kill` config option
 - Killing people gives flat coin bonus instead of 1/5 their coins?

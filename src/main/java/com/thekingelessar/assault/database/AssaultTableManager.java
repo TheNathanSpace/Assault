@@ -4,7 +4,9 @@ import com.thekingelessar.assault.Assault;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -47,7 +49,7 @@ public class AssaultTableManager
                     .append("FASTEST_TIME REAL DEFAULT -1.0,")
                     .append("MOST_KILLS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
                     .append("MOST_DEATHS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
-                    .append("MOST_STARS_IN_SINGLE_GAME INTEGER DEFAULT 0")
+                    .append("MOST_STARS_IN_SINGLE_GAME INTEGER DEFAULT 0,")
                     .append("LAST_PLAYED INTEGER DEFAULT 0")
                     .append(");")
                     .toString();
@@ -56,8 +58,8 @@ public class AssaultTableManager
             ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM %s;", TABLE_NAME));
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             
-            List<Statistic> missingList = Arrays.asList(Statistic.values());
-            for (int i = 0; i <= resultSetMetaData.getColumnCount(); i++)
+            List<Statistic> missingList = new LinkedList<>(Arrays.asList(Statistic.values()));
+            for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++)
             {
                 String columnName = resultSetMetaData.getColumnName(i);
                 missingList.remove(Statistic.valueOf(columnName));
@@ -85,7 +87,7 @@ public class AssaultTableManager
         {
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             statement.executeUpdate(new StringBuilder()
-                    .append(String.format("INSERT INTO %s (PLAYER_UUID) ", TABLE_NAME))
+                    .append(String.format("INSERT OR IGNORE INTO %s (PLAYER_UUID) ", TABLE_NAME)) // todo: if not exist
                     .append(String.format("VALUES ('%s');", uniqueId))
                     .toString());
         }
@@ -95,21 +97,44 @@ public class AssaultTableManager
         }
     }
     
+    public boolean playerExists(UUID uuid)
+    {
+        this.createTable();
+        try
+        {
+            Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
+            ResultSet rs = statement.executeQuery(new StringBuilder()
+                    .append(String.format("SELECT %s.PLAYER_UUID FROM %s ", TABLE_NAME, TABLE_NAME))
+                    .append(String.format("WHERE %s.PLAYER_UUID='%s';", TABLE_NAME, uuid))
+                    .toString());
+            if (rs.next())
+            {
+                return true;
+            }
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+        
+        return false;
+    }
+    
     public void insertValue(Player player, Statistic statistic, Object value)
     {
         this.createTable();
         UUID uniqueId = player.getUniqueId();
         try
         {
-            if (this.getValue(uniqueId, Statistic.PLAYER_UUID) == null)
+            if (!playerExists(player.getUniqueId()))
             {
                 return;
             }
             
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             statement.executeUpdate(new StringBuilder()
-                    .append(String.format("INSERT INTO %s (PLAYER_UUID, %s) ", TABLE_NAME, statistic))
-                    .append(String.format("VALUES ('%s', %s);", uniqueId, value))
+                    .append(String.format("UPDATE %s SET %s=%s ", TABLE_NAME, statistic, value))
+                    .append(String.format("WHERE PLAYER_UUID='%s';", uniqueId))
                     .toString());
         }
         catch (SQLException throwables)
@@ -123,7 +148,17 @@ public class AssaultTableManager
         this.createTable();
         UUID uniqueId = player.getUniqueId();
         Object value = this.getValue(uniqueId, statistic);
-        this.insertValue(player, statistic, ((int) value) + 1);
+        System.out.println(String.format("OLD value for %s: %s", statistic.toString(), value));
+        if (value == null)
+        {
+            this.insertValue(player, statistic, (0));
+        }
+        else
+        {
+            this.insertValue(player, statistic, ((int) value) + 1);
+        }
+        value = this.getValue(uniqueId, statistic);
+        System.out.println(String.format("NEW value for %s: %s", statistic.toString(), value));
     }
     
     public Object getValue(UUID uuid, Statistic statistic)
@@ -133,8 +168,8 @@ public class AssaultTableManager
         {
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             ResultSet rs = statement.executeQuery(new StringBuilder()
-                    .append(String.format("SELECT PLAYER_UUID, %s FROM %s", statistic, TABLE_NAME))
-                    .append(String.format("WHERE PLAYER_UUID='%s'", uuid))
+                    .append(String.format("SELECT %s.PLAYER_UUID, %s FROM %s ", TABLE_NAME, statistic, TABLE_NAME))
+                    .append(String.format("WHERE %s.PLAYER_UUID='%s';", TABLE_NAME, uuid))
                     .toString());
             if (rs.next())
             {
@@ -171,7 +206,7 @@ public class AssaultTableManager
         {
             Statement statement = DatabaseClient.getInstance().getConnection().createStatement();
             ResultSet playerUUIDs = statement.executeQuery(new StringBuilder()
-                    .append("SELECT PLAYER_UUID ")
+                    .append(String.format("SELECT %s.PLAYER_UUID ", TABLE_NAME))
                     .append(String.format("FROM %s;", TABLE_NAME))
                     .toString());
             

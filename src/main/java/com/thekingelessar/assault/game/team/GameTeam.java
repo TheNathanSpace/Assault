@@ -9,10 +9,10 @@ import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
-import com.thekingelessar.assault.game.teambuffs.IBuff;
-import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.game.teambuffs.IBuff;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,12 +23,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Team;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class GameTeam
 {
@@ -38,6 +37,7 @@ public class GameTeam
     public Team teamScoreboard;
     
     public List<GamePlayer> members = new ArrayList<>();
+    public List<UUID> loggedOutPlayers = new ArrayList<>();
     
     public TeamStage teamStage;
     
@@ -127,6 +127,11 @@ public class GameTeam
             }
         }
         
+        if (gameInstance.gameStage.equals(GameStage.ATTACK_ROUNDS))
+        {
+            gamePlayer.shopAttacking = new ShopAttack(this.color, gamePlayer);
+        }
+        
         members.add(gamePlayer);
         teamScoreboard.addEntry(player.getName());
         
@@ -151,7 +156,18 @@ public class GameTeam
     
     public void removeMember(Player player)
     {
+        System.out.println("Player leaving. Team list before:");
+        for (GamePlayer gamePlayer : this.members)
+        {
+            System.out.println(" - " + gamePlayer.player.getName());
+        }
         members.remove(this.getGamePlayer(player));
+        System.out.println("List after:");
+        for (GamePlayer gamePlayer : this.members)
+        {
+            System.out.println(" - " + gamePlayer.player.getName());
+        }
+        
         teamScoreboard.removeEntry(player.getName());
         
         if (members.size() == 0)

@@ -874,6 +874,8 @@ public class GameInstance
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
             this.players.add(player);
+            player.getInventory().setItem(8, GameInstance.gameModifierItemStack.clone());
+            this.modifierShopMap.put(player, new PlayerShopModifiers(this, player));
             return;
         }
         
