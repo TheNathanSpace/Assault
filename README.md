@@ -19,16 +19,12 @@ phase and Attacking phase.
 
 ### Bugs
 
-- FT5S mode: both get zero stars?
-- `isTie` not set to properly declare non-FT5S ties?
 - `NullPointerException` with `GamePlayer` when leave and rejoin
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features
 
 - Forfeit times weird
-- `gp_on_kill` config option
-- Killing people gives flat coin bonus instead of 1/5 their coins?
 - Coin cap
 - Multiverse support
 - Statistics (local database or simple json files)

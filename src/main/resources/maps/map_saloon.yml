@@ -15,6 +15,11 @@ building_coins: 100
 give_coin_delay: 5.0
 give_coin_amount: 8
 
+flat_coins_on_kill: false
+coins_on_kill: 0
+percent_coins_on_kill: true
+rate_on_kill: 0.2
+
 attack_time_limit: 480
 first_to_five_stars_time_limit: 480
 

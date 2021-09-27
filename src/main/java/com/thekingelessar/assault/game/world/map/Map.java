@@ -32,6 +32,11 @@ public class Map
     public double giveCoinDelay = 5.0;
     public int giveCoinAmount = 8;
     
+    public boolean flatCoinsOnKill = false;
+    public int coinsOnKill = 0;
+    public boolean percentCoinsOnKill = true;
+    public double rateOnKill = 0.2;
+    
     public int attackTimeLimit = 480;
     public int firstToFiveStarsTimeLimit = 480;
     
@@ -129,7 +134,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "building_coins invalid; defaulting to 100");
         }
-    
+        
         try
         {
             giveCoinDelay = config.getDouble("give_coin_delay");
@@ -138,7 +143,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "give_coin_delay invalid; defaulting to 5.0");
         }
-    
+        
         try
         {
             giveCoinAmount = config.getInt("give_coin_amount");
@@ -147,7 +152,43 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "give_coin_amount invalid; defaulting to 8");
         }
-    
+        
+        try
+        {
+            flatCoinsOnKill = config.getBoolean("flat_coins_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "flat_coins_on_kill invalid; defaulting to false");
+        }
+        
+        try
+        {
+            coinsOnKill = config.getInt("coins_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "coins_on_kill invalid; defaulting to 0");
+        }
+        
+        try
+        {
+            percentCoinsOnKill = config.getBoolean("percent_coins_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "percent_coins_on_kill invalid; defaulting to true");
+        }
+        
+        try
+        {
+            rateOnKill = config.getDouble("rate_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "rate_on_kill invalid; defaulting to 0.2");
+        }
+        
         try
         {
             attackTimeLimit = config.getInt("attack_time_limit");

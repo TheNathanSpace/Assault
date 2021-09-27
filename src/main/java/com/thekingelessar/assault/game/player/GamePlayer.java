@@ -207,7 +207,7 @@ public class GamePlayer
         {
             this.gameInstance.deathsInGame.put(uuid, 1);
         }
-    
+        
         int mostDeathsOld = (int) AssaultTableManager.getInstance().getValue(uuid, Statistic.MOST_DEATHS_IN_SINGLE_GAME);
         if (gameInstance.deathsInGame.containsKey(uuid))
         {
@@ -217,7 +217,7 @@ public class GamePlayer
                 AssaultTableManager.getInstance().insertValue(player, Statistic.MOST_DEATHS_IN_SINGLE_GAME, mostDeathsNew);
             }
         }
-    
+        
         if (playerMode.equals(PlayerMode.BUILDING))
         {
             this.spawn(playerMode, false);
@@ -329,7 +329,7 @@ public class GamePlayer
     public void killPlayer(Player victim, boolean arrow)
     {
         AssaultTableManager.getInstance().incrementValue(this.player, Statistic.KILLS);
-    
+        
         UUID uuid = player.getUniqueId();
         if (this.gameInstance.killsInGame.containsKey(uuid))
         {
@@ -340,7 +340,7 @@ public class GamePlayer
         {
             this.gameInstance.killsInGame.put(uuid, 1);
         }
-    
+        
         int mostKillsOld = (int) AssaultTableManager.getInstance().getValue(uuid, Statistic.MOST_KILLS_IN_SINGLE_GAME);
         if (gameInstance.killsInGame.containsKey(uuid))
         {
@@ -350,7 +350,7 @@ public class GamePlayer
                 AssaultTableManager.getInstance().insertValue(player, Statistic.MOST_KILLS_IN_SINGLE_GAME, mostKillsNew);
             }
         }
-    
+        
         if (this.gameTeam.teamStage.equals(TeamStage.ATTACKING))
         {
             gameTeam.gamerPoints += 1;
@@ -364,7 +364,14 @@ public class GamePlayer
             Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage)));
         }
         
-        this.playerBank.coins += (int) (0.2 * (victimPlayer.playerBank.coins));
+        if (this.gameInstance.gameMap.flatCoinsOnKill)
+        {
+            this.playerBank.coins += this.gameInstance.gameMap.coinsOnKill;
+        }
+        else if (this.gameInstance.gameMap.percentCoinsOnKill)
+        {
+            this.playerBank.coins += (int) (this.gameInstance.gameMap.rateOnKill * (victimPlayer.playerBank.coins));
+        }
         
         try
         {

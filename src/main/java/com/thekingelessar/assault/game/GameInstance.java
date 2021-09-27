@@ -563,56 +563,7 @@ public class GameInstance
     
     public boolean isTie()
     {
-        boolean isTimeTie = false;
-        
-        int triedTeam = 0;
-        double firstTime = 0;
-        
-        for (GameTeam gameTeam : this.teams)
-        {
-            if (gameTeam.finalAttackingTime == 0)
-            {
-                isTimeTie = false;
-                break;
-            }
-            if (triedTeam == 0)
-            {
-                firstTime = gameTeam.finalAttackingTime;
-                triedTeam++;
-            }
-            else
-            {
-                if (firstTime == gameTeam.finalAttackingTime)
-                {
-                    isTimeTie = true;
-                }
-            }
-        }
-        
-        boolean isStarTie = false;
-        if (isTimeTie && this.modFirstTo5Stars.enabled)
-        {
-            triedTeam = 0;
-            int firstStars = 0;
-            
-            for (GameTeam gameTeam : this.teams)
-            {
-                if (triedTeam == 0)
-                {
-                    firstStars = gameTeam.starsPickedUp;
-                    triedTeam++;
-                }
-                else
-                {
-                    if (firstStars == gameTeam.starsPickedUp)
-                    {
-                        isStarTie = true;
-                    }
-                }
-            }
-        }
-        
-        return isTimeTie && isStarTie;
+        return isTimeTie() && isStarTie();
     }
     
     public boolean isTimeTie()
@@ -644,6 +595,36 @@ public class GameInstance
         }
         
         return isTimeTie;
+    }
+    
+    public boolean isStarTie()
+    {
+        if (modFirstTo5Stars.enabled)
+        {
+            boolean isStarTie = false;
+            int triedTeam = 0;
+            int firstStars = 0;
+            
+            for (GameTeam gameTeam : this.teams)
+            {
+                if (triedTeam == 0)
+                {
+                    firstStars = gameTeam.starsPickedUp;
+                    triedTeam++;
+                }
+                else
+                {
+                    if (firstStars == gameTeam.starsPickedUp)
+                    {
+                        isStarTie = true;
+                    }
+                }
+            }
+            
+            return isStarTie;
+        }
+        
+        return true;
     }
     
     public void endRound(boolean attackersForfeit)
