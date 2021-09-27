@@ -136,7 +136,7 @@ public class PlayerMoveHandler implements Listener
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
             if (gamePlayer != null)
             {
-                if (newLocation.getX() > gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.x < gameInstance.gameMap.borderX)
+                if (newLocation.getX() > gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.get(0).x < gameInstance.gameMap.borderX)
                 {
                     cancelMovement(playerMoveEvent);
                     
@@ -144,7 +144,7 @@ public class PlayerMoveHandler implements Listener
                     return;
                 }
                 
-                if (newLocation.getX() < gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.x > gameInstance.gameMap.borderX)
+                if (newLocation.getX() < gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objective.get(0).x > gameInstance.gameMap.borderX)
                 {
                     cancelMovement(playerMoveEvent);
                     
@@ -156,7 +156,7 @@ public class PlayerMoveHandler implements Listener
             return;
         }
         
-        if (newLocation.getX() > gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objective.x < gameInstance.gameMap.borderX)
+        if (newLocation.getX() > gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objective.get(0).x < gameInstance.gameMap.borderX)
         {
             player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
@@ -167,7 +167,7 @@ public class PlayerMoveHandler implements Listener
             }
         }
         
-        if (newLocation.getX() < gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objective.x > gameInstance.gameMap.borderX)
+        if (newLocation.getX() < gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objective.get(0).x > gameInstance.gameMap.borderX)
         {
             player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
             GamePlayer gamePlayer = gameInstance.getGamePlayer(player);

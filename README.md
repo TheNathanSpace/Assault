@@ -23,9 +23,8 @@ phase and Attacking phase.
 - Mixed teams when leaving and rejoining:
   - Wrong nametag color
   - Wrong scoreboard coins
-- FT5S mode: both get zero stars?
-- `isTie` not set to properly declare non-FT5S ties?
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
+- Check commented out areas to see if it's actually needed for the stars to end up in the right spot
 
 ### Features
 
@@ -33,17 +32,11 @@ phase and Attacking phase.
 - Modifier to place star yourself
 - Procedurally generated terrain map
 - Forfeit times weird
-- `gp_on_kill` config option
-- Killing people gives flat coin bonus instead of 1/5 their coins?
-- Coin cap
 - Multiverse support
-- Statistics (local database or simple json files)
 - Package maps with plugin
 - Add more game modifiers:
     - Most stars in 8 minutes
     - Swap team on death
-
-- Actual documentation
 
 ## Roadmap
 

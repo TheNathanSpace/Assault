@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,11 +82,14 @@ public class PlayerBlockPlaceHandler implements Listener
                     return;
                 }
                 
-                Location objectiveLocation = mapBase.objective.toLocation(gameInstance.gameWorld);
-                if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
+                for (Coordinate objectiveCoord : mapBase.objective)
                 {
-                    blockPlaceEvent.setCancelled(true);
-                    return;
+                    Location objectiveLocation = objectiveCoord.toLocation(gameInstance.gameWorld);
+                    if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
+                    {
+                        blockPlaceEvent.setCancelled(true);
+                        return;
+                    }
                 }
             }
             

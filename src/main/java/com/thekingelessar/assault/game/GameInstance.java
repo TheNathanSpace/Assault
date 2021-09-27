@@ -370,20 +370,27 @@ public class GameInstance
         
         for (GameTeam team : teams)
         {
-            Location objectiveLocation = team.mapBase.objective.toLocation(this.gameWorld);
-            objectiveLocation.add(0, 0.5, 0);
-            ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+            List<Location> objectiveLocations = new ArrayList<>();
+            for (Coordinate coordinate : team.mapBase.objective)
+            {
+                Location objectiveLocation = coordinate.toLocation(this.gameWorld);
+                objectiveLocations.add(objectiveLocation);
+                
+                objectiveLocation.add(0, 0.5, 0);
+                ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+                
+                Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+                
+                Vector velocity = guidingItem.getVelocity();
+                velocity.setX(0);
+                velocity.setY(0);
+                velocity.setZ(0);
+                guidingItem.setVelocity(velocity);
+                
+                guidingItem.teleport(objectiveLocation);
+                this.guidingObjectives.put(team, guidingItem);
+            }
             
-            Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
-            
-            Vector velocity = guidingItem.getVelocity();
-            velocity.setX(0);
-            velocity.setY(0);
-            velocity.setZ(0);
-            guidingItem.setVelocity(velocity);
-            
-            guidingItem.teleport(objectiveLocation);
-            this.guidingObjectives.put(team, guidingItem);
             
             for (Player player : team.getPlayers())
             {
@@ -544,75 +551,31 @@ public class GameInstance
         this.getDefendingTeam().mapBase.spawnShops(this);
         this.getAttackingTeam().displaySeconds = 0;
         
-        Location objectiveLocation = this.getDefendingTeam().mapBase.objective.toLocation(this.gameWorld);
-        objectiveLocation.add(0, 0.5, 0);
-        ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
-        
-        Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
-        
-        Vector velocity = objectiveEntity.getVelocity();
-        velocity.setX(0);
-        velocity.setY(0);
-        velocity.setZ(0);
-        objectiveEntity.setVelocity(velocity);
-        
-        objectiveEntity.teleport(objectiveLocation);
-        
-        this.currentObjective.put(getDefendingTeam(), objectiveEntity);
+        List<Location> objectiveLocations = new ArrayList<>();
+        for (Coordinate coordinate : this.getDefendingTeam().mapBase.objective)
+        {
+            Location objectiveLocation = coordinate.toLocation(this.gameWorld);
+            
+            objectiveLocation.add(0, 0.5, 0);
+            ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+            
+            Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+            
+            Vector velocity = objectiveEntity.getVelocity();
+            velocity.setX(0);
+            velocity.setY(0);
+            velocity.setZ(0);
+            objectiveEntity.setVelocity(velocity);
+            
+            objectiveEntity.teleport(objectiveLocation);
+            
+            this.currentObjective.put(getDefendingTeam(), objectiveEntity);
+        }
     }
     
     public boolean isTie()
     {
-        boolean isTimeTie = false;
-        
-        int triedTeam = 0;
-        double firstTime = 0;
-        
-        for (GameTeam gameTeam : this.teams)
-        {
-            if (gameTeam.finalAttackingTime == 0)
-            {
-                isTimeTie = false;
-                break;
-            }
-            if (triedTeam == 0)
-            {
-                firstTime = gameTeam.finalAttackingTime;
-                triedTeam++;
-            }
-            else
-            {
-                if (firstTime == gameTeam.finalAttackingTime)
-                {
-                    isTimeTie = true;
-                }
-            }
-        }
-        
-        boolean isStarTie = false;
-        if (isTimeTie && this.modFirstTo5Stars.enabled)
-        {
-            triedTeam = 0;
-            int firstStars = 0;
-            
-            for (GameTeam gameTeam : this.teams)
-            {
-                if (triedTeam == 0)
-                {
-                    firstStars = gameTeam.starsPickedUp;
-                    triedTeam++;
-                }
-                else
-                {
-                    if (firstStars == gameTeam.starsPickedUp)
-                    {
-                        isStarTie = true;
-                    }
-                }
-            }
-        }
-        
-        return isTimeTie && isStarTie;
+        return isTimeTie() && isStarTie();
     }
     
     public boolean isTimeTie()
@@ -646,8 +609,45 @@ public class GameInstance
         return isTimeTie;
     }
     
+    public boolean isStarTie()
+    {
+        if (modFirstTo5Stars.enabled)
+        {
+            boolean isStarTie = false;
+            int triedTeam = 0;
+            int firstStars = 0;
+            
+            for (GameTeam gameTeam : this.teams)
+            {
+                if (triedTeam == 0)
+                {
+                    firstStars = gameTeam.starsPickedUp;
+                    triedTeam++;
+                }
+                else
+                {
+                    if (firstStars == gameTeam.starsPickedUp)
+                    {
+                        isStarTie = true;
+                    }
+                }
+            }
+            
+            return isStarTie;
+        }
+        
+        return true;
+    }
+    
     public void endRound(boolean attackersForfeit)
     {
+        for (Item item : this.currentObjective.values())
+        {
+            item.remove();
+        }
+        
+        this.currentObjective = new HashMap<>();
+        
         if (this.taskAttackTimer != null)
         {
             this.taskAttackTimer.stopTimer();

@@ -32,6 +32,13 @@ public class Map
     public double giveCoinDelay = 5.0;
     public int giveCoinAmount = 8;
     
+    public boolean flatCoinsOnKill = false;
+    public int coinsOnKill = 0;
+    public boolean percentCoinsOnKill = true;
+    public double rateOnKill = 0.2;
+    
+    public int coinCap = 0;
+    
     public int attackTimeLimit = 480;
     public int firstToFiveStarsTimeLimit = 480;
     
@@ -129,7 +136,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "building_coins invalid; defaulting to 100");
         }
-    
+        
         try
         {
             giveCoinDelay = config.getDouble("give_coin_delay");
@@ -138,7 +145,7 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "give_coin_delay invalid; defaulting to 5.0");
         }
-    
+        
         try
         {
             giveCoinAmount = config.getInt("give_coin_amount");
@@ -147,7 +154,52 @@ public class Map
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "give_coin_amount invalid; defaulting to 8");
         }
-    
+        
+        try
+        {
+            flatCoinsOnKill = config.getBoolean("flat_coins_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "flat_coins_on_kill invalid; defaulting to false");
+        }
+        
+        try
+        {
+            coinsOnKill = config.getInt("coins_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "coins_on_kill invalid; defaulting to 0");
+        }
+        
+        try
+        {
+            percentCoinsOnKill = config.getBoolean("percent_coins_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "percent_coins_on_kill invalid; defaulting to true");
+        }
+        
+        try
+        {
+            rateOnKill = config.getDouble("rate_on_kill");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "rate_on_kill invalid; defaulting to 0.2");
+        }
+        
+        try
+        {
+            coinCap = config.getInt("coin_cap");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "coin_cap invalid; defaulting to 0");
+        }
+        
         try
         {
             attackTimeLimit = config.getInt("attack_time_limit");
@@ -335,15 +387,28 @@ public class Map
                 throw exception;
             }
             
-            Coordinate objective;
+            List<Coordinate> objectives = new ArrayList<>();
             try
             {
-                objective = new Coordinate((String) baseSubMap.get("objective"));
+                List<Object> objectiveListObject = (List<Object>) baseSubMap.get("objectives");
+                for (Object object : objectiveListObject)
+                {
+                    objectives.add(new Coordinate((String) object));
+                }
             }
             catch (Exception exception)
             {
-                Assault.INSTANCE.getLogger().log(Level.WARNING, "objective invalid");
-                throw exception;
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "objectives invalid, trying single objective");
+                
+                try
+                {
+                    objectives.add(new Coordinate(config.getString("objective")));
+                }
+                catch (Exception exception2)
+                {
+                    Assault.INSTANCE.getLogger().log(Level.WARNING, "objective invalid");
+                    throw exception;
+                }
             }
             
             List<Coordinate> buffShops;
@@ -380,7 +445,7 @@ public class Map
                 throw exception;
             }
             
-            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objective, itemShops, buffShops);
+            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objectives, itemShops, buffShops);
             bases.add(mapBase);
         }
         

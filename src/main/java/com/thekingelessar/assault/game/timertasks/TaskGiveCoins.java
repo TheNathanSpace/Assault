@@ -33,7 +33,7 @@ public class TaskGiveCoins extends BukkitRunnable
         {
             for (GamePlayer player : gameTeam.members)
             {
-                player.playerBank.coins += this.coins;
+                player.playerBank.addCoins(this.coins);
             }
         }
         
