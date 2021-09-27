@@ -387,15 +387,28 @@ public class Map
                 throw exception;
             }
             
-            Coordinate objective;
+            List<Coordinate> objectives = new ArrayList<>();
             try
             {
-                objective = new Coordinate((String) baseSubMap.get("objective"));
+                List<Object> objectiveListObject = (List<Object>) baseSubMap.get("objectives");
+                for (Object object : objectiveListObject)
+                {
+                    objectives.add(new Coordinate((String) object));
+                }
             }
             catch (Exception exception)
             {
-                Assault.INSTANCE.getLogger().log(Level.WARNING, "objective invalid");
-                throw exception;
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "objectives invalid, trying single objective");
+                
+                try
+                {
+                    objectives.add(new Coordinate(config.getString("objective")));
+                }
+                catch (Exception exception2)
+                {
+                    Assault.INSTANCE.getLogger().log(Level.WARNING, "objective invalid");
+                    throw exception;
+                }
             }
             
             List<Coordinate> buffShops;
@@ -432,7 +445,7 @@ public class Map
                 throw exception;
             }
             
-            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objective, itemShops, buffShops);
+            MapBase mapBase = new MapBase(teamColor, defenderSpawns, defenderBoundingBoxes, attackerSpawns, emeraldSpawns, objectives, itemShops, buffShops);
             bases.add(mapBase);
         }
         

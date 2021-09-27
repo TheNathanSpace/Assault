@@ -47,24 +47,24 @@ public class TaskCountdownBuilding extends BukkitRunnable
     
     public void advanceTimer()
     {
-        if (!doneFirst)
-        {
-            for (Map.Entry<GameTeam, Item> entry : gameInstance.guidingObjectives.entrySet())
-            {
-                
-                Location objectiveLocation = entry.getKey().mapBase.objective.toLocation(gameInstance.gameWorld);
-                objectiveLocation.add(0, 0.5, 0);
-                
-                Vector velocity = entry.getValue().getVelocity();
-                velocity.setX(0);
-                velocity.setY(0);
-                velocity.setZ(0);
-                
-                entry.getValue().teleport(objectiveLocation);
-            }
-            
-            doneFirst = true;
-        }
+//        if (!doneFirst)
+//        {
+//            for (Map.Entry<GameTeam, Item> entry : gameInstance.guidingObjectives.entrySet())
+//            {
+//
+//                Location objectiveLocation = entry.getKey().mapBase.objective.toLocation(gameInstance.gameWorld);
+//                objectiveLocation.add(0, 0.5, 0);
+//
+//                Vector velocity = entry.getValue().getVelocity();
+//                velocity.setX(0);
+//                velocity.setY(0);
+//                velocity.setZ(0);
+//
+//                entry.getValue().teleport(objectiveLocation);
+//            }
+//
+//            doneFirst = true;
+//        }
         
         if (ticksLeft < 20)
         {

@@ -21,18 +21,16 @@ phase and Attacking phase.
 
 - `NullPointerException` with `GamePlayer` when leave and rejoin
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
+- Check commented out areas to see if it's actually needed for the stars to end up in the right spot
 
 ### Features
 
 - Forfeit times weird
 - Multiverse support
-- Statistics (local database or simple json files)
 - Package maps with plugin
 - Add more game modifiers:
     - Most stars in 8 minutes
     - Swap team on death
-
-- Actual documentation
 
 ## Roadmap
 

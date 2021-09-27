@@ -35,9 +35,9 @@ public class MapBase
     public List<NPC> itemShopNPCs = new ArrayList<>();
     public List<NPC> teamBuffShopNPCs = new ArrayList<>();
     
-    public Coordinate objective;
+    public List<Coordinate> objective;
     
-    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, Coordinate objective, List<Coordinate> itemShopCoords, List<Coordinate> buffShopCoords)
+    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, List<Coordinate> objective, List<Coordinate> itemShopCoords, List<Coordinate> buffShopCoords)
     {
         this.teamColor = teamColor;
         this.defenderSpawns = defenderSpawns;

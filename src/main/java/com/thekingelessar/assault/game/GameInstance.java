@@ -370,20 +370,27 @@ public class GameInstance
         
         for (GameTeam team : teams)
         {
-            Location objectiveLocation = team.mapBase.objective.toLocation(this.gameWorld);
-            objectiveLocation.add(0, 0.5, 0);
-            ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+            List<Location> objectiveLocations = new ArrayList<>();
+            for (Coordinate coordinate : team.mapBase.objective)
+            {
+                Location objectiveLocation = coordinate.toLocation(this.gameWorld);
+                objectiveLocations.add(objectiveLocation);
+                
+                objectiveLocation.add(0, 0.5, 0);
+                ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+                
+                Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+                
+                Vector velocity = guidingItem.getVelocity();
+                velocity.setX(0);
+                velocity.setY(0);
+                velocity.setZ(0);
+                guidingItem.setVelocity(velocity);
+                
+                guidingItem.teleport(objectiveLocation);
+                this.guidingObjectives.put(team, guidingItem);
+            }
             
-            Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
-            
-            Vector velocity = guidingItem.getVelocity();
-            velocity.setX(0);
-            velocity.setY(0);
-            velocity.setZ(0);
-            guidingItem.setVelocity(velocity);
-            
-            guidingItem.teleport(objectiveLocation);
-            this.guidingObjectives.put(team, guidingItem);
             
             for (Player player : team.getPlayers())
             {
@@ -544,21 +551,26 @@ public class GameInstance
         this.getDefendingTeam().mapBase.spawnShops(this);
         this.getAttackingTeam().displaySeconds = 0;
         
-        Location objectiveLocation = this.getDefendingTeam().mapBase.objective.toLocation(this.gameWorld);
-        objectiveLocation.add(0, 0.5, 0);
-        ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
-        
-        Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
-        
-        Vector velocity = objectiveEntity.getVelocity();
-        velocity.setX(0);
-        velocity.setY(0);
-        velocity.setZ(0);
-        objectiveEntity.setVelocity(velocity);
-        
-        objectiveEntity.teleport(objectiveLocation);
-        
-        this.currentObjective.put(getDefendingTeam(), objectiveEntity);
+        List<Location> objectiveLocations = new ArrayList<>();
+        for (Coordinate coordinate : this.getDefendingTeam().mapBase.objective)
+        {
+            Location objectiveLocation = coordinate.toLocation(this.gameWorld);
+            
+            objectiveLocation.add(0, 0.5, 0);
+            ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+            
+            Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+            
+            Vector velocity = objectiveEntity.getVelocity();
+            velocity.setX(0);
+            velocity.setY(0);
+            velocity.setZ(0);
+            objectiveEntity.setVelocity(velocity);
+            
+            objectiveEntity.teleport(objectiveLocation);
+            
+            this.currentObjective.put(getDefendingTeam(), objectiveEntity);
+        }
     }
     
     public boolean isTie()
@@ -629,6 +641,13 @@ public class GameInstance
     
     public void endRound(boolean attackersForfeit)
     {
+        for (Item item : this.currentObjective.values())
+        {
+            item.remove();
+        }
+        
+        this.currentObjective = new HashMap<>();
+        
         if (this.taskAttackTimer != null)
         {
             this.taskAttackTimer.stopTimer();

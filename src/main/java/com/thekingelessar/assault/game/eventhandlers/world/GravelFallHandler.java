@@ -62,17 +62,20 @@ public class GravelFallHandler implements Listener
                     
                     for (GameTeam gameTeam : gameInstance.teams)
                     {
-                        Location objectiveLocation = gameTeam.mapBase.objective.toLocation(gameInstance.gameWorld);
-                        if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
+                        for (Coordinate objectiveCoord : gameTeam.mapBase.objective)
                         {
-                            gameInstance.placedBlocks.remove(placedCoordinate);
-                            entityChangeBlockEvent.setCancelled(true);
-                            
-                            Player player = gameInstance.fallingBlockPlayerMap.get(fallingBlock);
-                            if (player != null)
+                            Location objectiveLocation = objectiveCoord.toLocation(gameInstance.gameWorld);
+                            if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
                             {
-                                player.getInventory().addItem(new ItemStack(fallingBlock.getMaterial()));
-                                gameInstance.fallingBlockPlayerMap.remove(fallingBlock);
+                                gameInstance.placedBlocks.remove(placedCoordinate);
+                                entityChangeBlockEvent.setCancelled(true);
+                                
+                                Player player = gameInstance.fallingBlockPlayerMap.get(fallingBlock);
+                                if (player != null)
+                                {
+                                    player.getInventory().addItem(new ItemStack(fallingBlock.getMaterial()));
+                                    gameInstance.fallingBlockPlayerMap.remove(fallingBlock);
+                                }
                             }
                         }
                     }

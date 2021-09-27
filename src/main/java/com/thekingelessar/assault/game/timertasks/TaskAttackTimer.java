@@ -87,25 +87,25 @@ public class TaskAttackTimer extends BukkitRunnable
                 forfeitAlerted = true;
             }
         }
-        if (!doneFirst)
-        {
-            for (Map.Entry<GameTeam, Item> entry : gameInstance.currentObjective.entrySet())
-            {
-                
-                Location objectiveLocation = entry.getKey().mapBase.objective.toLocation(gameInstance.gameWorld);
-                objectiveLocation.add(0, 0.5, 0);
-                
-                Vector velocity = entry.getValue().getVelocity();
-                velocity.setX(0);
-                velocity.setY(0);
-                velocity.setZ(0);
-                entry.getValue().setVelocity(velocity);
-                
-                entry.getValue().teleport(objectiveLocation);
-            }
-            
-            doneFirst = true;
-        }
+//        if (!doneFirst)
+//        {
+//            for (Map.Entry<GameTeam, Item> entry : gameInstance.currentObjective.entrySet())
+//            {
+//
+//                Location objectiveLocation = entry.getKey().mapBase.objective.toLocation(gameInstance.gameWorld);
+//                objectiveLocation.add(0, 0.5, 0);
+//
+//                Vector velocity = entry.getValue().getVelocity();
+//                velocity.setX(0);
+//                velocity.setY(0);
+//                velocity.setZ(0);
+//                entry.getValue().setVelocity(velocity);
+//
+//                entry.getValue().teleport(objectiveLocation);
+//            }
+//
+//            doneFirst = true;
+//        }
         
         double attackingTime = gameInstance.getAttackingTeam().displaySeconds;
         attackingTime += 1.;
@@ -117,8 +117,6 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public void stopTimer()
     {
-        this.gameInstance.currentObjective = new HashMap<>();
-        
         this.gameInstance.taskAttackTimer = null;
         this.gameInstance.taskGiveCoins.cancel();
         this.gameInstance.taskGiveCoins = null;
