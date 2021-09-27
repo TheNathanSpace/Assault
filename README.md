@@ -25,7 +25,6 @@ phase and Attacking phase.
 ### Features
 
 - Forfeit times weird
-- Coin cap
 - Multiverse support
 - Statistics (local database or simple json files)
 - Package maps with plugin

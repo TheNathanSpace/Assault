@@ -37,6 +37,8 @@ public class Map
     public boolean percentCoinsOnKill = true;
     public double rateOnKill = 0.2;
     
+    public int coinCap = 0;
+    
     public int attackTimeLimit = 480;
     public int firstToFiveStarsTimeLimit = 480;
     
@@ -187,6 +189,15 @@ public class Map
         catch (Exception exception)
         {
             Assault.INSTANCE.getLogger().log(Level.WARNING, "rate_on_kill invalid; defaulting to 0.2");
+        }
+        
+        try
+        {
+            coinCap = config.getInt("coin_cap");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "coin_cap invalid; defaulting to 0");
         }
         
         try

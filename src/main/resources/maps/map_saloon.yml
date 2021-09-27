@@ -20,6 +20,8 @@ coins_on_kill: 0
 percent_coins_on_kill: true
 rate_on_kill: 0.2
 
+coin_cap: 0
+
 attack_time_limit: 480
 first_to_five_stars_time_limit: 480
 

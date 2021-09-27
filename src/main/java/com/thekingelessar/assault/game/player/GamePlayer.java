@@ -54,7 +54,7 @@ public class GamePlayer
     {
         this.player = player;
         this.gameInstance = gameInstance;
-        this.playerBank = new PlayerBank(0);
+        this.playerBank = new PlayerBank(0, this);
         this.scoreboard = new FastBoard(player);
         this.gameTeam = gameTeam;
     }
@@ -366,11 +366,11 @@ public class GamePlayer
         
         if (this.gameInstance.gameMap.flatCoinsOnKill)
         {
-            this.playerBank.coins += this.gameInstance.gameMap.coinsOnKill;
+            this.playerBank.addCoins(this.gameInstance.gameMap.coinsOnKill);
         }
         else if (this.gameInstance.gameMap.percentCoinsOnKill)
         {
-            this.playerBank.coins += (int) (this.gameInstance.gameMap.rateOnKill * (victimPlayer.playerBank.coins));
+            this.playerBank.addCoins((int) (this.gameInstance.gameMap.rateOnKill * (victimPlayer.playerBank.coins)));
         }
         
         try
