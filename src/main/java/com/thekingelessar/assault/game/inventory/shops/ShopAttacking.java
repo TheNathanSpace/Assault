@@ -77,6 +77,8 @@ public class ShopAttacking extends ShopItemShop implements IShop
         constructShopItem(new Potion(PotionType.INVISIBILITY).toItemStack(1), "Invisibility Potion (30 sec)", 2, Currency.EMERALDS, false);
         constructShopItem(new Potion(PotionType.POISON).splash().toItemStack(1), "Splash Potion of Poison (4 hearts)", 1, Currency.EMERALDS, false);
         
+        // constructRandomShopItem
+        
         storageItem = new ItemStack(Material.CHEST);
         ItemMeta chestMeta = storageItem.getItemMeta();
         chestMeta.setDisplayName(ChatColor.RESET + "Secret Storage");

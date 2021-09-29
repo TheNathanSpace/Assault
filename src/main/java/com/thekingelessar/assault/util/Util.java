@@ -1,12 +1,12 @@
 package com.thekingelessar.assault.util;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Util
 {
@@ -166,5 +166,80 @@ public class Util
     public static boolean blockLocationsEqual(Location loc1, Location loc2)
     {
         return loc1.getBlockX() == loc2.getBlockX() && loc1.getBlockY() == loc2.getBlockY() && loc1.getBlockZ() == loc2.getBlockZ();
+    }
+    
+    public static Material getRandomMaterial()
+    {
+        Material[] materials = Material.values();
+        Random generator = new Random();
+        Material randomMaterial = materials[generator.nextInt(materials.length)];
+        while (randomMaterial.isEdible() || randomMaterial.isRecord())
+        {
+            randomMaterial = materials[generator.nextInt(materials.length)];
+        }
+        
+        return randomMaterial;
+    }
+    
+    public static ItemStack getRandomItemStack()
+    {
+        Material randomMaterial = Util.getRandomMaterial();
+        int count = new Random().nextInt(64) + 1;
+        ItemStack randomItemStack = new ItemStack(randomMaterial, count);
+        
+        double stdDeviation = 4.5;
+        double mean = 24;
+        
+        randomItemStack.setAmount(Util.weightedInt(stdDeviation, mean, 1, 64));
+        
+        return randomItemStack;
+    }
+    
+    // Inclusive bounds
+    public static int weightedInt(double stdDeviation, double mean, int lower, int upper)
+    {
+        RandomCollection<Object> randomCollection = new RandomCollection<>();
+        for (int i = lower; i <= upper; i++)
+        {
+            randomCollection.add(Util.gaussianCurve(i, stdDeviation, mean), i);
+        }
+        return (int) randomCollection.next();
+    }
+    
+    public static double gaussianCurve(double x, double stdDeviation, double mean)
+    {
+        double variance = stdDeviation * stdDeviation;
+        return Math.pow(Math.exp(-(((x - mean) * (x - mean)) / ((2 * variance)))), 1 / (stdDeviation * Math.sqrt(2 * Math.PI)));
+    }
+    
+    public static class RandomCollection<E>
+    {
+        private final NavigableMap<Double, E> map = new TreeMap<Double, E>();
+        private final Random random;
+        private double total = 0;
+        
+        public RandomCollection()
+        {
+            this(new Random());
+        }
+        
+        public RandomCollection(Random random)
+        {
+            this.random = random;
+        }
+        
+        public RandomCollection<E> add(double weight, E result)
+        {
+            if (weight <= 0) return this;
+            total += weight;
+            map.put(total, result);
+            return this;
+        }
+        
+        public E next()
+        {
+            double value = random.nextDouble() * total;
+            return map.higherEntry(value).getValue();
+        }
     }
 }
