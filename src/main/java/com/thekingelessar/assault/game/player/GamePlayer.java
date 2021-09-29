@@ -5,6 +5,7 @@ import com.thekingelessar.assault.database.AssaultTableManager;
 import com.thekingelessar.assault.database.Statistic;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
+import com.thekingelessar.assault.game.Objective;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -47,6 +48,8 @@ public class GamePlayer
     public List<ItemStack> spawnArmor = new ArrayList<>();
     
     List<Material> itemsToDrop = Arrays.asList(Material.EMERALD, Material.TNT, Material.OBSIDIAN);
+    
+    public long lastCompassUpdate = 0;
     
     public boolean flightReset = true;
     
@@ -95,6 +98,13 @@ public class GamePlayer
         itemMeta.spigot().setUnbreakable(true);
         woodSword.setItemMeta(itemMeta);
         spawnItems.add(woodSword);
+        
+        ItemStack compass = new ItemStack(Material.COMPASS);
+        ItemMeta compassMeta = compass.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.DARK_AQUA + "Nearest Star");
+        itemMeta.setLore(Arrays.asList("This compass points towards the", "nearest Nether Star!"));
+        compass.setItemMeta(compassMeta);
+        spawnItems.add(compass);
     }
     
     public void addSpawnItem(ItemStack spawnItem)
@@ -108,10 +118,7 @@ public class GamePlayer
         PlayerMode mode = PlayerMode.setPlayerMode(player, playerMode, gameInstance);
         
         Vector velocity = player.getVelocity();
-        velocity.setX(0);
-        velocity.setY(0);
-        velocity.setZ(0);
-        player.setVelocity(velocity);
+        player.setVelocity(velocity.zero());
         player.setFallDistance(0);
         
         player.teleport(gameInstance.gameMap.getSpawn(playerTeam, null).toLocation(gameInstance.gameWorld));
@@ -143,6 +150,8 @@ public class GamePlayer
                 player.getInventory().addItem(itemStack);
             }
         }
+        
+        this.setCompassObjective();
     }
     
     public void respawn(PlayerMode playerMode, boolean delay, DeathType deathType)
@@ -328,6 +337,7 @@ public class GamePlayer
     
     public void killPlayer(Player victim, boolean arrow)
     {
+        System.out.println(String.format("%s killed player %s", this.player.getName(), victim.getName()));
         AssaultTableManager.getInstance().incrementValue(this.player, Statistic.KILLS);
         
         UUID uuid = player.getUniqueId();
@@ -503,35 +513,35 @@ public class GamePlayer
         }
         else
         {
-            String timeBlue = "";
-            String timeRed = "";
+            String teamOneTime = "";
+            String teamTwoTime = "";
             
             if (gameInstance.getTeamOne().didForfeit())
             {
-                timeBlue = "Forfeit";
+                teamOneTime = "Forfeit";
             }
             else
             {
-                timeBlue = Util.secondsToMinutes((int) gameInstance.getTeamOne().displaySeconds, true);
+                teamOneTime = Util.secondsToMinutes((int) gameInstance.getTeamOne().displaySeconds, true);
             }
             
             if (gameInstance.getTeamTwo().didForfeit())
             {
-                timeRed = "Forfeit";
+                teamTwoTime = "Forfeit";
             }
             else
             {
-                timeRed = Util.secondsToMinutes((int) gameInstance.getTeamTwo().displaySeconds, true);
+                teamTwoTime = Util.secondsToMinutes((int) gameInstance.getTeamTwo().displaySeconds, true);
             }
             
             if (gameInstance.modFirstTo5Stars.enabled)
             {
-                timeBlue += String.format(" %s%s✬", gameInstance.getTeamOne().starsPickedUp, ChatColor.WHITE);
-                timeRed += String.format(" %s%s✬", gameInstance.getTeamTwo().starsPickedUp, ChatColor.WHITE);
+                teamOneTime += String.format(" %s%s✬", gameInstance.getTeamOne().starsPickedUp, ChatColor.WHITE);
+                teamTwoTime += String.format(" %s%s✬", gameInstance.getTeamTwo().starsPickedUp, ChatColor.WHITE);
             }
             
-            lines.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "BLUE" + ChatColor.RESET + ": " + timeBlue);
-            lines.add(ChatColor.RED.toString() + ChatColor.BOLD + "RED" + ChatColor.RESET + ": " + timeRed);
+            lines.add(gameInstance.getTeamOne().color.getFormattedName(false, true, ChatColor.BOLD) + ChatColor.RESET + ": " + teamOneTime);
+            lines.add(gameInstance.getTeamTwo().color.getFormattedName(false, true, ChatColor.BOLD) + ChatColor.RESET + ": " + teamTwoTime);
         }
         
         lines.add("");
@@ -638,5 +648,30 @@ public class GamePlayer
         }
         
         return false;
+    }
+    
+    public void setCompassObjective()
+    {
+        long currentTime = System.nanoTime();
+        if ((currentTime - this.lastCompassUpdate) / 1000000000. > 1)
+        {
+            Location playerLocation = this.player.getLocation();
+            Objective closestObjective = null;
+            double smallestDistance = Double.MAX_VALUE;
+            for (Objective objective : this.gameInstance.getObjectives())
+            {
+                double distanceSquare = objective.item.getLocation().distanceSquared(playerLocation);
+                if (distanceSquare < smallestDistance)
+                {
+                    closestObjective = objective;
+                    smallestDistance = distanceSquare;
+                }
+            }
+            
+            if (closestObjective != null)
+            {
+                this.player.setCompassTarget(closestObjective.item.getLocation());
+            }
+        }
     }
 }

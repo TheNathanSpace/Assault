@@ -41,6 +41,12 @@ public class PlayerItemDropHandler implements Listener
                 return;
             }
             
+            if (itemStack.getType().equals(Material.COMPASS))
+            {
+                playerDropItemEvent.setCancelled(true);
+                return;
+            }
+            
             if (ShopItemTool.axes.contains(itemStack.getType()) || ShopItemTool.pickaxes.contains(itemStack.getType()) || itemStack.getType().equals(Material.SHEARS))
             {
                 playerDropItemEvent.setCancelled(true);
