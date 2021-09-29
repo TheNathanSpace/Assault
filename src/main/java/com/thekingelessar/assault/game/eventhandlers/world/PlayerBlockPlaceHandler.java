@@ -1,10 +1,10 @@
 package com.thekingelessar.assault.game.eventhandlers.world;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
+import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
@@ -19,7 +19,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,6 +90,20 @@ public class PlayerBlockPlaceHandler implements Listener
                         return;
                     }
                 }
+            }
+            
+            if (gameInstance.gameMap.placeableBlocks.contains(blockPlaceEvent.getBlock().getType()))
+            {
+                blockPlaceEvent.setCancelled(false);
+            }
+            else
+            {
+                blockPlaceEvent.setCancelled(true);
+            }
+            
+            if (!gameInstance.gameMap.enablePlacableBlocks)
+            {
+                blockPlaceEvent.setCancelled(false);
             }
             
             Coordinate placedCoordinate = new Coordinate(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());

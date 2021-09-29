@@ -36,6 +36,9 @@ attacker_base_prot_max_z: 20.
 
 emerald_spawn_delay: 20
 
+enable_placeable_blocks: false
+enable_breakable_blocks: true
+
 # https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
 placeable_blocks:
   - WOOL

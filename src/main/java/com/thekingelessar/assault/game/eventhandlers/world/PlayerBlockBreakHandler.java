@@ -48,6 +48,11 @@ public class PlayerBlockBreakHandler implements Listener
             {
                 blockBreakEvent.setCancelled(false);
             }
+            
+            if (!gameInstance.gameMap.enableBreakableBlocks)
+            {
+                blockBreakEvent.setCancelled(false);
+            }
         }
     }
 }

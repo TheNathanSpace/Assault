@@ -55,6 +55,9 @@ public class Map
     
     public List<MapBase> bases = new ArrayList<>();
     
+    public boolean enablePlacableBlocks = false;
+    public boolean enableBreakableBlocks = true;
+    
     public List<Material> placeableBlocks = new ArrayList<>();
     public List<Material> breakableBlocks = new ArrayList<>();
     
@@ -468,6 +471,24 @@ public class Map
             {
                 Assault.INSTANCE.getLogger().warning("Invalid material in breakable_blocks: " + object.toString());
             }
+        }
+    
+        try
+        {
+            enablePlacableBlocks = config.getBoolean("enable_placeable_blocks");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "enable_placeable_blocks invalid; defaulting to false");
+        }
+    
+        try
+        {
+            enableBreakableBlocks = config.getBoolean("enable_breakable_blocks");
+        }
+        catch (Exception exception)
+        {
+            Assault.INSTANCE.getLogger().log(Level.WARNING, "enable_breakable_blocks invalid; defaulting to true");
         }
         
         List<?> placeableList = config.getList("placeable_blocks");
