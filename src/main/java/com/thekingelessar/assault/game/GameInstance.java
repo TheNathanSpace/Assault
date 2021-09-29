@@ -88,8 +88,8 @@ public class GameInstance
     
     public List<ThrownPotion> fixedPotions = new ArrayList<>();
     
-    public HashMap<GameTeam, Item> guidingObjectives = new HashMap<>();
-    public HashMap<GameTeam, Item> currentObjective = new HashMap<>();
+    public List<Objective> buildingObjectives = new ArrayList<>();
+    public List<Objective> attackingObjectives = new ArrayList<>();
     
     public HashMap<Player, Player> lastDamagedBy = new HashMap<>();
     
@@ -371,24 +371,22 @@ public class GameInstance
         for (GameTeam team : teams)
         {
             List<Location> objectiveLocations = new ArrayList<>();
-            for (Coordinate coordinate : team.mapBase.objective)
+            for (Coordinate coordinate : team.mapBase.objectives)
             {
                 Location objectiveLocation = coordinate.toLocation(this.gameWorld);
                 objectiveLocations.add(objectiveLocation);
                 
-                objectiveLocation.add(0, 0.5, 0);
                 ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
                 
                 Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
                 
                 Vector velocity = guidingItem.getVelocity();
-                velocity.setX(0);
-                velocity.setY(0);
-                velocity.setZ(0);
-                guidingItem.setVelocity(velocity);
+                guidingItem.setVelocity(velocity.zero());
                 
                 guidingItem.teleport(objectiveLocation);
-                this.guidingObjectives.put(team, guidingItem);
+                
+                Objective objective = new Objective(this, this.getDefendingTeam(), guidingItem, objectiveLocation);
+                this.buildingObjectives.add(objective);
             }
             
             
@@ -424,15 +422,15 @@ public class GameInstance
     
     public void startAttackMode()
     {
-        for (Item item : this.guidingObjectives.values())
+        for (Objective objective : this.buildingObjectives)
         {
-            item.remove();
+            objective.delete();
         }
         
         taskTickTimer = new TaskTickTimer(0, 1, this);
         taskTickTimer.runTaskTimer(Assault.INSTANCE, taskTickTimer.startDelay, taskTickTimer.tickDelay);
         
-        this.gameStage = GameStage.ATTACK_ROUNDS;
+        this.gameStage = GameStage.ATTACKING;
         
         List<GameTeam> randomList = new ArrayList<>(teams);
         Collections.shuffle(randomList);
@@ -551,25 +549,20 @@ public class GameInstance
         this.getDefendingTeam().mapBase.spawnShops(this);
         this.getAttackingTeam().displaySeconds = 0;
         
-        List<Location> objectiveLocations = new ArrayList<>();
-        for (Coordinate coordinate : this.getDefendingTeam().mapBase.objective)
+        for (Coordinate coordinate : this.getDefendingTeam().mapBase.objectives)
         {
             Location objectiveLocation = coordinate.toLocation(this.gameWorld);
             
-            objectiveLocation.add(0, 0.5, 0);
             ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
             
             Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
             
             Vector velocity = objectiveEntity.getVelocity();
-            velocity.setX(0);
-            velocity.setY(0);
-            velocity.setZ(0);
-            objectiveEntity.setVelocity(velocity);
+            objectiveEntity.setVelocity(velocity.zero());
             
             objectiveEntity.teleport(objectiveLocation);
-            
-            this.currentObjective.put(getDefendingTeam(), objectiveEntity);
+            Objective objective = new Objective(this, this.getDefendingTeam(), objectiveEntity, objectiveLocation);
+            this.attackingObjectives.add(objective);
         }
     }
     
@@ -641,12 +634,12 @@ public class GameInstance
     
     public void endRound(boolean attackersForfeit)
     {
-        for (Item item : this.currentObjective.values())
+        for (Objective objective : this.attackingObjectives)
         {
-            item.remove();
+            objective.delete();
         }
         
-        this.currentObjective = new HashMap<>();
+        this.attackingObjectives = new ArrayList<>();
         
         if (this.taskAttackTimer != null)
         {
@@ -924,6 +917,16 @@ public class GameInstance
                 }
             }
         }
+    }
+    
+    public List<Objective> getObjectives()
+    {
+        List<Objective> objectiveList = new ArrayList<>();
+        for (GameTeam gameTeam : this.teams)
+        {
+            objectiveList.addAll(gameTeam.getObjectives());
+        }
+        return objectiveList;
     }
     
     public static GameInstance getPlayerGameInstance(Player player)

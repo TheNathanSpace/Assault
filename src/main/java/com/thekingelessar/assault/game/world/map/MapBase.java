@@ -35,9 +35,9 @@ public class MapBase
     public List<NPC> itemShopNPCs = new ArrayList<>();
     public List<NPC> teamBuffShopNPCs = new ArrayList<>();
     
-    public List<Coordinate> objective;
+    public List<Coordinate> objectives;
     
-    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, List<Coordinate> objective, List<Coordinate> itemShopCoords, List<Coordinate> buffShopCoords)
+    public MapBase(TeamColor teamColor, List<Coordinate> defenderSpawns, List<List<Coordinate>> defenderBoundingBoxes, List<Coordinate> attackerSpawns, List<Coordinate> emeraldSpawns, List<Coordinate> objectives, List<Coordinate> itemShopCoords, List<Coordinate> buffShopCoords)
     {
         this.teamColor = teamColor;
         this.defenderSpawns = defenderSpawns;
@@ -48,7 +48,7 @@ public class MapBase
         this.itemShopCoords = itemShopCoords;
         this.buffShopCoords = buffShopCoords;
         
-        this.objective = objective;
+        this.objectives = objectives;
     }
     
     public void spawnShops(GameInstance gameInstance)
@@ -86,7 +86,7 @@ public class MapBase
             Assault.gameNPCs.add(npc);
         }
         
-        if (gameInstance.gameStage.equals(GameStage.ATTACK_ROUNDS))
+        if (gameInstance.gameStage.equals(GameStage.ATTACKING))
         {
             for (Coordinate buffShop : buffShopCoords)
             {

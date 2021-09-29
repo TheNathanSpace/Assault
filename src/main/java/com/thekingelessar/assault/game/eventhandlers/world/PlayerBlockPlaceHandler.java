@@ -81,7 +81,7 @@ public class PlayerBlockPlaceHandler implements Listener
                     return;
                 }
                 
-                for (Coordinate objectiveCoord : mapBase.objective)
+                for (Coordinate objectiveCoord : mapBase.objectives)
                 {
                     Location objectiveLocation = objectiveCoord.toLocation(gameInstance.gameWorld);
                     if (Util.blockLocationsEqual(objectiveLocation, placedLocation))

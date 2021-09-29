@@ -30,16 +30,6 @@ public class TaskTickTimer extends BukkitRunnable
     public void advanceTimer()
     {
         gameInstance.doBuffs();
-//        for (Map.Entry<GameTeam, Item> objective : this.gameInstance.currentObjective.entrySet())
-//        {
-//            Item objectiveItem = objective.getValue();
-//            GameTeam gameTeam = objective.getKey();
-//
-//            if (objectiveItem.getLocation().distance(gameTeam.mapBase.objective.toLocation(this.gameInstance.gameWorld)) > 1)
-//            {
-//                objectiveItem.teleport(gameTeam.mapBase.objective.toLocation(this.gameInstance.gameWorld));
-//            }
-//        }
     }
     
 }

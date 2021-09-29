@@ -53,10 +53,7 @@ public class TaskEmeraldSpawnTimer extends BukkitRunnable
             Location objectiveLocation = gameInstance.getDefendingTeam().mapBase.emeraldSpawns.get(0).toLocation(gameInstance.gameWorld);
             
             Vector velocity = spawnedItem.getVelocity();
-            velocity.setX(0);
-            velocity.setY(0);
-            velocity.setZ(0);
-            
+            spawnedItem.setVelocity(velocity.zero());
             spawnedItem.teleport(objectiveLocation);
         }
         
@@ -88,10 +85,7 @@ public class TaskEmeraldSpawnTimer extends BukkitRunnable
                 modSpawned = true;
                 
                 Vector velocity = spawnedItem.getVelocity();
-                velocity.setX(0);
-                velocity.setY(0);
-                velocity.setZ(0);
-                this.spawnedItem.setVelocity(velocity);
+                this.spawnedItem.setVelocity(velocity.zero());
                 
                 spawnedItem.teleport(location);
             }

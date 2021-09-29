@@ -62,7 +62,7 @@ public class GravelFallHandler implements Listener
                     
                     for (GameTeam gameTeam : gameInstance.teams)
                     {
-                        for (Coordinate objectiveCoord : gameTeam.mapBase.objective)
+                        for (Coordinate objectiveCoord : gameTeam.mapBase.objectives)
                         {
                             Location objectiveLocation = objectiveCoord.toLocation(gameInstance.gameWorld);
                             if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
