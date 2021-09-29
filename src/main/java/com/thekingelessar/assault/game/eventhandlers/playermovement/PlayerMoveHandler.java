@@ -9,6 +9,9 @@ import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.world.map.MapBase;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,27 +77,42 @@ public class PlayerMoveHandler implements Listener
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 gamePlayer.setCompassObjective();
                 
-                if (((Entity) player).isOnGround())
+                if (gamePlayer.startTimeInAir != 0)
                 {
-                    gamePlayer.startTimeInAir = 0;
+                    if (((Entity) player).isOnGround())
+                    {
+                        gamePlayer.startTimeInAir = 0;
+                    }
+                    else if (locTo.getBlock() != null && locTo.getBlock().getType().equals(Material.WEB))
+                    {
+                        gamePlayer.startTimeInAir = 0;
+                    }
+                    else if ((locTo.getBlock() != null && locTo.getBlock().getRelative(BlockFace.UP) != null && locTo.getBlock().getRelative(BlockFace.UP).getType().equals(Material.WEB)))
+                    {
+                        gamePlayer.startTimeInAir = 0;
+                    }
+                    else if (player.getVehicle() instanceof Boat)
+                    {
+                        gamePlayer.startTimeInAir = 0;
+                    }
+                    else if ((System.nanoTime() - gamePlayer.startTimeInAir) / 1000000000. > 5) // todo: nano time comparison?
+                    {
+                        if (PlayerMode.getPlayerMode(player).equals(PlayerMode.SPECTATOR))
+                        {
+                            gamePlayer.startTimeInAir = 0;
+                        }
+                        else
+                        {
+                            player.sendMessage(Assault.ASSAULT_PREFIX + "Looks like you're stuck—respawning!");
+                            gamePlayer.respawn(null, true, DeathType.DEATH);
+                        }
+                    }
                 }
-                else if (gamePlayer.startTimeInAir == 0)
+                else
                 {
                     if (locTo.getY() > playerMoveEvent.getFrom().getY())
                     {
                         gamePlayer.startTimeInAir = System.nanoTime();
-                    }
-                }
-                else if ((System.nanoTime() - gamePlayer.startTimeInAir) / 1000000000. > 5)
-                {
-                    if (PlayerMode.getPlayerMode(player).equals(PlayerMode.SPECTATOR))
-                    {
-                        gamePlayer.startTimeInAir = 0;
-                    }
-                    else
-                    {
-                        player.sendMessage(Assault.ASSAULT_PREFIX + "Looks like you're stuck—respawning!");
-                        gamePlayer.respawn(null, true, DeathType.DEATH);
                     }
                 }
                 

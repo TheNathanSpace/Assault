@@ -2,7 +2,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.eventhandlers.combat.PlayerAttackVictimHandler;
-import com.thekingelessar.assault.game.eventhandlers.combat.PlayerDamageHandler;
+import com.thekingelessar.assault.game.eventhandlers.combat.EntityDamageHandler;
 import com.thekingelessar.assault.game.eventhandlers.combat.PotionThrowHandler;
 import com.thekingelessar.assault.game.eventhandlers.inventory.InventoryClickHandler;
 import com.thekingelessar.assault.game.eventhandlers.inventory.InventoryCloseHandler;
@@ -24,7 +24,7 @@ public class RegisterHandlers
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBlockBreakHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBlockPlaceHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerChatHandler(), Assault.INSTANCE);
-        Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageHandler(), Assault.INSTANCE);
+        Bukkit.getServer().getPluginManager().registerEvents(new EntityDamageHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerFoodLevelChange(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerInteractHandler(), Assault.INSTANCE);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerItemDropHandler(), Assault.INSTANCE);

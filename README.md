@@ -24,9 +24,6 @@ phase and Attacking phase.
   - Wrong nametag color
   - Wrong scoreboard coins
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
-- Check commented out areas to see if it's actually needed for the stars to end up in the right spot
-- Cactus destroyed
-- Flying timer kills when in cobwebs and boats
 
 ### Features
 
