@@ -1,7 +1,6 @@
 package com.thekingelessar.assault.game.player;
 
 import com.thekingelessar.assault.Assault;
-import com.thekingelessar.assault.game.GameInstance;
 import org.bukkit.Sound;
 
 public class PlayerBank
@@ -27,6 +26,14 @@ public class PlayerBank
                 this.coins = this.gamePlayer.gameInstance.gameMap.coinCap;
                 alert = true;
             }
+            else
+            {
+                this.coins += coinsToAdd;
+            }
+        }
+        else
+        {
+            this.coins += coinsToAdd;
         }
         
         if (alert && !this.maxCoinAlerted)

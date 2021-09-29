@@ -44,6 +44,8 @@ public class PotionThrowHandler implements Listener
                 Collection<PotionEffect> potionEffects = thrownPotion.getEffects();
                 List<PotionEffect> potionEffectList = new ArrayList<>(potionEffects);
                 
+                if (potionEffectList.size() == 0) return;
+                
                 switch (PotionType.getByEffect(potionEffectList.get(0).getType()))
                 {
                     case POISON:

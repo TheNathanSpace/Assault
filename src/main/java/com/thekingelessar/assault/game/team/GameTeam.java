@@ -6,6 +6,7 @@ import com.thekingelessar.assault.database.Statistic;
 import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
+import com.thekingelessar.assault.game.Objective;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
@@ -127,7 +128,7 @@ public class GameTeam
             }
         }
         
-        if (gameInstance.gameStage.equals(GameStage.ATTACK_ROUNDS))
+        if (gameInstance.gameStage.equals(GameStage.ATTACKING))
         {
             gamePlayer.shopAttacking = new ShopAttack(this.color, gamePlayer);
         }
@@ -175,7 +176,7 @@ public class GameTeam
             switch (gameInstance.gameStage)
             {
                 case BUILDING:
-                case ATTACK_ROUNDS:
+                case ATTACKING:
                     gameInstance.alertTeamleft(this.getOppositeTeam());
                     break;
             }
@@ -321,6 +322,33 @@ public class GameTeam
         }
         
         return shopInventories;
+    }
+    
+    public List<Objective> getObjectives()
+    {
+        List<Objective> objectives = new ArrayList<>();
+        if (this.gameInstance.gameStage.equals(GameStage.BUILDING))
+        {
+            for (Objective objective : this.gameInstance.buildingObjectives)
+            {
+                if (objective.gameTeam.equals(this))
+                {
+                    objectives.add(objective);
+                }
+            }
+        }
+        if (this.gameInstance.gameStage.equals(GameStage.ATTACKING))
+        {
+            for (Objective objective : this.gameInstance.attackingObjectives)
+            {
+                if (objective.gameTeam.equals(this))
+                {
+                    objectives.add(objective);
+                }
+            }
+        }
+        
+        return objectives;
     }
     
 }

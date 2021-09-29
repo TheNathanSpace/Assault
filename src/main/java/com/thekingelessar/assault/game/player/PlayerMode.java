@@ -87,7 +87,7 @@ public enum PlayerMode
             case BUILDING:
                 return PlayerMode.BUILDING;
             
-            case ATTACK_ROUNDS:
+            case ATTACKING:
                 return PlayerMode.ATTACKING;
             
             case FINISHED:

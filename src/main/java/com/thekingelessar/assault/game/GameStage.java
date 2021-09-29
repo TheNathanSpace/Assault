@@ -4,6 +4,6 @@ public enum GameStage
 {
     PREGAME,
     BUILDING,
-    ATTACK_ROUNDS,
+    ATTACKING,
     FINISHED;
 }
