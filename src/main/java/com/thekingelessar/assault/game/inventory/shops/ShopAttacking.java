@@ -78,11 +78,14 @@ public class ShopAttacking extends ShopItemShop implements IShop
         constructShopItem(new Potion(PotionType.INVISIBILITY).toItemStack(1), "Invisibility Potion (30 sec)", 2, Currency.EMERALDS, false);
         constructShopItem(new Potion(PotionType.POISON).splash().toItemStack(1), "Splash Potion of Poison (4 hearts)", 1, Currency.EMERALDS, false);
         
-        boolean randomNewRow = true;
-        for (ShopItem shopItem : this.gamePlayer.gameInstance.randomShopItems)
+        if (!this.gamePlayer.gameInstance.modDisableRandomItems.enabled)
         {
-            insertRandomShopItem(shopItem, randomNewRow);
-            randomNewRow = false;
+            boolean randomNewRow = true;
+            for (ShopItem shopItem : this.gamePlayer.gameInstance.randomShopItems)
+            {
+                insertRandomShopItem(shopItem, randomNewRow);
+                randomNewRow = false;
+            }
         }
         
         storageItem = new ItemStack(Material.CHEST);

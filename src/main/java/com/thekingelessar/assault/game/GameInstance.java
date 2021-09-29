@@ -9,6 +9,7 @@ import com.thekingelessar.assault.game.inventory.ShopUtil;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.modifiers.GameModifier;
 import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
+import com.thekingelessar.assault.game.modifiers.modifiers.ModDisableRandomItems;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstTo5Stars;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
@@ -52,6 +53,7 @@ public class GameInstance
     
     public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
     public ModFirstTo5Stars modFirstTo5Stars = new ModFirstTo5Stars(this);
+    public ModDisableRandomItems modDisableRandomItems = new ModDisableRandomItems(this);
     
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
