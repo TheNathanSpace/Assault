@@ -7,7 +7,6 @@ import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemArmor;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemSword;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemTool;
-import com.thekingelessar.assault.util.Util;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -43,14 +42,9 @@ public class ShopItemShop implements IShop
         ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
     }
     
-    public void constructRandomShopItem(String name, boolean newRow)
+    public void insertRandomShopItem(ShopItem shopItem, boolean newRow)
     {
-        ItemStack boughtItemStack = new ItemStack(Util.getRandomItemStack());
-        int coinCost = Util.weightedInt(4.6, 24, 1, 64);
-        ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtItemStack.clone(), name, coinCost, Currency.COINS);
-        ShopItem shopItem = new ShopItem(coinCost, Currency.COINS, shopItemStack, boughtItemStack);
-        
-        this.shopItemMap.put(shopItemStack, shopItem);
+        this.shopItemMap.put(shopItem.shopItemStack, shopItem);
         
         ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
     }

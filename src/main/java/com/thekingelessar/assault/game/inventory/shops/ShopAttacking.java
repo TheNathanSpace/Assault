@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.inventory.shops;
 
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.IShop;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemTool;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumAxeTier;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumPickaxeTier;
@@ -77,7 +78,12 @@ public class ShopAttacking extends ShopItemShop implements IShop
         constructShopItem(new Potion(PotionType.INVISIBILITY).toItemStack(1), "Invisibility Potion (30 sec)", 2, Currency.EMERALDS, false);
         constructShopItem(new Potion(PotionType.POISON).splash().toItemStack(1), "Splash Potion of Poison (4 hearts)", 1, Currency.EMERALDS, false);
         
-        // constructRandomShopItem
+        boolean randomNewRow = true;
+        for (ShopItem shopItem : this.gamePlayer.gameInstance.randomShopItems)
+        {
+            insertRandomShopItem(shopItem, randomNewRow);
+            randomNewRow = false;
+        }
         
         storageItem = new ItemStack(Material.CHEST);
         ItemMeta chestMeta = storageItem.getItemMeta();

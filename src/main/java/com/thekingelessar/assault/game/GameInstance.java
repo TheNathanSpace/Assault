@@ -4,6 +4,9 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.game.inventory.Currency;
+import com.thekingelessar.assault.game.inventory.ShopUtil;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.modifiers.GameModifier;
 import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstTo5Stars;
@@ -96,6 +99,8 @@ public class GameInstance
     public HashMap<UUID, Integer> killsInGame = new HashMap<>();
     public HashMap<UUID, Integer> deathsInGame = new HashMap<>();
     public HashMap<UUID, Integer> starsInGame = new HashMap<>();
+    
+    public List<ShopItem> randomShopItems = new ArrayList<>();
     
     public GameInstance(String mapName, List<Player> players, List<Player> spectators)
     {
@@ -367,6 +372,12 @@ public class GameInstance
                 player.removePotionEffect(effect.getType());
             }
         }
+        
+        ItemStack shopItemBoughtStack = new ItemStack(Util.getRandomItemStack());
+        int coinCost = Util.weightedInt(4.6, 24, 1, 64);
+        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + ChatColor.RESET + shopItemBoughtStack.getItemMeta().getDisplayName(), coinCost, Currency.COINS);
+        ShopItem shopItem = new ShopItem(coinCost, Currency.COINS, shopItemStack, shopItemBoughtStack);
+        this.randomShopItems.add(shopItem);
         
         for (GameTeam team : teams)
         {
