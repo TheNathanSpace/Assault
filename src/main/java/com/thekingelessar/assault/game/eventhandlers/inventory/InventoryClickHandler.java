@@ -4,7 +4,7 @@ import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
-import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
@@ -116,7 +116,7 @@ public class InventoryClickHandler implements Listener
                 return;
             }
             
-            ShopAttack shop = gamePlayer.shopAttacking;
+            ShopAttacking shop = gamePlayer.shopAttacking;
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
         else if (inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))

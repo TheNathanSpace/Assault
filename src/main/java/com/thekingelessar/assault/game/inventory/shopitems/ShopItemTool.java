@@ -4,10 +4,9 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumAxeTier;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumPickaxeTier;
-import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -52,15 +51,7 @@ public class ShopItemTool extends ShopItem
             {
                 if (this.boughtItemStack.getType().equals(itemStack.getType()))
                 {
-                    try
-                    {
-                        player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-                    }
-                    catch (Throwable throwable)
-                    {
-                        player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
-                    }
-    
+                    super.playSound(player, false);
                     return;
                 }
             }
@@ -162,18 +153,18 @@ public class ShopItemTool extends ShopItem
         }
     }
     
-    public static void updateItemPurchase(ShopAttack shopAttack, ShopItemTool shopItemTool)
+    public static void updateItemPurchase(ShopAttacking shopAttacking, ShopItemTool shopItemTool)
     {
         if (axes.contains(shopItemTool.boughtItemStack.getType()))
         {
-            shopItemTool.slot = shopAttack.axeSlot;
+            shopItemTool.slot = shopAttacking.axeSlot;
         }
         else if (pickaxes.contains(shopItemTool.boughtItemStack.getType()))
         {
-            shopItemTool.slot = shopAttack.pickaxeSlot;
+            shopItemTool.slot = shopAttacking.pickaxeSlot;
         }
         
-        shopAttack.shopItemMap.put(shopItemTool.shopItemStack, shopItemTool);
-        shopAttack.inventory.setItem(shopItemTool.slot, shopItemTool.shopItemStack);
+        shopAttacking.shopItemMap.put(shopItemTool.shopItemStack, shopItemTool);
+        shopAttacking.inventory.setItem(shopItemTool.slot, shopItemTool.shopItemStack);
     }
 }

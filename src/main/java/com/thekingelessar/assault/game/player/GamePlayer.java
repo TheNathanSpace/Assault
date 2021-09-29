@@ -7,7 +7,8 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.Objective;
 import com.thekingelessar.assault.game.inventory.Currency;
-import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItemArmor;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
@@ -38,7 +39,7 @@ public class GamePlayer
     public FastBoard scoreboard;
     
     public PlayerBank playerBank;
-    public ShopAttack shopAttacking;
+    public ShopAttacking shopAttacking;
     
     public TaskCountdownRespawn taskCountdownRespawn;
     
@@ -105,6 +106,34 @@ public class GamePlayer
         itemMeta.setLore(Arrays.asList("This compass points towards the", "nearest Nether Star!"));
         compass.setItemMeta(compassMeta);
         spawnItems.add(compass);
+    }
+    
+    public void setArmor(Material chestplate, Material leggings)
+    {
+        for (ItemStack armorPiece : this.spawnArmor)
+        {
+            Material armorMaterial = armorPiece.getType();
+            if (ShopItemArmor.CHESTPLATES.contains(armorMaterial))
+            {
+                this.spawnArmor.remove(armorPiece);
+            }
+            else if (ShopItemArmor.LEGGINGS.contains(armorMaterial))
+            {
+                this.spawnArmor.remove(armorPiece);
+            }
+        }
+        
+        ItemStack itemChestplate = new ItemStack(chestplate);
+        ItemMeta chestplateMeta = itemChestplate.getItemMeta();
+        chestplateMeta.spigot().setUnbreakable(true);
+        itemChestplate.setItemMeta(chestplateMeta);
+        spawnArmor.add(itemChestplate);
+        
+        ItemStack itemLeggings = new ItemStack(leggings);
+        ItemMeta leggingsMeta = itemLeggings.getItemMeta();
+        leggingsMeta.spigot().setUnbreakable(true);
+        itemLeggings.setItemMeta(leggingsMeta);
+        spawnArmor.add(itemLeggings);
     }
     
     public void addSpawnItem(ItemStack spawnItem)

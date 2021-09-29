@@ -1,7 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,10 +31,10 @@ public class PlayerConsumeItemHandler implements Listener
                     switch (potionEffect)
                     {
                         case JUMP:
-                            player.addPotionEffect(ShopAttack.JUMP_30_5, true);
+                            player.addPotionEffect(ShopAttacking.JUMP_30_5, true);
                             break;
                         case INVISIBILITY:
-                            player.addPotionEffect(ShopAttack.INVIS_30_1);
+                            player.addPotionEffect(ShopAttacking.INVIS_30_1);
                             break;
                     }
                     playerItemConsumeEvent.setCancelled(true);

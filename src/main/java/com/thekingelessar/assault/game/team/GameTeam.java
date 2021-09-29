@@ -7,7 +7,7 @@ import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.Objective;
-import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.player.GamePlayer;
@@ -130,7 +130,7 @@ public class GameTeam
         
         if (gameInstance.gameStage.equals(GameStage.ATTACKING))
         {
-            gamePlayer.shopAttacking = new ShopAttack(this.color, gamePlayer);
+            gamePlayer.shopAttacking = new ShopAttacking(this.color, gamePlayer);
         }
         
         members.add(gamePlayer);
@@ -216,7 +216,7 @@ public class GameTeam
         for (Player player : this.getPlayers())
         {
             GamePlayer gamePlayer = this.getGamePlayer(player);
-            gamePlayer.shopAttacking = new ShopAttack(this.color, gamePlayer);
+            gamePlayer.shopAttacking = new ShopAttacking(this.color, gamePlayer);
         }
         
         this.setSecretStorage();

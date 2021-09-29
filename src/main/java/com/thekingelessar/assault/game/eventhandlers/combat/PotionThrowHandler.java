@@ -1,7 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers.combat;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.game.inventory.shops.ShopAttack;
+import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -62,7 +62,7 @@ public class PotionThrowHandler implements Listener
                         PotionMeta potionMeta = (PotionMeta) newPotionItemMeta;
                         potionMeta.setMainEffect(PotionEffectType.POISON);
                         
-                        potionMeta.addCustomEffect(ShopAttack.POISON_6_2, true);
+                        potionMeta.addCustomEffect(ShopAttacking.POISON_6_2, true);
                         newPotionItemStack.setItemMeta(potionMeta);
                         
                         ThrownPotion newPotion = throwerPlayer.launchProjectile(ThrownPotion.class);

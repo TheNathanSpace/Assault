@@ -20,7 +20,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.Arrays;
 
-public class ShopAttack extends ShopItemShop implements IShop
+public class ShopAttacking extends ShopItemShop implements IShop
 {
     public static final PotionEffect JUMP_30_5 = new PotionEffect(PotionEffectType.JUMP, 20 * 30, 4, true, true);
     public static final PotionEffect INVIS_30_1 = new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 30, 0, true, true);
@@ -36,7 +36,7 @@ public class ShopAttack extends ShopItemShop implements IShop
     public int axeSlot;
     public int pickaxeSlot;
     
-    public ShopAttack(TeamColor teamColor, GamePlayer gamePlayer)
+    public ShopAttacking(TeamColor teamColor, GamePlayer gamePlayer)
     {
         this.gamePlayer = gamePlayer;
         
@@ -59,6 +59,7 @@ public class ShopAttack extends ShopItemShop implements IShop
         constructShopItemSword(new ItemStack(Material.IRON_SWORD, 1), "Iron Sword", 40, Currency.COINS, false);
         constructShopItem(new ItemStack(Material.BOW, 1), "Bow", 32, Currency.COINS, false);
         constructShopItem(new ItemStack(Material.ARROW, 8), "Arrows", 32, Currency.COINS, false);
+        constructShopItemArmor(new ItemStack(Material.IRON_CHESTPLATE), new ItemStack(Material.IRON_LEGGINGS), "Iron Armor", 2, Currency.EMERALDS, false);
         
         ShopItemTool woodAxeItem = constructShopItemTool(new ItemStack(Material.WOOD_AXE, 1), "Wooden Axe", 24, Currency.COINS, true, 0);
         axeSlot = woodAxeItem.slot;

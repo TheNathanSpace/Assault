@@ -4,6 +4,7 @@ import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.IShop;
 import com.thekingelessar.assault.game.inventory.ShopUtil;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItemArmor;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemSword;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemTool;
 import org.bukkit.inventory.Inventory;
@@ -56,7 +57,19 @@ public class ShopItemShop implements IShop
         ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtItemStack.clone(), name, cost, currency);
         ShopItemTool shopItem = new ShopItemTool(cost, currency, shopItemStack, boughtItemStack, level);
         
-        this.insertShopItemTool(shopItemStack, shopItem, newRow);
+        this.shopItemMap.put(shopItemStack, shopItem);
+        ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
+        
+        return shopItem;
+    }
+    
+    public ShopItemArmor constructShopItemArmor(ItemStack boughtChestplate, ItemStack boughtLeggings, String name, int cost, Currency currency, boolean newRow)
+    {
+        ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtChestplate.clone(), name, cost, currency);
+        ShopItemArmor shopItem = new ShopItemArmor(cost, currency, shopItemStack, boughtChestplate, boughtLeggings);
+        
+        this.shopItemMap.put(shopItemStack, shopItem);
+        ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
         
         return shopItem;
     }
@@ -65,13 +78,6 @@ public class ShopItemShop implements IShop
     {
         ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtItemStack.clone(), name, cost, currency);
         return new ShopItemTool(cost, currency, shopItemStack, boughtItemStack, level);
-    }
-    
-    public void insertShopItemTool(ItemStack shopItemStack, ShopItemTool shopItem, boolean newRow)
-    {
-        this.shopItemMap.put(shopItemStack, shopItem);
-        
-        ShopUtil.insertItem(this.inventory, airSlots, shopItem, newRow);
     }
     
 }

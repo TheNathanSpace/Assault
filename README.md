@@ -21,13 +21,15 @@ phase and Attacking phase.
 
 - Kills not finishing properly (gamerpoints, database)
 - Mixed teams when leaving and rejoining:
-  - Wrong nametag color
-  - Wrong scoreboard coins
+    - Wrong nametag color
+    - Wrong scoreboard coins
 - Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features
 
 - Save team when leave and rejoin
+- Random item shop
+- Map-specific items
 - Team chooser
 - Modifier to place star yourself
 - Procedurally generated terrain map
@@ -37,10 +39,3 @@ phase and Attacking phase.
 - Add more game modifiers:
     - Most stars in 8 minutes
     - Swap team on death
-
-## Roadmap
-
-- Shops
-    - Armor
-    - Strength team buff?
-    - Map-specific items
