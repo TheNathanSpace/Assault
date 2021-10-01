@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.logging.Level;
 
 public class GameEndManager
 {
@@ -164,7 +164,14 @@ public class GameEndManager
                 gameTeam.removeMember(player);
             }
             
-            gameTeam.teamScoreboard.unregister();
+            try
+            {
+                gameTeam.teamScoreboard.unregister();
+            }
+            catch (IllegalStateException e)
+            {
+                Assault.INSTANCE.getLogger().log(Level.WARNING, "Couldn't unregister scoreboard for " + gameTeam.color);
+            }
         }
         
         WorldManager.closeWorld(gameInstance.gameWorld);

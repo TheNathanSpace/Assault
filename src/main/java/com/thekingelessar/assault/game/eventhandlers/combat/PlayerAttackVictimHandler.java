@@ -23,6 +23,7 @@ public class PlayerAttackVictimHandler implements Listener
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent entityAttackEvent)
     {
+        // Cancel friendly bow fire
         if (entityAttackEvent.getEntity() instanceof Player)
         {
             if (entityAttackEvent.getDamager() instanceof Arrow)
@@ -53,11 +54,13 @@ public class PlayerAttackVictimHandler implements Listener
             }
         }
         
+        // If not attacked by player or arrow, return
         if (!(entityAttackEvent.getDamager() instanceof Player || entityAttackEvent.getDamager() instanceof Arrow))
         {
             return;
         }
         
+        // Cancel if attacker can't damage
         if (entityAttackEvent.getDamager() instanceof Player)
         {
             Player attacker = (Player) entityAttackEvent.getDamager();
@@ -65,7 +68,6 @@ public class PlayerAttackVictimHandler implements Listener
             
             if (attackerMode != null)
             {
-                // Cancel if attacker can't damage
                 if (!(attackerMode.canDamage))
                 {
                     entityAttackEvent.setCancelled(true);
@@ -77,11 +79,6 @@ public class PlayerAttackVictimHandler implements Listener
         if (entityAttackEvent.getEntity() instanceof Player)
         {
             Player victim = (Player) entityAttackEvent.getEntity();
-            
-            if (victim.getWorld().equals(Assault.lobbyWorld))
-            {
-                entityAttackEvent.setCancelled(true);
-            }
             
             GameInstance gameInstance = GameInstance.getPlayerGameInstance(victim);
             if (gameInstance != null)
@@ -169,12 +166,14 @@ public class PlayerAttackVictimHandler implements Listener
                         {
                             String deathMessage = victimPlayer.addBowDeathFeed(attacker);
                             Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage)));
-                            attackerPlayer.killPlayer(victim, true);
+                            attackerPlayer.killPlayer(victim, true, false);
                         }
                         else
                         {
-                            attackerPlayer.killPlayer(victim, false);
+                            attackerPlayer.killPlayer(victim, false, false);
                         }
+                        
+                        entityAttackEvent.setCancelled(true);
                     }
                 }
             }

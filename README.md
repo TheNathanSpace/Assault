@@ -19,7 +19,8 @@ phase and Attacking phase.
 
 ### Bugs
 
-- Kills not finishing properly (gamerpoints, database)
+- Destroy entire inventory
+- Still getting killed for flying (web, ladder, boat, minecart...)
 - Mixed teams when leaving and rejoining:
     - Wrong nametag color
     - Wrong scoreboard coins
@@ -28,7 +29,6 @@ phase and Attacking phase.
 ### Features
 
 - Save team when leave and rejoin
-- Random item shop
 - Map-specific items
 - Team chooser
 - Modifier to place star yourself

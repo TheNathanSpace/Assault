@@ -137,7 +137,7 @@ public class Assault extends JavaPlugin
         
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ItemShopTrait.class).withName("itemshoptrait"));
         CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(BuffShopTrait.class).withName("buffshoptrait"));
-    
+        
         try
         {
             Class.forName("org.sqlite.JDBC");
@@ -157,14 +157,6 @@ public class Assault extends JavaPlugin
         super.onDisable();
         for (NPC npc : gameNPCs)
         {
-            try
-            {
-                npc.despawn();
-            }
-            catch (Exception ignored)
-            {
-            }
-            
             try
             {
                 npc.destroy();

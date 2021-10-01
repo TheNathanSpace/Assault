@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.eventhandlers.combat;
 
+import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.player.DeathType;
 import com.thekingelessar.assault.game.player.GamePlayer;
@@ -28,9 +29,14 @@ public class EntityDamageHandler implements Listener
         if (entityDamageEvent.getEntity() instanceof Player)
         {
             Player damagedPlayer = (Player) entityDamageEvent.getEntity();
-            
+    
+            if (damagedPlayer.getWorld().equals(Assault.lobbyWorld))
+            {
+                entityDamageEvent.setCancelled(true);
+            }
+    
             GameInstance playerGameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
-            if (damagedPlayer.getHealth() - entityDamageEvent.getDamage() < 1)
+            if (damagedPlayer.getHealth() - entityDamageEvent.getFinalDamage() <= 0)
             {
                 if (playerGameInstance == null)
                 {

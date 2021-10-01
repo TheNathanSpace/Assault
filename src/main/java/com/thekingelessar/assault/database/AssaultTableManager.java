@@ -148,7 +148,6 @@ public class AssaultTableManager
         this.createTable();
         UUID uniqueId = player.getUniqueId();
         Object value = this.getValue(uniqueId, statistic);
-        System.out.println(String.format("OLD value for %s: %s", statistic.toString(), value));
         if (value == null)
         {
             this.insertValue(player, statistic, (0));
@@ -157,8 +156,6 @@ public class AssaultTableManager
         {
             this.insertValue(player, statistic, ((int) value) + 1);
         }
-        value = this.getValue(uniqueId, statistic);
-        System.out.println(String.format("NEW value for %s: %s", statistic.toString(), value));
     }
     
     public Object getValue(UUID uuid, Statistic statistic)

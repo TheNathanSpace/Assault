@@ -125,16 +125,12 @@ public class MapBase
     
     public void destroyShops()
     {
-        List<NPC> removedIndeces = new ArrayList<>();
-        List<NPC> shopNPCs = this.itemShopNPCs;
-        for (NPC npc : shopNPCs)
+        for (NPC npc : new ArrayList<>(this.itemShopNPCs))
         {
             Assault.gameNPCs.remove(npc);
-            removedIndeces.add(npc);
-            npc.despawn();
+            this.itemShopNPCs.remove(npc);
             npc.destroy();
         }
-        this.itemShopNPCs.removeAll(removedIndeces);
         
         if (this.teamBuffShopNPCs.size() != 0)
         {
@@ -142,7 +138,6 @@ public class MapBase
             for (NPC npc : this.teamBuffShopNPCs)
             {
                 Assault.gameNPCs.remove(npc);
-                npc.despawn();
                 npc.destroy();
                 removeList.add(npc);
             }

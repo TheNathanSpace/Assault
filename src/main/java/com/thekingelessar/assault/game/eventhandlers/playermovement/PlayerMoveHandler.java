@@ -11,7 +11,6 @@ import com.thekingelessar.assault.game.world.map.MapBase;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,6 +41,17 @@ public class PlayerMoveHandler implements Listener
                 }
             }
             
+            if (locTo.getZ() > gameInstance.gameMap.maxZ)
+            {
+                cancelMovement(playerMoveEvent);
+                return;
+            }
+            if (locTo.getZ() < gameInstance.gameMap.minZ)
+            {
+                cancelMovement(playerMoveEvent);
+                return;
+            }
+            
             if (gameInstance.gameStage.equals(GameStage.BUILDING))
             {
                 if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
@@ -53,18 +63,6 @@ public class PlayerMoveHandler implements Listener
             else if (gameInstance.getDefendingTeam().equals(gameInstance.getPlayerTeam(player)))
             {
                 if (locTo.getZ() < gameInstance.gameMap.attackerBaseProtMaxZ)
-                {
-                    cancelMovement(playerMoveEvent);
-                    return;
-                }
-                
-                if (locTo.getZ() > gameInstance.gameMap.maxZ)
-                {
-                    cancelMovement(playerMoveEvent);
-                    return;
-                }
-                
-                if (locTo.getZ() < gameInstance.gameMap.minZ)
                 {
                     cancelMovement(playerMoveEvent);
                     return;
@@ -82,17 +80,29 @@ public class PlayerMoveHandler implements Listener
                     if (((Entity) player).isOnGround())
                     {
                         gamePlayer.startTimeInAir = 0;
-                    }
+                    } // todo: when only barely touching web, ded
                     else if (locTo.getBlock() != null && locTo.getBlock().getType().equals(Material.WEB))
                     {
+                        System.out.println("Block at FEET is web");
                         gamePlayer.startTimeInAir = 0;
                     }
-                    else if ((locTo.getBlock() != null && locTo.getBlock().getRelative(BlockFace.UP) != null && locTo.getBlock().getRelative(BlockFace.UP).getType().equals(Material.WEB)))
+                    else if ((player.getEyeLocation().getBlock() != null && player.getEyeLocation().getBlock().getRelative(BlockFace.UP) != null && player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.WEB)))
                     {
+                        System.out.println("Block at EYE is web");
                         gamePlayer.startTimeInAir = 0;
                     }
-                    else if (player.getVehicle() instanceof Boat)
+                    else if (locTo.getWorld().getBlockAt(locTo) != null && locTo.getWorld().getBlockAt(locTo).getType().equals(Material.WEB))
                     {
+                        System.out.println("Block at LOCATION is web");
+                    }
+                    else if ((locTo.getBlock() != null && locTo.getBlock().getRelative(BlockFace.UP) != null && locTo.getBlock().getRelative(BlockFace.UP).getType().equals(Material.LADDER)))
+                    {
+                        System.out.println("In ladder");
+                        gamePlayer.startTimeInAir = 0;
+                    }
+                    else if (player.getVehicle() != null)
+                    {
+                        System.out.println("In vehicle");
                         gamePlayer.startTimeInAir = 0;
                     }
                     else if ((System.nanoTime() - gamePlayer.startTimeInAir) / 1000000000. > 5) // todo: nano time comparison?
@@ -158,7 +168,6 @@ public class PlayerMoveHandler implements Listener
                 if (newLocation.getX() > gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objectives.get(0).x < gameInstance.gameMap.borderX)
                 {
                     cancelMovement(playerMoveEvent);
-                    
                     player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
                     return;
                 }
@@ -166,7 +175,6 @@ public class PlayerMoveHandler implements Listener
                 if (newLocation.getX() < gameInstance.gameMap.borderX && gamePlayer.gameTeam.mapBase.objectives.get(0).x > gameInstance.gameMap.borderX)
                 {
                     cancelMovement(playerMoveEvent);
-                    
                     player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
                     return;
                 }
@@ -174,28 +182,30 @@ public class PlayerMoveHandler implements Listener
             
             return;
         }
-        
-        if (newLocation.getX() > gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objectives.get(0).x < gameInstance.gameMap.borderX)
+        if (gameInstance.gameStage.equals(GameStage.ATTACKING))
         {
-            player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
-            GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
-            if (gamePlayer != null)
+            if (newLocation.getX() > gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objectives.get(0).x < gameInstance.gameMap.borderX)
             {
-                cancelMovement(playerMoveEvent);
-                return;
+                GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+                if (gamePlayer != null)
+                {
+                    cancelMovement(playerMoveEvent);
+                    player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
+                    return;
+                }
+            }
+            
+            if (newLocation.getX() < gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objectives.get(0).x > gameInstance.gameMap.borderX)
+            {
+                GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
+                if (gamePlayer != null)
+                {
+                    cancelMovement(playerMoveEvent);
+                    player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
+                    return;
+                }
             }
         }
-        
-        if (newLocation.getX() < gameInstance.gameMap.borderX && gameInstance.getDefendingTeam().mapBase.objectives.get(0).x > gameInstance.gameMap.borderX)
-        {
-            player.sendMessage(Assault.ASSAULT_PREFIX + "You can't go over here!");
-            GamePlayer gamePlayer = gameInstance.getGamePlayer(player);
-            if (gamePlayer != null)
-            {
-                cancelMovement(playerMoveEvent);
-            }
-        }
-        
     }
     
     private void cancelMovement(PlayerMoveEvent playerMoveEvent)
