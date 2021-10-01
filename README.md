@@ -27,7 +27,6 @@ phase and Attacking phase.
 
 - Save team when leave and rejoin
 - Map-specific items
-- Team chooser
 - Modifier to place star yourself
 - Procedurally generated terrain map
 - Forfeit times weird
