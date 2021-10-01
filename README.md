@@ -19,12 +19,9 @@ phase and Attacking phase.
 
 ### Bugs
 
-- Destroy entire inventory
-- Still getting killed for flying (web, ladder, boat, minecart...)
 - Mixed teams when leaving and rejoining:
     - Wrong nametag color
     - Wrong scoreboard coins
-- Citizens NPCs aren't deleted properly, so they stick around in Citizens' config
 
 ### Features
 

@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -272,5 +273,227 @@ public class Util
         }
         
         return Arrays.asList(helmet, chestplate, leggings, boots);
+    }
+    
+    public static List<Block> getTouchingBlocks(Player player)
+    {
+        Location playerLocation = player.getLocation();
+        List<Block> touchingBlocks = new ArrayList<>();
+        touchingBlocks.add(playerLocation.getBlock());
+        
+        Location headLocation = playerLocation.clone();
+        headLocation.setY(playerLocation.getY() + 1);
+        touchingBlocks.add(headLocation.getBlock());
+        
+        if (playerLocation.getX() - (long) playerLocation.getX() != 0)
+        {
+            double difference = playerLocation.getX() - (long) playerLocation.getX();
+            if (Math.abs(difference) > 0.6)
+            {
+                Location extendedX = playerLocation.clone();
+                if (difference < 0)
+                {
+                    extendedX.setX(Math.floor(playerLocation.getX() - 1));
+                }
+                else
+                {
+                    extendedX.setX(Math.ceil(playerLocation.getX() + 1));
+                }
+                Block otherX = playerLocation.getWorld().getBlockAt(extendedX);
+                if (!Util.isBlockInList(touchingBlocks, otherX))
+                {
+                    touchingBlocks.add(otherX);
+                }
+            }
+            else if (Math.abs(difference) < 0.4)
+            {
+                Location extendedX = playerLocation.clone();
+                if (difference < 0)
+                {
+                    extendedX.setX(Math.ceil(playerLocation.getX()));
+                }
+                else
+                {
+                    extendedX.setX(Math.floor(playerLocation.getX()));
+                }
+                Block otherX = playerLocation.getWorld().getBlockAt(extendedX);
+                if (!Util.isBlockInList(touchingBlocks, otherX))
+                {
+                    touchingBlocks.add(otherX);
+                }
+            }
+        }
+        
+        if (playerLocation.getZ() - (long) playerLocation.getZ() != 0)
+        {
+            double difference = playerLocation.getZ() - (long) playerLocation.getZ();
+            if (Math.abs(difference) > 0.6)
+            {
+                Location extendedZ = playerLocation.clone();
+                if (difference < 0)
+                {
+                    extendedZ.setZ(Math.floor(playerLocation.getZ() - 1));
+                }
+                else
+                {
+                    extendedZ.setZ(Math.ceil(playerLocation.getZ() + 1));
+                }
+                Block otherZ = playerLocation.getWorld().getBlockAt(extendedZ);
+                if (!Util.isBlockInList(touchingBlocks, otherZ))
+                {
+                    touchingBlocks.add(otherZ);
+                }
+            }
+            else if (Math.abs(difference) < 0.4)
+            {
+                Location extendedZ = playerLocation.clone();
+                if (difference < 0)
+                {
+                    extendedZ.setZ(Math.ceil(playerLocation.getZ() + 1));
+                }
+                else
+                {
+                    extendedZ.setZ(Math.floor(playerLocation.getZ() - 1));
+                }
+                Block otherZ = playerLocation.getWorld().getBlockAt(extendedZ);
+                if (!Util.isBlockInList(touchingBlocks, otherZ))
+                {
+                    touchingBlocks.add(otherZ);
+                }
+            }
+        }
+        
+        if (playerLocation.getX() - (long) playerLocation.getX() != 0)
+        {
+            double difference = playerLocation.getX() - (long) playerLocation.getX();
+            if (Math.abs(difference) > 0.6)
+            {
+                Location extendedX = playerLocation.clone();
+                if (difference < 0)
+                {
+                    extendedX.setX(Math.floor(playerLocation.getX() - 1));
+                }
+                else
+                {
+                    extendedX.setX(Math.ceil(playerLocation.getX() + 1));
+                }
+                Block otherX = playerLocation.getWorld().getBlockAt(extendedX);
+                if (!Util.isBlockInList(touchingBlocks, otherX))
+                {
+                    touchingBlocks.add(otherX);
+                }
+            }
+            else if (Math.abs(difference) < 0.4)
+            {
+                Location extendedX = playerLocation.clone();
+                if (difference < 0)
+                {
+                    extendedX.setX(Math.ceil(playerLocation.getX() + 1));
+                }
+                else
+                {
+                    extendedX.setX(Math.floor(playerLocation.getX() - 1));
+                }
+                Block otherX = playerLocation.getWorld().getBlockAt(extendedX);
+                if (!Util.isBlockInList(touchingBlocks, otherX))
+                {
+                    touchingBlocks.add(otherX);
+                }
+            }
+        }
+        
+        headLocation.setY(headLocation.getY() + 1);
+        
+        if (headLocation.getZ() - (long) headLocation.getZ() != 0)
+        {
+            double difference = headLocation.getZ() - (long) headLocation.getZ();
+            if (Math.abs(difference) > 0.6)
+            {
+                Location extendedZ = headLocation.clone();
+                if (difference < 0)
+                {
+                    extendedZ.setZ(Math.floor(headLocation.getZ() - 1));
+                }
+                else
+                {
+                    extendedZ.setZ(Math.ceil(headLocation.getZ() + 1));
+                }
+                Block otherZ = headLocation.getWorld().getBlockAt(extendedZ);
+                if (!Util.isBlockInList(touchingBlocks, otherZ))
+                {
+                    touchingBlocks.add(otherZ);
+                }
+            }
+            else if (Math.abs(difference) < 0.4)
+            {
+                Location extendedZ = headLocation.clone();
+                if (difference < 0)
+                {
+                    extendedZ.setZ(Math.ceil(headLocation.getZ() + 1));
+                }
+                else
+                {
+                    extendedZ.setZ(Math.floor(headLocation.getZ() - 1));
+                }
+                Block otherZ = headLocation.getWorld().getBlockAt(extendedZ);
+                if (!Util.isBlockInList(touchingBlocks, otherZ))
+                {
+                    touchingBlocks.add(otherZ);
+                }
+            }
+        }
+        
+        //        // 1.8 doesn't work with z height
+        //        if (headLocation.getZ() - (long) headLocation.getZ() != 0)
+        //        {
+        //            double difference = headLocation.getZ() - (long) headLocation.getZ();
+        //            if (Math.abs(difference) > 0.6)
+        //            {
+        //                Location extendedZ = headLocation.clone();
+        //                if (difference < 0)
+        //                {
+        //                    extendedZ.setY(Math.floor(headLocation.getZ() - 1));
+        //                }
+        //                else
+        //                {
+        //                    extendedZ.setZ(Math.ceil(headLocation.getZ() + 1));
+        //                }
+        //                Block otherZ = headLocation.getWorld().getBlockAt(extendedZ);
+        //                touchingBlocks.add(otherZ);
+        //            }
+        //            else if (Math.abs(difference) < 0.4)
+        //            {
+        //                Location extendedZ = headLocation.clone();
+        //                if (difference < 0)
+        //                {
+        //                    extendedZ.setZ(Math.ceil(headLocation.getZ() + 1));
+        //                }
+        //                else
+        //                {
+        //                    extendedZ.setZ(Math.floor(headLocation.getZ() - 1));
+        //                }
+        //                Block otherZ = headLocation.getWorld().getBlockAt(extendedZ);
+        //                touchingBlocks.add(otherZ);
+        //            }
+        //        }
+        
+        return touchingBlocks;
+    }
+    
+    public static boolean blockLocationsEqual(Block block1, Block block2)
+    {
+        return block1.getWorld().equals(block2.getWorld()) && block1.getX() == block2.getX() && block1.getY() == block2.getY() && block1.getZ() == block2.getZ();
+    }
+    
+    public static boolean isBlockInList(List<Block> blockList, Block block)
+    {
+        for (Block block1 : blockList)
+        {
+            if (Util.blockLocationsEqual(block, block1))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

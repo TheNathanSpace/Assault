@@ -165,6 +165,8 @@ public class GamePlayer
         if (!playerMode.equals(PlayerMode.BUILDING))
         {
             player.getInventory().clear();
+            player.setItemOnCursor(null);
+            player.getOpenInventory().getTopInventory().clear();
         }
         
         player.getInventory().setArmorContents(spawnArmor.toArray(new ItemStack[0]));

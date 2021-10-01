@@ -8,9 +8,10 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.world.map.MapBase;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,8 +19,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PlayerMoveHandler implements Listener
 {
+    public final static List<Material> FLYING_BLOCKS = Arrays.asList(Material.WEB, Material.LADDER);
+    
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent playerMoveEvent)
     {
@@ -80,29 +86,9 @@ public class PlayerMoveHandler implements Listener
                     if (((Entity) player).isOnGround())
                     {
                         gamePlayer.startTimeInAir = 0;
-                    } // todo: when only barely touching web, ded
-                    else if (locTo.getBlock() != null && locTo.getBlock().getType().equals(Material.WEB))
-                    {
-                        System.out.println("Block at FEET is web");
-                        gamePlayer.startTimeInAir = 0;
-                    }
-                    else if ((player.getEyeLocation().getBlock() != null && player.getEyeLocation().getBlock().getRelative(BlockFace.UP) != null && player.getEyeLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.WEB)))
-                    {
-                        System.out.println("Block at EYE is web");
-                        gamePlayer.startTimeInAir = 0;
-                    }
-                    else if (locTo.getWorld().getBlockAt(locTo) != null && locTo.getWorld().getBlockAt(locTo).getType().equals(Material.WEB))
-                    {
-                        System.out.println("Block at LOCATION is web");
-                    }
-                    else if ((locTo.getBlock() != null && locTo.getBlock().getRelative(BlockFace.UP) != null && locTo.getBlock().getRelative(BlockFace.UP).getType().equals(Material.LADDER)))
-                    {
-                        System.out.println("In ladder");
-                        gamePlayer.startTimeInAir = 0;
                     }
                     else if (player.getVehicle() != null)
                     {
-                        System.out.println("In vehicle");
                         gamePlayer.startTimeInAir = 0;
                     }
                     else if ((System.nanoTime() - gamePlayer.startTimeInAir) / 1000000000. > 5) // todo: nano time comparison?
@@ -116,6 +102,19 @@ public class PlayerMoveHandler implements Listener
                             player.sendMessage(Assault.ASSAULT_PREFIX + "Looks like you're stuck—respawning!");
                             gamePlayer.respawn(null, true, DeathType.DEATH);
                         }
+                    }
+                    else
+                    {
+                        List<Block> touchingBlocks = Util.getTouchingBlocks(player);
+                        for (Block touchingBlock : touchingBlocks)
+                        {
+                            if (FLYING_BLOCKS.contains(touchingBlock.getType()))
+                            {
+                                gamePlayer.startTimeInAir = 0;
+                                break;
+                            }
+                        }
+                        
                     }
                 }
                 else

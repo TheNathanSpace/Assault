@@ -254,18 +254,18 @@ public class GameInstance
         
         GameTeam lowerTeam = null;
         int lowestMembers = Integer.MAX_VALUE;
+        Random generator = new Random();
         while (this.players.size() != 0)
         {
             for (GameTeam gameTeam : this.teams)
             {
-                if (gameTeam.members.size() < lowestMembers)
+                if (gameTeam.members.size() <= lowestMembers)
                 {
                     lowerTeam = gameTeam;
                     lowestMembers = gameTeam.members.size();
                 }
             }
             
-            Random generator = new Random();
             Player player = this.players.get(generator.nextInt(this.players.size()));
             this.players.remove(player);
             lowerTeam.addMember(player);
@@ -621,6 +621,8 @@ public class GameInstance
                 gamePlayer.playerBank.coins = 0;
                 
                 player.getInventory().clear();
+                player.setItemOnCursor(null);
+                player.getOpenInventory().getTopInventory().clear();
                 gamePlayer.swapReset();
                 
                 PlayerMode mode = PlayerMode.setPlayerMode(player, PlayerMode.ATTACKING, this);
