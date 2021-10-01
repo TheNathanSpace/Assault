@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.util;
 
+import com.thekingelessar.assault.game.inventory.shopitems.ShopItemArmor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -241,5 +242,35 @@ public class Util
             double value = random.nextDouble() * total;
             return map.higherEntry(value).getValue();
         }
+    }
+    
+    public static List<ItemStack> sortArmor(List<ItemStack> armorList)
+    {
+        ItemStack helmet = null;
+        ItemStack chestplate = null;
+        ItemStack leggings = null;
+        ItemStack boots = null;
+        
+        for (ItemStack armorPiece : armorList)
+        {
+            if (ShopItemArmor.HELMETS.contains(armorPiece.getType()))
+            {
+                helmet = armorPiece;
+            }
+            if (ShopItemArmor.CHESTPLATES.contains(armorPiece.getType()))
+            {
+                chestplate = armorPiece;
+            }
+            if (ShopItemArmor.LEGGINGS.contains(armorPiece.getType()))
+            {
+                leggings = armorPiece;
+            }
+            if (ShopItemArmor.BOOTS.contains(armorPiece.getType()))
+            {
+                boots = armorPiece;
+            }
+        }
+        
+        return Arrays.asList(helmet, chestplate, leggings, boots);
     }
 }

@@ -102,15 +102,15 @@ public class GamePlayer
         
         ItemStack compass = new ItemStack(Material.COMPASS);
         ItemMeta compassMeta = compass.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.DARK_AQUA + "Nearest Star");
-        itemMeta.setLore(Arrays.asList("This compass points towards the", "nearest Nether Star!"));
+        compassMeta.setDisplayName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Nearest Star");
+        compassMeta.setLore(Arrays.asList(ChatColor.RESET + "This compass points towards the", ChatColor.RESET + "nearest Nether Star!"));
         compass.setItemMeta(compassMeta);
         spawnItems.add(compass);
     }
     
     public void setArmor(Material chestplate, Material leggings)
     {
-        for (ItemStack armorPiece : this.spawnArmor)
+        for (ItemStack armorPiece : new ArrayList<>(this.spawnArmor))
         {
             Material armorMaterial = armorPiece.getType();
             if (ShopItemArmor.CHESTPLATES.contains(armorMaterial))
@@ -134,6 +134,9 @@ public class GamePlayer
         leggingsMeta.spigot().setUnbreakable(true);
         itemLeggings.setItemMeta(leggingsMeta);
         spawnArmor.add(itemLeggings);
+        
+        this.spawnArmor = Util.sortArmor(this.spawnArmor);
+        this.player.getInventory().setArmorContents(spawnArmor.toArray(new ItemStack[0]));
     }
     
     public void addSpawnItem(ItemStack spawnItem)
@@ -324,7 +327,7 @@ public class GamePlayer
             GamePlayer attackerPlayer = gameInstance.getGamePlayer(attacker);
             GamePlayer victimPlayer = gameInstance.getGamePlayer(player);
             
-            attackerPlayer.killPlayer(victimPlayer.player, false);
+            attackerPlayer.killPlayer(victimPlayer.player, false, true);
             
             if (!dropItems)
             {
@@ -364,9 +367,8 @@ public class GamePlayer
         gameInstance.lastDamagedBy.put(player, null);
     }
     
-    public void killPlayer(Player victim, boolean arrow)
+    public void killPlayer(Player victim, boolean arrow, boolean indirect)
     {
-        System.out.println(String.format("%s killed player %s", this.player.getName(), victim.getName()));
         AssaultTableManager.getInstance().incrementValue(this.player, Statistic.KILLS);
         
         UUID uuid = player.getUniqueId();
@@ -397,7 +399,7 @@ public class GamePlayer
         
         GamePlayer victimPlayer = gameInstance.getPlayerTeam(victim).getGamePlayer(victim);
         
-        if (!arrow)
+        if (!arrow && !indirect)
         {
             String deathMessage = victimPlayer.addSwordDeathFeed(this.player);
             Assault.INSTANCE.getLogger().log(Level.INFO, ChatColor.stripColor(String.format("DEATH [%s]: %s", gameInstance.gameUUID, deathMessage)));
