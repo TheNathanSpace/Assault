@@ -7,14 +7,18 @@ import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.ShopUtil;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
-import com.thekingelessar.assault.game.modifiers.GameModifier;
-import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
-import com.thekingelessar.assault.game.modifiers.modifiers.ModDisableRandomItems;
-import com.thekingelessar.assault.game.modifiers.modifiers.ModFirstTo5Stars;
-import com.thekingelessar.assault.game.modifiers.modifiers.ModInfiniteTime;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
+import com.thekingelessar.assault.game.pregame.modifiers.GameModifier;
+import com.thekingelessar.assault.game.pregame.modifiers.PlayerShopModifiers;
+import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModDisableWildcardItems;
+import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModFirstTo5Stars;
+import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModInfiniteTime;
+import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModUseTeamSelection;
+import com.thekingelessar.assault.game.pregame.teamselection.PlayerShopTeamSelection;
+import com.thekingelessar.assault.game.pregame.teamselection.SelectedTeam;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
@@ -23,6 +27,7 @@ import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.util.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -53,11 +58,16 @@ public class GameInstance
     
     public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
     public ModFirstTo5Stars modFirstTo5Stars = new ModFirstTo5Stars(this);
-    public ModDisableRandomItems modDisableRandomItems = new ModDisableRandomItems(this);
+    public ModDisableWildcardItems modDisableWildcardItems = new ModDisableWildcardItems(this);
+    public ModUseTeamSelection modUseTeamSelection = new ModUseTeamSelection(this);
     
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
-    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars);
+    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars, modDisableWildcardItems, modUseTeamSelection);
+    
+    public static ItemStack teamSelectionItemStack = ItemInit.initTeamSelectionItemStack();
+    public HashMap<Player, PlayerShopTeamSelection> teamSelectionShopMap = new HashMap<>();
+    public List<SelectedTeam> selectedTeamList = new ArrayList<>();
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
@@ -140,6 +150,14 @@ public class GameInstance
     
     public void sendPlayersToWorld()
     {
+        for (MapBase mapBase : this.gameMap.bases)
+        {
+            TeamColor teamColor = mapBase.teamColor;
+            
+            SelectedTeam selectedTeam = new SelectedTeam(this, teamColor);
+            this.selectedTeamList.add(selectedTeam);
+        }
+        
         this.gameStage = GameStage.PREGAME;
         
         for (Player player : players)
@@ -147,6 +165,9 @@ public class GameInstance
             player.getInventory().clear();
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
+            
+            player.getInventory().setItem(7, GameInstance.teamSelectionItemStack.clone());
+            this.teamSelectionShopMap.put(player, new PlayerShopTeamSelection(this, player));
             
             player.getInventory().setItem(8, GameInstance.gameModifierItemStack.clone());
             this.modifierShopMap.put(player, new PlayerShopModifiers(this, player));
@@ -165,7 +186,7 @@ public class GameInstance
         taskCountdownGameStart.runTaskTimer(Assault.INSTANCE, taskCountdownGameStart.startDelay, taskCountdownGameStart.tickDelay);
     }
     
-    public void endPreGame()
+    public void endPreGame(String message)
     {
         for (Player player : this.gameWorld.getPlayers())
         {
@@ -179,11 +200,10 @@ public class GameInstance
             {
                 player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
             }
-            player.sendRawMessage(Assault.ASSAULT_PREFIX + "Not enough players! :(");
+            player.sendRawMessage(message);
         }
         
         WorldManager.closeWorld(this.gameWorld);
-        List<GameInstance> gameInstances = Assault.gameInstances;
         Assault.gameInstances.remove(this);
     }
     
@@ -195,7 +215,15 @@ public class GameInstance
         }
     }
     
-    public void createTeams()
+    public void updateTeamSelectionShops()
+    {
+        for (PlayerShopTeamSelection playerShopTeamSelection : this.teamSelectionShopMap.values())
+        {
+            playerShopTeamSelection.updateCounts();
+        }
+    }
+    
+    public boolean createTeams()
     {
         GameTeam teamOne = new GameTeam(this.gameMap.getTeamOne().teamColor, this);
         teamOne.setTeamMapBase();
@@ -208,30 +236,77 @@ public class GameInstance
         teams.add(teamOne);
         teams.add(teamTwo);
         
-        Collections.shuffle(this.players);
-        
-        List<List<Player>> teamLists = new ArrayList<>();
-        
-        int numberOfTeams = 2;
-        int halfwayPoint = players.size() / numberOfTeams;
-        int start = 0;
-        int end = halfwayPoint;
-        for (int i = 0; i < numberOfTeams; i++)
+        this.modUseTeamSelection.setEnabled();
+        if (this.modUseTeamSelection.enabled)
         {
-            List<Player> sublist = players.subList(start, end);
-            end = players.size();
-            start = halfwayPoint;
+            for (SelectedTeam selectedTeam : this.selectedTeamList)
+            {
+                for (GameTeam gameTeam : this.teams)
+                {
+                    if (gameTeam.color.equals(selectedTeam.teamColor))
+                    {
+                        gameTeam.addMembers(selectedTeam.members);
+                        this.players.removeAll(selectedTeam.members);
+                    }
+                }
+            }
+        }
+        
+        GameTeam lowerTeam = null;
+        int lowestMembers = Integer.MAX_VALUE;
+        while (this.players.size() != 0)
+        {
+            for (GameTeam gameTeam : this.teams)
+            {
+                if (gameTeam.members.size() < lowestMembers)
+                {
+                    lowerTeam = gameTeam;
+                    lowestMembers = gameTeam.members.size();
+                }
+            }
             
-            teamLists.add(sublist);
+            Random generator = new Random();
+            Player player = this.players.get(generator.nextInt(this.players.size()));
+            this.players.remove(player);
+            lowerTeam.addMember(player);
         }
         
-        for (GameTeam gameTeam : teams)
+        for (GameTeam gameTeam : this.teams)
         {
-            gameTeam.addMembers(teamLists.remove(0));
+            if (gameTeam.members.size() == 0)
+            {
+                this.endPreGame(Assault.ASSAULT_PREFIX + "Ending game—there's nobody on " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.RESET + "!");
+                return false;
+            }
         }
+        
+        //        Collections.shuffle(this.players);
+        //
+        //        List<List<Player>> teamLists = new ArrayList<>();
+        //
+        //        int numberOfTeams = 2;
+        //        int halfwayPoint = players.size() / numberOfTeams;
+        //        int start = 0;
+        //        int end = halfwayPoint;
+        //        for (int i = 0; i < numberOfTeams; i++)
+        //        {
+        //            List<Player> sublist = players.subList(start, end);
+        //            end = players.size();
+        //            start = halfwayPoint;
+        //
+        //            teamLists.add(sublist);
+        //        }
+        //
+        //        for (GameTeam gameTeam : teams)
+        //        {
+        //            gameTeam.addMembers(teamLists.remove(0));
+        //        }
         
         this.modifierShopMap.clear();
         this.modifierShopMap = null;
+        
+        this.teamSelectionShopMap.clear();
+        this.teamSelectionShopMap = null;
         
         for (Player player : this.getPlayers())
         {
@@ -239,6 +314,8 @@ public class GameInstance
             GamePlayer gamePlayer = this.getGamePlayer(player);
             gamePlayer.swapReset();
         }
+        
+        return true;
     }
     
     public GameTeam getPlayerTeam(Player player)
@@ -285,6 +362,7 @@ public class GameInstance
         {
             this.winningTeam = this.getRemainingTeam();
             this.gameEndManager.declareWinners(GameEndManager.WinState.BUILDING_LEFT);
+            return;
         }
         
         TeamStage remainingTeamStage = remainingTeam.teamStage;
@@ -342,13 +420,16 @@ public class GameInstance
     {
         this.gameStage = GameStage.BUILDING;
         
-        createTeams();
+        boolean success = createTeams();
+        if (!success)
+        {
+            return;
+        }
         
         boolean intro = false;
         for (GameModifier gameModifier : modifierList)
         {
             boolean enabled = gameModifier.setEnabled();
-            
             if (enabled)
             {
                 if (!intro)
@@ -376,12 +457,12 @@ public class GameInstance
         }
         
         ItemStack shopItemBoughtStack = new ItemStack(Util.getRandomItemStack());
-        int coinCost = Util.weightedInt(4.6, 24, 1, 64);
-        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + ChatColor.RESET + shopItemBoughtStack.getItemMeta().getDisplayName(), coinCost, Currency.COINS);
+        int coinCost = Util.weightedInt(6, 16, 1, 64);
+        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + ChatColor.RESET + WordUtils.capitalize(shopItemBoughtStack.getType().name().toLowerCase()), coinCost, Currency.COINS);
         ShopItem shopItem = new ShopItem(coinCost, Currency.COINS, shopItemStack, shopItemBoughtStack);
         this.randomShopItems.add(shopItem);
         
-        for (GameTeam team : teams)
+        for (GameTeam team : this.teams)
         {
             List<Location> objectiveLocations = new ArrayList<>();
             for (Coordinate coordinate : team.mapBase.objectives)
@@ -451,13 +532,6 @@ public class GameInstance
         this.attackingTeam = randomList.get(0);
         this.attackingTeam.teamStage = TeamStage.ATTACKING;
         randomList.get(1).teamStage = TeamStage.DEFENDING;
-        
-        for (GameTeam gameTeam : teams)
-        {
-            gameTeam.mapBase.destroyShops();
-            gameTeam.mapBase.spawnShops(this);
-            gameTeam.displaySeconds = 0;
-        }
         
         startRound();
     }
@@ -647,7 +721,7 @@ public class GameInstance
     
     public void endRound(boolean attackersForfeit)
     {
-        for (Objective objective : this.attackingObjectives)
+        for (Objective objective : new ArrayList<>(this.attackingObjectives))
         {
             objective.delete();
         }
@@ -867,9 +941,17 @@ public class GameInstance
     {
         this.players.remove(player);
         
+        for (SelectedTeam selectedTeam : this.selectedTeamList)
+        {
+            if (selectedTeam.members.contains(player))
+            {
+                selectedTeam.removePlayer(player);
+            }
+        }
+        
         if (this.players.size() == 1)
         {
-            this.endPreGame();
+            this.endPreGame(Assault.ASSAULT_PREFIX + "Ending game—not enough players! :(");
         }
     }
     
@@ -880,6 +962,10 @@ public class GameInstance
             player.teleport(gameMap.waitingSpawn.toLocation(this.gameWorld));
             PlayerMode.setPlayerMode(player, PlayerMode.LOBBY, this);
             this.players.add(player);
+            
+            player.getInventory().setItem(7, GameInstance.teamSelectionItemStack.clone());
+            this.teamSelectionShopMap.put(player, new PlayerShopTeamSelection(this, player));
+            
             player.getInventory().setItem(8, GameInstance.gameModifierItemStack.clone());
             this.modifierShopMap.put(player, new PlayerShopModifiers(this, player));
             return;

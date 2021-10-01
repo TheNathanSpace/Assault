@@ -7,8 +7,9 @@ import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
-import com.thekingelessar.assault.game.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.pregame.modifiers.PlayerShopModifiers;
+import com.thekingelessar.assault.game.pregame.teamselection.PlayerShopTeamSelection;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.lobby.LobbyUtil;
 import org.bukkit.Material;
@@ -65,6 +66,12 @@ public class InventoryClickHandler implements Listener
                 inventoryClickEvent.setCancelled(true);
                 return;
             }
+            if (itemStack != null && itemStack.equals(GameInstance.teamSelectionItemStack))
+            {
+                player.openInventory(gameInstance.teamSelectionShopMap.get(player).inventory);
+                inventoryClickEvent.setCancelled(true);
+                return;
+            }
         }
         
         GameTeam playerTeam = gameInstance.getPlayerTeam(player);
@@ -91,6 +98,11 @@ public class InventoryClickHandler implements Listener
         if (gameInstance.modifierShopMap != null && inventoryOpen.equals(gameInstance.modifierShopMap.get(player).inventory))
         {
             PlayerShopModifiers shop = gameInstance.modifierShopMap.get(player);
+            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
+        }
+        else if (gameInstance.teamSelectionShopMap != null && inventoryOpen.equals(gameInstance.teamSelectionShopMap.get(player).inventory))
+        {
+            PlayerShopTeamSelection shop = gameInstance.teamSelectionShopMap.get(player);
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
         else if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))

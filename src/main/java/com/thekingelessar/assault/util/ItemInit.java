@@ -23,6 +23,19 @@ public class ItemInit
         return itemStack;
     }
     
+    public static ItemStack initTeamSelectionItemStack()
+    {
+        ItemStack itemStack = new ItemStack(Material.PAPER);
+        
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Team Selection");
+        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the team selection menu!"));
+        
+        itemStack.setItemMeta(itemMeta);
+        
+        return itemStack;
+    }
+    
     public static ItemStack initStar()
     {
         ItemStack itemStack = new ItemStack(Material.NETHER_STAR);

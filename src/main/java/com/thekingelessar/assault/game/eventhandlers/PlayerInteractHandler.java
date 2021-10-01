@@ -43,6 +43,10 @@ public class PlayerInteractHandler implements Listener
                 {
                     player.openInventory(gameInstance.modifierShopMap.get(player).inventory);
                 }
+                if (itemStack.equals(GameInstance.teamSelectionItemStack))
+                {
+                    player.openInventory(gameInstance.teamSelectionShopMap.get(player).inventory);
+                }
             }
         }
     }

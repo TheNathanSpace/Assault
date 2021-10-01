@@ -1,4 +1,4 @@
-package com.thekingelessar.assault.game.modifiers;
+package com.thekingelessar.assault.game.pregame.modifiers;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;

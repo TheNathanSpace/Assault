@@ -7,6 +7,7 @@ import com.thekingelessar.assault.util.ItemInit;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -169,6 +170,12 @@ public class LobbyUtil
     
     public static void joinLobby(Player player)
     {
+        Entity vehicle = player.getVehicle();
+        player.leaveVehicle();
+        if (vehicle != null)
+        {
+            vehicle.remove();
+        }
         player.teleport(Assault.lobbySpawn);
         player.setDisplayName(player.getName());
         player.setPlayerListName(player.getName());
