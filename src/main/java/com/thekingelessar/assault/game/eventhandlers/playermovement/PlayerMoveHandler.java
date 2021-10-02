@@ -24,7 +24,7 @@ import java.util.List;
 
 public class PlayerMoveHandler implements Listener
 {
-    public final static List<Material> FLYING_BLOCKS = Arrays.asList(Material.WEB, Material.LADDER);
+    public final static List<Material> FLYING_BLOCKS = Arrays.asList(Material.WEB, Material.LADDER, Material.WATER, Material.STATIONARY_WATER);
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent playerMoveEvent)
@@ -80,14 +80,10 @@ public class PlayerMoveHandler implements Listener
             {
                 GamePlayer gamePlayer = gameTeam.getGamePlayer(player);
                 gamePlayer.setCompassObjective();
-                
+                PlayerMode playerMode = PlayerMode.getPlayerMode(player);
                 if (gamePlayer.startTimeInAir != 0)
                 {
-                    if (((Entity) player).isOnGround())
-                    {
-                        gamePlayer.startTimeInAir = 0;
-                    }
-                    else if (player.getVehicle() != null)
+                    if (((Entity) player).isOnGround() || player.getVehicle() != null || (playerMode != null && playerMode.canFly))
                     {
                         gamePlayer.startTimeInAir = 0;
                     }

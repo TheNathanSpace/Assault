@@ -272,7 +272,7 @@ public class Util
             }
         }
         
-        return Arrays.asList(helmet, chestplate, leggings, boots);
+        return Arrays.asList(boots, leggings, chestplate, helmet);
     }
     
     public static List<Block> getTouchingBlocks(Player player)
