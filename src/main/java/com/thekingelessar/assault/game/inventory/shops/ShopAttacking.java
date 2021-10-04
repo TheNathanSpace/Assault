@@ -8,10 +8,10 @@ import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumAxeTier;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumPickaxeTier;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.TeamColor;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.Potion;
@@ -48,32 +48,32 @@ public class ShopAttacking extends ShopItemShop implements IShop
         
         inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Shop");
         
-        constructShopItem(new ItemStack(Material.WOOL, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Wool", 4, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.STAINED_CLAY, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Clay", 16, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.STAINED_GLASS, 8, DyeColor.valueOf(teamColor.toString()).getData()), "Glass", 16, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.WOOD, 4), "Wood Planks", 6, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.COBBLESTONE, 8), "Cobblestone", 16, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.WEB, 2), "Cobwebs", 16, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.GRAVEL, 4), "Gravel", 12, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.WOOL, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Wool", 4, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.STAINED_CLAY, 16, DyeColor.valueOf(teamColor.toString()).getData()), "Clay", 16, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.STAINED_GLASS, 8, DyeColor.valueOf(teamColor.toString()).getData()), "Glass", 16, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.PLANK, 4), "Wood Planks", 6, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.COBBLESTONE, 8), "Cobblestone", 16, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.COBWEB.parseMaterial(), 2), "Cobwebs", 16, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.GRAVEL.parseMaterial(), 4), "Gravel", 12, Currency.COINS, false);
         
-        constructShopItemSword(new ItemStack(Material.STONE_SWORD, 1), "Stone Sword", 16, Currency.COINS, true);
-        constructShopItemSword(new ItemStack(Material.IRON_SWORD, 1), "Iron Sword", 40, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.BOW, 1), "Bow", 32, Currency.COINS, false);
-        constructShopItem(new ItemStack(Material.ARROW, 8), "Arrows", 32, Currency.COINS, false);
-        constructShopItemArmor(new ItemStack(Material.IRON_CHESTPLATE), new ItemStack(Material.IRON_LEGGINGS), "Iron Armor", 2, Currency.EMERALDS, false);
+        constructShopItemSword(new ItemStack(XMaterial.STONE_SWORD.parseMaterial(), 1), "Stone Sword", 16, Currency.COINS, true);
+        constructShopItemSword(new ItemStack(XMaterial.IRON_SWORD.parseMaterial(), 1), "Iron Sword", 40, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.BOW.parseMaterial(), 1), "Bow", 32, Currency.COINS, false);
+        constructShopItem(new ItemStack(XMaterial.ARROW.parseMaterial(), 8), "Arrows", 32, Currency.COINS, false);
+        constructShopItemArmor(new ItemStack(XMaterial.IRON_CHESTPLATE.parseMaterial()), new ItemStack(XMaterial.IRON_LEGGINGS.parseMaterial()), "Iron Armor", 2, Currency.EMERALDS, false);
         
-        ShopItemTool woodAxeItem = constructShopItemTool(new ItemStack(Material.WOOD_AXE, 1), "Wooden Axe", 24, Currency.COINS, true, 0);
+        ShopItemTool woodAxeItem = constructShopItemTool(new ItemStack(XMaterial.WOODEN_AXE.parseMaterial(), 1), "Wooden Axe", 24, Currency.COINS, true, 0);
         axeSlot = woodAxeItem.slot;
         axeTier = EnumAxeTier.NONE;
         
-        ShopItemTool woodPickItem = constructShopItemTool(new ItemStack(Material.WOOD_PICKAXE, 1), "Wooden Pickaxe", 24, Currency.COINS, false, 0);
+        ShopItemTool woodPickItem = constructShopItemTool(new ItemStack(XMaterial.WOODEN_PICKAXE.parseMaterial(), 1), "Wooden Pickaxe", 24, Currency.COINS, false, 0);
         pickaxeSlot = woodPickItem.slot;
         pickaxeTier = EnumPickaxeTier.NONE;
         
-        constructShopItemTool(new ItemStack(Material.SHEARS, 1), "Shears", 28, Currency.COINS, false, 0);
+        constructShopItemTool(new ItemStack(XMaterial.SHEARS.parseMaterial(), 1), "Shears", 28, Currency.COINS, false, 0);
         
-        constructShopItem(new ItemStack(Material.OBSIDIAN, 4), "Obsidian", 4, Currency.EMERALDS, true);
-        constructShopItem(new ItemStack(Material.TNT, 1), "TNT", 4, Currency.EMERALDS, false);
+        constructShopItem(new ItemStack(XMaterial.OBSIDIAN.parseMaterial(), 4), "Obsidian", 4, Currency.EMERALDS, true);
+        constructShopItem(new ItemStack(XMaterial.TNT.parseMaterial(), 1), "TNT", 4, Currency.EMERALDS, false);
         constructShopItem(new Potion(PotionType.JUMP).toItemStack(1), "Jump Boost Potion (30 sec)", 1, Currency.EMERALDS, false);
         constructShopItem(new Potion(PotionType.INVISIBILITY).toItemStack(1), "Invisibility Potion (30 sec)", 2, Currency.EMERALDS, false);
         constructShopItem(new Potion(PotionType.POISON).splash().toItemStack(1), "Splash Potion of Poison (4 hearts)", 1, Currency.EMERALDS, false);
@@ -88,7 +88,7 @@ public class ShopAttacking extends ShopItemShop implements IShop
             }
         }
         
-        storageItem = new ItemStack(Material.CHEST);
+        storageItem = new ItemStack(XMaterial.CHEST.parseMaterial());
         ItemMeta chestMeta = storageItem.getItemMeta();
         chestMeta.setDisplayName(ChatColor.RESET + "Secret Storage");
         chestMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to open the secret storage.", ChatColor.RESET + "The secret storage can be used", ChatColor.RESET + "by your" + teamColor.chatColor + " entire team§r."));

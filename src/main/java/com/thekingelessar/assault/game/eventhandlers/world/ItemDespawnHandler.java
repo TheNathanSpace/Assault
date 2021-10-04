@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.eventhandlers.world;
 
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -15,7 +16,7 @@ public class ItemDespawnHandler implements Listener
         Item item = itemDespawnEvent.getEntity();
         ItemStack itemStack = item.getItemStack();
         
-        if (itemStack.getType().equals(Material.NETHER_STAR))
+        if (itemStack.getType().equals(XMaterial.NETHER_STAR.parseMaterial()))
         {
             itemDespawnEvent.setCancelled(true);
         }

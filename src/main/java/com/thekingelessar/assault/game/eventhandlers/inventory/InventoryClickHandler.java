@@ -12,6 +12,8 @@ import com.thekingelessar.assault.game.pregame.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.pregame.teamselection.PlayerShopTeamSelection;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.lobby.LobbyUtil;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -45,7 +47,7 @@ public class InventoryClickHandler implements Listener
                             LobbyUtil.joinQueue(player);
                         }
                         
-                        if (itemStack.getType().equals(Material.BARRIER))
+                        if (itemStack.getType().equals(XMaterial.BARRIER.parseMaterial()))
                         {
                             LobbyUtil.leaveQueue(player);
                         }
@@ -114,14 +116,7 @@ public class InventoryClickHandler implements Listener
         {
             if (itemClicked.equals(gamePlayer.shopAttacking.storageItem))
             {
-                try
-                {
-                    player.playSound(player.getLocation(), Sound.CHEST_OPEN, 0.5F, 1.3F);
-                }
-                catch (Throwable throwable)
-                {
-                    player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_OPEN"), 0.5F, 1.3F);
-                }
+                player.playSound(player.getLocation(), XSound.BLOCK_CHEST_OPEN.parseSound(), 0.5F, 1.3F);
                 
                 player.openInventory(playerTeam.secretStorage);
                 inventoryClickEvent.setCancelled(true);
@@ -135,14 +130,7 @@ public class InventoryClickHandler implements Listener
         {
             if (itemClicked.equals(playerTeam.goldItem))
             {
-                try
-                {
-                    player.playSound(player.getLocation(), Sound.CHEST_CLOSE, 0.5F, 1.3F);
-                }
-                catch (Throwable throwable)
-                {
-                    player.playSound(player.getLocation(), Sound.valueOf("BLOCK_CHEST_CLOSE"), 0.5F, 1.3F);
-                }
+                player.playSound(player.getLocation(), XSound.BLOCK_CHEST_CLOSE.parseSound(), 0.5F, 1.3F);
                 
                 player.openInventory(gamePlayer.shopAttacking.inventory);
                 inventoryClickEvent.setCancelled(true);
@@ -200,7 +188,7 @@ public class InventoryClickHandler implements Listener
         int slotClicked = inventoryClickEvent.getRawSlot();
         if (slotClicked < destInvent.getSize())
         {
-            if (inventoryClickEvent.getWhoClicked().getItemOnCursor() != null && !inventoryClickEvent.getWhoClicked().getItemOnCursor().getType().equals(Material.AIR))
+            if (inventoryClickEvent.getWhoClicked().getItemOnCursor() != null && !inventoryClickEvent.getWhoClicked().getItemOnCursor().getType().equals(XMaterial.AIR.parseMaterial()))
             {
                 return true;
             }

@@ -1,20 +1,22 @@
 package com.thekingelessar.assault.game.team;
 
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public enum TeamColor
 {
-    BLACK(ChatColor.BLACK, Color.BLACK, 15),
-    DARK_BLUE(ChatColor.DARK_BLUE, Color.NAVY, 11),
-    DARK_GREEN(ChatColor.DARK_GREEN, Color.GREEN, 13),
-    DARK_AQUA(ChatColor.DARK_AQUA, Color.TEAL, 11),
-    DARK_RED(ChatColor.DARK_RED, Color.MAROON, 14),
-    DARK_PURPLE(ChatColor.DARK_PURPLE, Color.PURPLE, 10),
+    BLACK(ChatColor.BLACK, Color.BLACK, XMaterial.BLACK_WOOL),
+    DARK_BLUE(ChatColor.DARK_BLUE, Color.NAVY, XMaterial.BLUE_WOOL),
+    DARK_GREEN(ChatColor.DARK_GREEN, Color.GREEN, XMaterial.GREEN_WOOL),
+    DARK_AQUA(ChatColor.DARK_AQUA, Color.TEAL, XMaterial.CYAN_WOOL),
+    DARK_RED(ChatColor.DARK_RED, Color.MAROON, XMaterial.RED_WOOL),
+    DARK_PURPLE(ChatColor.DARK_PURPLE, Color.PURPLE, XMaterial.PURPLE_WOOL),
     GOLD(ChatColor.GOLD, Color.ORANGE, 1),
     GRAY(ChatColor.GRAY, Color.SILVER, 8),
     DARK_GRAY(ChatColor.DARK_GRAY, Color.GRAY, 7),
@@ -30,7 +32,7 @@ public enum TeamColor
     public Color color;
     public int dataValue;
     
-    private TeamColor(ChatColor chatColor, Color color, int dataValue)
+    private TeamColor(ChatColor chatColor, Color color, Material wool)
     {
         this.chatColor = chatColor;
         this.color = color;

@@ -4,6 +4,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemTool;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.lobby.LobbyUtil;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,21 +42,21 @@ public class PlayerItemDropHandler implements Listener
                 return;
             }
             
-            if (itemStack.getType().equals(Material.COMPASS))
+            if (itemStack.getType().equals(XMaterial.COMPASS))
             {
                 playerDropItemEvent.setCancelled(true);
                 return;
             }
             
-            if (ShopItemTool.axes.contains(itemStack.getType()) || ShopItemTool.pickaxes.contains(itemStack.getType()) || itemStack.getType().equals(Material.SHEARS))
+            if (ShopItemTool.axes.contains(itemStack.getType()) || ShopItemTool.pickaxes.contains(itemStack.getType()) || itemStack.getType().equals(XMaterial.SHEARS.parseMaterial()))
             {
                 playerDropItemEvent.setCancelled(true);
                 return;
             }
             
-            List<Material> swordList = Arrays.asList(Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD);
+            List<Material> swordList = Arrays.asList(XMaterial.STONE_SWORD.parseMaterial(), XMaterial.IRON_SWORD.parseMaterial(), XMaterial.GOLDEN_SWORD.parseMaterial(), XMaterial.DIAMOND_SWORD.parseMaterial());
             
-            if (itemStack.getType().equals(Material.WOOD_SWORD))
+            if (itemStack.getType().equals(XMaterial.WOODEN_SWORD.parseMaterial()))
             {
                 for (ItemStack inventoryItem : player.getInventory().getContents())
                 {
@@ -88,7 +89,7 @@ public class PlayerItemDropHandler implements Listener
                 
                 if (swordCount == 0)
                 {
-                    player.getInventory().addItem(new ItemStack(Material.WOOD_SWORD));
+                    player.getInventory().addItem(new ItemStack(XMaterial.WOODEN_SWORD.parseMaterial()));
                 }
             }
         }

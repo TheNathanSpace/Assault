@@ -7,6 +7,7 @@ import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemBuff;
 import com.thekingelessar.assault.game.teambuffs.*;
 import com.thekingelessar.assault.game.team.GameTeam;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -41,12 +42,12 @@ public class ShopTeamBuffs implements IShop
         
         inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "Team Upgrade Shop");
         
-        constructShopItemBuff(new ItemStack(Material.GOLD_PICKAXE, 1), new BuffHaste(gameTeam), "Haste Upgrade", "Gives your team permanent Haste II.", 1, false);
-        constructShopItemBuff(new ItemStack(Material.FEATHER, 1), new BuffSpeed(gameTeam), "Speed Upgrade", "Gives your team permanent Speed II.", 3, false);
-        constructShopItemBuff(new ItemStack(Material.SPECKLED_MELON, 1), new BuffHealing(gameTeam), "Healing Upgrade", "Gives your team permanent Regeneration II.", 2, false);
-        constructShopItemBuff(new ItemStack(Material.GOLD_CHESTPLATE, 1), new BuffProtection(gameTeam), "Protection Upgrade", "Gives your team permanent Protection I.", 2, false);
-        constructShopItemBuff(new ItemStack(Material.GOLD_SWORD, 1), new BuffSharpness(gameTeam), "Sharpness Upgrade", "Gives your team permanent Sharpness I.", 3, false);
-        constructShopItemBuff(new ItemStack(Material.RABBIT_FOOT, 1), new BuffDoubleJump(gameTeam), "Double Jump Upgrade", "Gives your team permanent double jumping.", 2, false);
+        constructShopItemBuff(new ItemStack(XMaterial.GOLDEN_PICKAXE.parseMaterial(), 1), new BuffHaste(gameTeam), "Haste Upgrade", "Gives your team permanent Haste II.", 1, false);
+        constructShopItemBuff(new ItemStack(XMaterial.FEATHER.parseMaterial(), 1), new BuffSpeed(gameTeam), "Speed Upgrade", "Gives your team permanent Speed II.", 3, false);
+        constructShopItemBuff(new ItemStack(XMaterial.GLISTERING_MELON_SLICE.parseMaterial(), 1), new BuffHealing(gameTeam), "Healing Upgrade", "Gives your team permanent Regeneration II.", 2, false);
+        constructShopItemBuff(new ItemStack(XMaterial.GOLDEN_CHESTPLATE.parseMaterial(), 1), new BuffProtection(gameTeam), "Protection Upgrade", "Gives your team permanent Protection I.", 2, false);
+        constructShopItemBuff(new ItemStack(XMaterial.GOLDEN_SWORD.parseMaterial(), 1), new BuffSharpness(gameTeam), "Sharpness Upgrade", "Gives your team permanent Sharpness I.", 3, false);
+        constructShopItemBuff(new ItemStack(XMaterial.RABBIT_FOOT.parseMaterial(), 1), new BuffDoubleJump(gameTeam), "Double Jump Upgrade", "Gives your team permanent double jumping.", 2, false);
     }
     
     private void constructShopItemBuff(ItemStack shopItemStack, IBuff buff, String name, String description, int cost, boolean newRow)

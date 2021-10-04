@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.eventhandlers.combat;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -55,7 +56,7 @@ public class PotionThrowHandler implements Listener
                         potion.setSplash(true);
                         potion.setType(PotionType.POISON);
                         
-                        ItemStack newPotionItemStack = new ItemStack(Material.POTION);
+                        ItemStack newPotionItemStack = new ItemStack(XMaterial.POTION.parseMaterial());
                         potion.apply(newPotionItemStack);
                         
                         ItemMeta newPotionItemMeta = newPotionItemStack.getItemMeta();

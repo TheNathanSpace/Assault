@@ -7,6 +7,7 @@ import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -110,13 +111,12 @@ public class PlayerBlockPlaceHandler implements Listener
             
             gameInstance.placedBlocks.add(placedCoordinate);
             
-            List<Material> fallingBlocks = Arrays.asList(Material.SAND, Material.GRAVEL, Material.ANVIL, Material.DRAGON_EGG);
-            if (fallingBlocks.contains(blockPlaceEvent.getBlock().getType()))
+            if (GravelFallHandler.fallingBlocks.contains(blockPlaceEvent.getBlock().getType()))
             {
                 gameInstance.fallingBlockCoordinateMap.put(placedCoordinate.toString(), player);
             }
             
-            if (blockPlaceEvent.getBlock().getType().equals(Material.TNT))
+            if (blockPlaceEvent.getBlock().getType().equals(XMaterial.TNT.parseMaterial()))
             {
                 Block placedBlock = blockPlaceEvent.getBlockPlaced();
                 Location location = new Location(placedBlock.getWorld(), placedBlock.getX() + .5, placedBlock.getY() + .1, placedBlock.getZ() + .5);

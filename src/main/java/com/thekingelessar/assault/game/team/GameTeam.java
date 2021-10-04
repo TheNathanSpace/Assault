@@ -14,6 +14,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.teambuffs.IBuff;
 import com.thekingelessar.assault.game.world.map.MapBase;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -75,7 +76,7 @@ public class GameTeam
     {
         secretStorage = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + "Storage");
         
-        goldItem = new ItemStack(Material.GOLD_INGOT);
+        goldItem = new ItemStack(XMaterial.GOLD_INGOT.parseMaterial());
         ItemMeta goldMeta = goldItem.getItemMeta();
         goldMeta.setDisplayName(ChatColor.RESET + "Return to shop");
         goldMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to return to the shop.", ChatColor.RESET + "This storage can be used", ChatColor.RESET + "by your" + this.color.chatColor + " entire team§r."));

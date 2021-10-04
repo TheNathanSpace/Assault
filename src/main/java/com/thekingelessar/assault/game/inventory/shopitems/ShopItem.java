@@ -4,6 +4,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.IShop;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -51,25 +52,11 @@ public class ShopItem
     {
         if (success)
         {
-            try
-            {
-                player.playSound(player.getLocation(), Sound.NOTE_PLING, 1.0F, 2.0F);
-            }
-            catch (Throwable throwable)
-            {
-                player.playSound(player.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_PLING"), 1.0F, 2.0F);
-            }
+            player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1.0F, 2.0F);
         }
         else
         {
-            try
-            {
-                player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-            }
-            catch (Throwable throwable)
-            {
-                player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
-            }
+            player.playSound(player.getLocation(), XSound.ENTITY_SKELETON_HURT.parseSound(), 1.0F, 1.0F);
         }
     }
     

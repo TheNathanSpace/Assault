@@ -4,6 +4,8 @@ import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.util.ItemInit;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -30,14 +32,7 @@ public class LobbyUtil
     
     public static void joinQueue(Player player)
     {
-        try
-        {
-            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
-        }
-        catch (Throwable throwable)
-        {
-            player.playSound(player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 1.0F, 1.0F);
-        }
+        player.playSound(player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1.0F, 1.0F);
         
         if (Assault.gameInstances.size() > 0)
         {
@@ -80,14 +75,7 @@ public class LobbyUtil
                 else
                 {
                     worldPlayer.sendRawMessage(Assault.ASSAULT_PREFIX + "A game is starting! Click the §dnether star§r to join!");
-                    try
-                    {
-                        player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
-                    }
-                    catch (Throwable throwable)
-                    {
-                        player.playSound(player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 1.0F, 1.0F);
-                    }
+                    player.playSound(player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1.0F, 1.0F);
                 }
             }
             
@@ -121,17 +109,10 @@ public class LobbyUtil
     
     public static void leaveQueue(Player player)
     {
-        try
-        {
-            player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-        }
-        catch (Throwable throwable)
-        {
-            player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
-        }
+        player.playSound(player.getLocation(), XSound.ENTITY_SKELETON_HURT.parseSound(), 1.0F, 1.0F);
         
         queueList.remove(player);
-        player.getInventory().setItem(8, new ItemStack(Material.AIR));
+        player.getInventory().setItem(8, new ItemStack(XMaterial.AIR.parseMaterial()));
         LobbyUtil.giveStar(player);
         player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've been removed from the queue. :(");
     }
@@ -139,7 +120,7 @@ public class LobbyUtil
     public static void sendRules(Player player)
     {
         LobbyUtil.sendGuideURL(player);
-        player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
+        player.playSound(player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1.0F, 1.0F);
     }
     
     private static void sendGuideURL(Player player)
@@ -182,7 +163,7 @@ public class LobbyUtil
         player.setCustomName(player.getName());
         player.setGameMode(Assault.lobbyGamemode);
         player.getInventory().clear();
-        player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR)});
+        player.getInventory().setArmorContents(new ItemStack[]{new ItemStack(XMaterial.AIR.parseMaterial()), new ItemStack(XMaterial.AIR.parseMaterial()), new ItemStack(XMaterial.AIR.parseMaterial()), new ItemStack(XMaterial.AIR.parseMaterial())});
         LobbyUtil.giveStar(player);
         LobbyUtil.giveBook(player);
         player.getInventory().setHeldItemSlot(0);

@@ -4,6 +4,7 @@ version: ${project.version}
 author: TheKingElessar
 softdepend: [ HolographicDisplays ]
 depend: [ Citizens ]
+api-version: "1.13"
 commands:
   assaulthelp:
     aliases: [ ]

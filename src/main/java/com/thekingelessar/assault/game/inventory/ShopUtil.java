@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.inventory;
 
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -25,7 +26,7 @@ public class ShopUtil
         {
             ItemStack inventoryItem = contents[i];
             
-            if (inventoryItem == null || inventoryItem.getType().equals(Material.AIR))
+            if (inventoryItem == null || inventoryItem.getType().equals(XMaterial.AIR.parseMaterial()))
             {
                 lastEmpty = i;
             }

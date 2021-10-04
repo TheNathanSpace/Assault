@@ -9,6 +9,7 @@ import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class PlayerMoveHandler implements Listener
 {
-    public final static List<Material> FLYING_BLOCKS = Arrays.asList(Material.WEB, Material.LADDER, Material.WATER, Material.STATIONARY_WATER);
+    public final static List<Material> FLYING_BLOCKS = Arrays.asList(XMaterial.COBWEB.parseMaterial(), XMaterial.LADDER.parseMaterial(), XMaterial.WATER.parseMaterial());
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent playerMoveEvent)

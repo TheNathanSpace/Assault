@@ -4,6 +4,7 @@ import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Title;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
@@ -75,14 +76,7 @@ public class TaskAttackTimer extends BukkitRunnable
             {
                 for (Player player : gameInstance.getAttackingTeam().getPlayers())
                 {
-                    try
-                    {
-                        player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1.5f, 2.0f);
-                    }
-                    catch (Throwable throwable)
-                    {
-                        player.playSound(player.getLocation(), Sound.valueOf("BLOCK_NOTE_BLOCK_BASS"), 1.5f, 2.0f);
-                    }
+                    player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_GUITAR.parseSound(), 1.5f, 2.0f);
                 }
                 forfeitAlerted = true;
             }

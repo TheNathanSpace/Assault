@@ -4,6 +4,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,13 +20,13 @@ import java.util.List;
 
 public class GravelFallHandler implements Listener
 {
+    public static List<Material> fallingBlocks = Arrays.asList(XMaterial.SAND.parseMaterial(), XMaterial.GRAVEL.parseMaterial(), XMaterial.ANVIL.parseMaterial(), XMaterial.DRAGON_EGG.parseMaterial());
+    
     @EventHandler
     public void onGravelFall(EntityChangeBlockEvent entityChangeBlockEvent)
     {
         if (entityChangeBlockEvent.getEntity() instanceof FallingBlock)
         {
-            List<Material> fallingBlocks = Arrays.asList(Material.SAND, Material.GRAVEL, Material.ANVIL, Material.DRAGON_EGG);
-            
             FallingBlock fallingBlock = (FallingBlock) entityChangeBlockEvent.getEntity();
             Block block = entityChangeBlockEvent.getBlock();
             
@@ -49,7 +50,7 @@ public class GravelFallHandler implements Listener
                     }
                 }
             }
-            else if (fallingBlocks.contains(fallingBlock.getMaterial()) && block.getType().equals(Material.AIR))
+            else if (fallingBlocks.contains(fallingBlock.getMaterial()) && block.getType().equals(XMaterial.AIR.parseMaterial()))
             {
                 Location placedLocation = fallingBlock.getLocation();
                 Coordinate placedCoordinate = new Coordinate(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());

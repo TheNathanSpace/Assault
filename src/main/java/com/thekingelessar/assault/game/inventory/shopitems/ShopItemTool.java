@@ -6,6 +6,7 @@ import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumAxeTier;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumPickaxeTier;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class ShopItemTool extends ShopItem
 {
-    public static List<Material> axes = Arrays.asList(Material.WOOD_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLD_AXE);
-    public static List<Material> pickaxes = Arrays.asList(Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE);
+    public static List<Material> axes = Arrays.asList(XMaterial.WOODEN_AXE.parseMaterial(), XMaterial.STONE_AXE.parseMaterial(), XMaterial.IRON_AXE.parseMaterial(), XMaterial.GOLDEN_AXE.parseMaterial());
+    public static List<Material> pickaxes = Arrays.asList(XMaterial.WOODEN_PICKAXE.parseMaterial(), XMaterial.STONE_PICKAXE.parseMaterial(), XMaterial.GOLDEN_PICKAXE.parseMaterial(), XMaterial.DIAMOND_PICKAXE.parseMaterial());
     
     public int level;
     
@@ -79,17 +80,17 @@ public class ShopItemTool extends ShopItem
         
         boolean add = true;
         
-        if (this.boughtItemStack.getType().equals(Material.WOOD_PICKAXE))
+        if (this.boughtItemStack.getType().equals(XMaterial.WOODEN_PICKAXE.parseMaterial()))
         {
             gamePlayer.shopAttacking.pickaxeTier = EnumPickaxeTier.WOOD_PICKAXE;
             ShopItemTool.updateItemPurchase(gamePlayer.shopAttacking, gamePlayer.shopAttacking.pickaxeTier.getHigherPickaxeTier().shopItemTool);
         }
-        else if (this.boughtItemStack.getType().equals(Material.WOOD_AXE))
+        else if (this.boughtItemStack.getType().equals(XMaterial.WOODEN_AXE.parseMaterial()))
         {
             gamePlayer.shopAttacking.axeTier = EnumAxeTier.WOOD_AXE;
             ShopItemTool.updateItemPurchase(gamePlayer.shopAttacking, gamePlayer.shopAttacking.axeTier.getHigherAxeTier().shopItemTool);
         }
-        else if (axes.contains(this.boughtItemStack.getType()) && !this.boughtItemStack.getType().equals(Material.WOOD_AXE))
+        else if (axes.contains(this.boughtItemStack.getType()) && !this.boughtItemStack.getType().equals(XMaterial.WOODEN_AXE.parseMaterial()))
         {
             ItemStack[] contents = player.getInventory().getContents();
             for (int i = 0; i < contents.length; i++)

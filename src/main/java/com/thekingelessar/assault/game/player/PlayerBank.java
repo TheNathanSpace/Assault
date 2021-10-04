@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.player;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import org.bukkit.Sound;
 
 public class PlayerBank
@@ -39,7 +40,7 @@ public class PlayerBank
         if (alert && !this.maxCoinAlerted)
         {
             this.gamePlayer.player.sendMessage(Assault.ASSAULT_PREFIX + "You've can't hold onto anymore coins! Go spend some!");
-            this.gamePlayer.player.playSound(this.gamePlayer.player.getLocation(), Sound.FIRE_IGNITE, 1.0f, 1.0f);
+            this.gamePlayer.player.playSound(this.gamePlayer.player.getLocation(), XSound.ITEM_FLINTANDSTEEL_USE.parseSound(), 1.0f, 1.0f);
             this.maxCoinAlerted = true;
         }
     }

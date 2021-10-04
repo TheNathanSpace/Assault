@@ -3,6 +3,7 @@ package com.thekingelessar.assault.game.inventory.shopitems;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class ShopItemColoredBlock extends ShopItem
 {
-    public List<Material> durabilityList = Arrays.asList(Material.WOOL, Material.STAINED_CLAY, Material.STAINED_GLASS);
+    public List<Material> durabilityList = Arrays.asList(XMaterial.WOOL, XMaterial.TERRACOTTA.parseMaterial(), XMaterial.STAINED_GLASS);
     
     public ShopItemColoredBlock(int cost, Currency currency, ItemStack shopItemStack, ItemStack boughtItemStack)
     {

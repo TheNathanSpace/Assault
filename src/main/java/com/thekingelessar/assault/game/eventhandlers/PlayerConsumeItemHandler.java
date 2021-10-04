@@ -2,6 +2,7 @@ package com.thekingelessar.assault.game.eventhandlers;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,7 @@ public class PlayerConsumeItemHandler implements Listener
             GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
             if (gameInstance != null)
             {
-                if (itemStack.getType().equals(Material.POTION))
+                if (itemStack.getType().equals(XMaterial.POTION.parseMaterial()))
                 {
                     Potion potion = Potion.fromItemStack(itemStack);
                     PotionType potionEffect = potion.getType();
@@ -38,7 +39,7 @@ public class PlayerConsumeItemHandler implements Listener
                             break;
                     }
                     playerItemConsumeEvent.setCancelled(true);
-                    player.getInventory().setItem(player.getInventory().getHeldItemSlot(), new ItemStack(Material.AIR));
+                    player.getInventory().setItem(player.getInventory().getHeldItemSlot(), new ItemStack(XMaterial.AIR.parseMaterial()));
                 }
             }
         }

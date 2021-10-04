@@ -9,6 +9,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.FireworkUtils;
 import com.thekingelessar.assault.util.Title;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,14 +30,14 @@ public class PlayerPickupItemHandler implements Listener
         Material pickedUp = playerPickupItemEvent.getItem().getItemStack().getType();
         Player player = playerPickupItemEvent.getPlayer();
         
-        List<Material> swordList = Arrays.asList(Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD);
+        List<Material> swordList = Arrays.asList(XMaterial.STONE_SWORD.parseMaterial(), XMaterial.IRON_SWORD.parseMaterial(), XMaterial.GOLDEN_SWORD.parseMaterial(), XMaterial.DIAMOND_SWORD.parseMaterial());
         if (swordList.contains(pickedUp))
         {
             ItemStack[] contents = player.getInventory().getContents();
             for (int i = 0; i < contents.length; i++)
             {
                 ItemStack inventoryItem = contents[i];
-                if (inventoryItem != null && inventoryItem.getType().equals(Material.WOOD_SWORD))
+                if (inventoryItem != null && inventoryItem.getType().equals(XMaterial.WOODEN_SWORD.parseMaterial()))
                 {
                     player.getInventory().setItem(i, playerPickupItemEvent.getItem().getItemStack());
                     playerPickupItemEvent.setCancelled(true);
@@ -46,7 +47,7 @@ public class PlayerPickupItemHandler implements Listener
             }
         }
         
-        if (pickedUp.equals(Material.NETHER_STAR))
+        if (pickedUp.equals(XMaterial.NETHER_STAR.parseMaterial()))
         {
             GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
             

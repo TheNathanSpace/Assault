@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.util;
 
+import com.thekingelessar.assault.util.xsupport.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ public class ItemInit
 {
     public static ItemStack initGameModifierItemStack()
     {
-        ItemStack itemStack = new ItemStack(Material.REDSTONE_COMPARATOR);
+        ItemStack itemStack = new ItemStack(XMaterial.COMPARATOR.parseMaterial());
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Modifiers");
@@ -25,7 +26,7 @@ public class ItemInit
     
     public static ItemStack initTeamSelectionItemStack()
     {
-        ItemStack itemStack = new ItemStack(Material.PAPER);
+        ItemStack itemStack = new ItemStack(XMaterial.PAPER.parseMaterial());
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Team Selection");
@@ -38,7 +39,7 @@ public class ItemInit
     
     public static ItemStack initStar()
     {
-        ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
+        ItemStack itemStack = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Join Game");
@@ -51,7 +52,7 @@ public class ItemInit
     
     public static ItemStack initInQueueStar()
     {
-        ItemStack itemStack = new ItemStack(Material.NETHER_STAR);
+        ItemStack itemStack = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "You are in the queue!");
@@ -64,7 +65,7 @@ public class ItemInit
     
     public static ItemStack initBarrier()
     {
-        ItemStack itemStack = new ItemStack(Material.BARRIER);
+        ItemStack itemStack = new ItemStack(XMaterial.BARRIER.parseMaterial());
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Queue");
@@ -77,7 +78,7 @@ public class ItemInit
     
     public static ItemStack initBook()
     {
-        ItemStack itemStack = new ItemStack(Material.BOOK);
+        ItemStack itemStack = new ItemStack(XMaterial.BOOK.parseMaterial());
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.BLUE + ChatColor.BOLD.toString() + "Guide");

@@ -13,6 +13,8 @@ import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
 import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -48,7 +50,7 @@ public class GamePlayer
     public List<ItemStack> spawnItems = new ArrayList<>();
     public List<ItemStack> spawnArmor = new ArrayList<>();
     
-    List<Material> itemsToDrop = Arrays.asList(Material.EMERALD, Material.TNT, Material.OBSIDIAN);
+    List<Material> itemsToDrop = Arrays.asList(XMaterial.EMERALD.parseMaterial(), XMaterial.TNT.parseMaterial(), XMaterial.OBSIDIAN.parseMaterial());
     
     public long lastCompassUpdate = 0;
     
@@ -68,39 +70,39 @@ public class GamePlayer
         spawnItems = new ArrayList<>();
         spawnArmor = new ArrayList<>();
         
-        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+        ItemStack boots = new ItemStack(XMaterial.LEATHER_BOOTS.parseMaterial());
         LeatherArmorMeta bootsMeta = (LeatherArmorMeta) boots.getItemMeta();
         bootsMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
         bootsMeta.spigot().setUnbreakable(true);
         boots.setItemMeta(bootsMeta);
         spawnArmor.add(boots);
         
-        ItemStack leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+        ItemStack leggings = new ItemStack(XMaterial.CHAINMAIL_LEGGINGS.parseMaterial());
         ItemMeta leggingsMeta = leggings.getItemMeta();
         leggingsMeta.spigot().setUnbreakable(true);
         leggings.setItemMeta(leggingsMeta);
         spawnArmor.add(leggings);
         
-        ItemStack chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        ItemStack chestplate = new ItemStack(XMaterial.CHAINMAIL_CHESTPLATE.parseMaterial());
         ItemMeta chestplateMeta = chestplate.getItemMeta();
         chestplateMeta.spigot().setUnbreakable(true);
         chestplate.setItemMeta(chestplateMeta);
         spawnArmor.add(chestplate);
         
-        ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+        ItemStack helmet = new ItemStack(XMaterial.LEATHER_HELMET.parseMaterial());
         LeatherArmorMeta helmetMeta = (LeatherArmorMeta) helmet.getItemMeta();
         helmetMeta.setColor(gameInstance.getPlayerTeam(player).color.color);
         helmetMeta.spigot().setUnbreakable(true);
         helmet.setItemMeta(helmetMeta);
         spawnArmor.add(helmet);
         
-        ItemStack woodSword = new ItemStack(Material.WOOD_SWORD);
+        ItemStack woodSword = new ItemStack(XMaterial.WOODEN_SWORD.parseMaterial());
         ItemMeta itemMeta = woodSword.getItemMeta();
         itemMeta.spigot().setUnbreakable(true);
         woodSword.setItemMeta(itemMeta);
         spawnItems.add(woodSword);
         
-        ItemStack compass = new ItemStack(Material.COMPASS);
+        ItemStack compass = new ItemStack(XMaterial.COMPASS.parseMaterial());
         ItemMeta compassMeta = compass.getItemMeta();
         compassMeta.setDisplayName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Nearest Star");
         compassMeta.setLore(Arrays.asList(ChatColor.RESET + "This compass points towards the", ChatColor.RESET + "nearest Nether Star!"));
@@ -190,14 +192,7 @@ public class GamePlayer
     
     public void respawn(PlayerMode playerMode, boolean delay, DeathType deathType)
     {
-        try
-        {
-            this.player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-        }
-        catch (Throwable throwable)
-        {
-            this.player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
-        }
+        this.player.playSound(player.getLocation(), XSound.ENTITY_SKELETON_HURT.parseSound(), 1.0F, 1.0F);
         
         
         if (playerMode == null)
@@ -416,14 +411,7 @@ public class GamePlayer
             this.playerBank.addCoins((int) (this.gameInstance.gameMap.rateOnKill * (victimPlayer.playerBank.coins)));
         }
         
-        try
-        {
-            this.player.playSound(this.player.getLocation(), Sound.ORB_PICKUP, 0.8F, 1.0F);
-        }
-        catch (Throwable throwable)
-        {
-            this.player.playSound(this.player.getLocation(), Sound.valueOf("ENTITY_EXPERIENCE_ORB_PICKUP"), 0.8F, 1.0F);
-        }
+        this.player.playSound(this.player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 0.8F, 1.0F);
         
         this.updateScoreboard();
     }

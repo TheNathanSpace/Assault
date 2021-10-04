@@ -7,6 +7,7 @@ import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.world.map.MapBase;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -149,14 +150,7 @@ public class PlayerAttackVictimHandler implements Listener
                     
                     if (victim.getHealth() - entityAttackEvent.getFinalDamage() <= 0)
                     {
-                        try
-                        {
-                            gameInstance.gameWorld.playSound(victim.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-                        }
-                        catch (Throwable throwable)
-                        {
-                            gameInstance.gameWorld.playSound(victim.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
-                        }
+                        gameInstance.gameWorld.playSound(victim.getLocation(), XSound.ENTITY_SKELETON_HURT.parseSound(), 1.0F, 1.0F);
                         
                         GamePlayer attackerPlayer = attackerTeam.getGamePlayer(attacker);
                         

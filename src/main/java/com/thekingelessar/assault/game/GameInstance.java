@@ -25,6 +25,8 @@ import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.game.world.map.Map;
 import com.thekingelessar.assault.game.world.map.MapBase;
 import com.thekingelessar.assault.util.*;
+import com.thekingelessar.assault.util.xsupport.XMaterial;
+import com.thekingelessar.assault.util.xsupport.XSound;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
 import org.apache.commons.lang.WordUtils;
@@ -192,14 +194,7 @@ public class GameInstance
         {
             Title title = new Title();
             title.clearTitle(player);
-            try
-            {
-                player.playSound(player.getLocation(), Sound.SKELETON_HURT, 1.0F, 1.0F);
-            }
-            catch (Throwable throwable)
-            {
-                player.playSound(player.getLocation(), Sound.valueOf("ENTITY_SKELETON_HURT"), 1.0F, 1.0F);
-            }
+                player.playSound(player.getLocation(), XSound.ENTITY_SKELETON_HURT.parseSound(), 1.0F, 1.0F);
             player.sendRawMessage(message);
         }
         
@@ -475,7 +470,7 @@ public class GameInstance
                 Location objectiveLocation = coordinate.toLocation(this.gameWorld);
                 objectiveLocations.add(objectiveLocation);
                 
-                ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+                ItemStack objectiveItem = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
                 
                 Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
                 
@@ -647,7 +642,7 @@ public class GameInstance
         {
             Location objectiveLocation = coordinate.toLocation(this.gameWorld);
             
-            ItemStack objectiveItem = new ItemStack(Material.NETHER_STAR);
+            ItemStack objectiveItem = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
             
             Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
             
