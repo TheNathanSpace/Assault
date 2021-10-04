@@ -19,19 +19,19 @@ phase and Attacking phase.
 
 ### Bugs
 
+- Teams not balanced
 - Mixed teams when leaving and rejoining:
     - Wrong nametag color
     - Wrong scoreboard coins
+- Forfeit times weird
 
 ### Features
 
+- XMaterial future versions support
+  - https://www.spigotmc.org/threads/xseries-xmaterial-xparticle-xsound-xpotion-titles-actionbar-etc.378136/
+  - https://github.com/CryptoMorin/XSeries/tree/dfb4ecea6387e30260a296ba9ddea0b80d635bee
 - Save team when leave and rejoin
 - Map-specific items
 - Modifier to place star yourself
 - Procedurally generated terrain map
-- Forfeit times weird
-- Multiverse support
 - Package maps with plugin
-- Add more game modifiers:
-    - Most stars in 8 minutes
-    - Swap team on death

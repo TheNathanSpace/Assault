@@ -12,9 +12,9 @@ import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.pregame.modifiers.GameModifier;
 import com.thekingelessar.assault.game.pregame.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModDisableWildcardItems;
+import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModDontUseTeamSelection;
 import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModFirstTo5Stars;
 import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModInfiniteTime;
-import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModUseTeamSelection;
 import com.thekingelessar.assault.game.pregame.teamselection.PlayerShopTeamSelection;
 import com.thekingelessar.assault.game.pregame.teamselection.SelectedTeam;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -59,11 +59,11 @@ public class GameInstance
     public ModInfiniteTime modInfiniteTime = new ModInfiniteTime(this);
     public ModFirstTo5Stars modFirstTo5Stars = new ModFirstTo5Stars(this);
     public ModDisableWildcardItems modDisableWildcardItems = new ModDisableWildcardItems(this);
-    public ModUseTeamSelection modUseTeamSelection = new ModUseTeamSelection(this);
+    public ModDontUseTeamSelection modDontUseTeamSelector = new ModDontUseTeamSelection(this);
     
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
-    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars, modDisableWildcardItems, modUseTeamSelection);
+    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars, modDisableWildcardItems, modDontUseTeamSelector);
     
     public static ItemStack teamSelectionItemStack = ItemInit.initTeamSelectionItemStack();
     public HashMap<Player, PlayerShopTeamSelection> teamSelectionShopMap = new HashMap<>();
@@ -236,8 +236,8 @@ public class GameInstance
         teams.add(teamOne);
         teams.add(teamTwo);
         
-        this.modUseTeamSelection.setEnabled();
-        if (this.modUseTeamSelection.enabled)
+        this.modDontUseTeamSelector.setEnabled();
+        if (!this.modDontUseTeamSelector.enabled)
         {
             for (SelectedTeam selectedTeam : this.selectedTeamList)
             {
@@ -247,6 +247,10 @@ public class GameInstance
                     {
                         gameTeam.addMembers(selectedTeam.members);
                         this.players.removeAll(selectedTeam.members);
+                        for (Player player : selectedTeam.members)
+                        {
+                            System.out.println(String.format("Forced: Added %s to %s team", player.getName(), gameTeam.color));
+                        }
                     }
                 }
             }
@@ -269,6 +273,7 @@ public class GameInstance
             Player player = this.players.get(generator.nextInt(this.players.size()));
             this.players.remove(player);
             lowerTeam.addMember(player);
+            System.out.println(String.format("Random: Added %s to %s team", player.getName(), lowerTeam.color));
         }
         
         for (GameTeam gameTeam : this.teams)
