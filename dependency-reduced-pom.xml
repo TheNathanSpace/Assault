@@ -7,7 +7,7 @@
   <version>0.13.0</version>
   <url>https://github.com/thekingelessar/assault</url>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>modules/source/src/main/java</sourceDirectory>
     <resources>
       <resource>
         <targetPath>.</targetPath>
