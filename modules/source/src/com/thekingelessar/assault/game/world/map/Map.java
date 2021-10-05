@@ -6,6 +6,7 @@ import com.thekingelessar.assault.game.team.TeamColor;
 import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -464,7 +465,7 @@ public class Map
         {
             try
             {
-                Material material = Material.valueOf(object.toString());
+                Material material = XMaterial.matchXMaterial(object.toString()).get().parseMaterial();
                 breakableBlocks.add(material);
             }
             catch (IllegalArgumentException exception)
@@ -497,7 +498,7 @@ public class Map
         {
             try
             {
-                Material material = Material.valueOf(object.toString());
+                Material material = XMaterial.matchXMaterial(object.toString()).get().parseMaterial();
                 placeableBlocks.add(material);
             }
             catch (IllegalArgumentException exception)
