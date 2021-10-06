@@ -47,6 +47,7 @@ public class PlayerShopModifiers implements IShop
         constructShopItemModifier(new ItemStack(XMaterial.QUARTZ_BLOCK.parseMaterial(), 0), gameInstance.modFirstTo5Stars, gameInstance.modFirstTo5Stars.name, gameInstance.modFirstTo5Stars.description, false);
         constructShopItemModifier(new ItemStack(XMaterial.ENDER_EYE.parseMaterial(), 0), gameInstance.modDisableWildcardItems, gameInstance.modDisableWildcardItems.name, gameInstance.modDisableWildcardItems.description, false);
         constructShopItemModifier(new ItemStack(XMaterial.PAPER.parseMaterial(), 0), gameInstance.modDontUseTeamSelector, gameInstance.modDontUseTeamSelector.name, gameInstance.modDontUseTeamSelector.description, false);
+        constructShopItemModifier(new ItemStack(XMaterial.IRON_SHOVEL.parseMaterial(), 0), gameInstance.modManualStar, gameInstance.modManualStar.name, gameInstance.modManualStar.description, false);
     }
     
     private void constructShopItemModifier(ItemStack notVotedItemStack, GameModifier gameModifier, String name, String description, boolean newRow)

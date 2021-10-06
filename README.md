@@ -24,11 +24,17 @@ phase and Attacking phase.
     - Wrong nametag color
     - Wrong scoreboard coins
 - Forfeit times weird
+- Nether star die in void
+- Store PlayerMode in GamePlayer
 
 ### Features
 
 - Save team when leave and rejoin
 - Map-specific items
 - Modifier to place star yourself
+  - Give every player a star
+  - During build mode, allow players to drop stars
+  - During build mode, allow players to pick up **their** star when they drop an item
+  - Placing a star is optional, but if no stars are placed it'll use the default location
 - Procedurally generated terrain map
 - Package maps with plugin

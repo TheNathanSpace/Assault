@@ -11,10 +11,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.pregame.modifiers.GameModifier;
 import com.thekingelessar.assault.game.pregame.modifiers.PlayerShopModifiers;
-import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModDisableWildcardItems;
-import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModDontUseTeamSelection;
-import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModFirstTo5Stars;
-import com.thekingelessar.assault.game.pregame.modifiers.modifiers.ModInfiniteTime;
+import com.thekingelessar.assault.game.pregame.modifiers.modifiers.*;
 import com.thekingelessar.assault.game.pregame.teamselection.PlayerShopTeamSelection;
 import com.thekingelessar.assault.game.pregame.teamselection.SelectedTeam;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -60,6 +57,7 @@ public class GameInstance
     public ModFirstTo5Stars modFirstTo5Stars = new ModFirstTo5Stars(this);
     public ModDisableWildcardItems modDisableWildcardItems = new ModDisableWildcardItems(this);
     public ModDontUseTeamSelection modDontUseTeamSelector = new ModDontUseTeamSelection(this);
+    public ModManualStar modManualStar = new ModManualStar(this);
     
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
