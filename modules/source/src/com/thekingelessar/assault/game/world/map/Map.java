@@ -467,7 +467,7 @@ public class Map
             {
                 String materialString = object.toString().toUpperCase();
                 String containedMaterial = "";
-                if (materialString.toLowerCase().contains("WOOL"))
+                if (materialString.contains("WOOL"))
                 {
                     containedMaterial = "WOOL";
                 }
@@ -512,13 +512,13 @@ public class Map
                     containedMaterial = "CONCRETE";
                 }
                 
-                if (!materialString.equals(""))
+                if (!containedMaterial.equals(""))
                 {
                     List<Material> woolList = new ArrayList<>();
-                    woolList.add(XMaterial.matchXMaterial(materialString).get().parseMaterial());
+                    woolList.add(XMaterial.matchXMaterial(containedMaterial).get().parseMaterial());
                     for (int i = 1; i <= 15; i++)
                     {
-                        Material material = XMaterial.matchXMaterial(materialString + ":" + i).get().parseMaterial();
+                        Material material = XMaterial.matchXMaterial(containedMaterial + ":" + i).get().parseMaterial();
                         woolList.add(material);
                     }
                     breakableBlocks.addAll(woolList);
@@ -561,7 +561,7 @@ public class Map
             {
                 String materialString = object.toString().toUpperCase();
                 String containedMaterial = "";
-                if (materialString.toLowerCase().contains("WOOL"))
+                if (materialString.contains("WOOL"))
                 {
                     containedMaterial = "WOOL";
                 }
@@ -605,14 +605,14 @@ public class Map
                 {
                     containedMaterial = "CONCRETE";
                 }
-    
-                if (!materialString.equals(""))
+                
+                if (!containedMaterial.equals(""))
                 {
                     List<Material> woolList = new ArrayList<>();
-                    woolList.add(XMaterial.matchXMaterial(materialString).get().parseMaterial());
+                    woolList.add(XMaterial.matchXMaterial(containedMaterial).get().parseMaterial());
                     for (int i = 1; i <= 15; i++)
                     {
-                        Material material = XMaterial.matchXMaterial(materialString + ":" + i).get().parseMaterial();
+                        Material material = XMaterial.matchXMaterial(containedMaterial + ":" + i).get().parseMaterial();
                         woolList.add(material);
                     }
                     placeableBlocks.addAll(woolList);

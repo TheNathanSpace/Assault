@@ -27,9 +27,6 @@ phase and Attacking phase.
 
 ### Features
 
-- XMaterial future versions support
-  - https://www.spigotmc.org/threads/xseries-xmaterial-xparticle-xsound-xpotion-titles-actionbar-etc.378136/
-  - https://github.com/CryptoMorin/XSeries/tree/dfb4ecea6387e30260a296ba9ddea0b80d635bee
 - Save team when leave and rejoin
 - Map-specific items
 - Modifier to place star yourself
