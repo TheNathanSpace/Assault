@@ -39,7 +39,8 @@ emerald_spawn_delay: 20
 enable_placeable_blocks: false
 enable_breakable_blocks: true
 
-# https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
+# Modern: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# 1.8: https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
 placeable_blocks:
   - WOOL
   - STAINED_CLAY

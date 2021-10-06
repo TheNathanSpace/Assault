@@ -465,8 +465,69 @@ public class Map
         {
             try
             {
-                Material material = XMaterial.matchXMaterial(object.toString()).get().parseMaterial();
-                breakableBlocks.add(material);
+                String materialString = object.toString().toUpperCase();
+                String containedMaterial = "";
+                if (materialString.toLowerCase().contains("WOOL"))
+                {
+                    containedMaterial = "WOOL";
+                }
+                else if (materialString.contains("GLAZED_TERRACOTTA"))
+                {
+                    containedMaterial = "GLAZED_TERRACOTTA";
+                }
+                else if (materialString.contains("STAINED_CLAY") || materialString.contains("TERRACOTTA"))
+                {
+                    containedMaterial = "STAINED_CLAY";
+                }
+                else if (materialString.contains("THIN_GLASS") || materialString.contains("STAINED_GLASS_PANE"))
+                {
+                    containedMaterial = "THIN_GLASS";
+                }
+                else if (materialString.contains("STAINED_GLASS"))
+                {
+                    containedMaterial = "STAINED_GLASS";
+                }
+                else if (materialString.contains("WALL_BANNER"))
+                {
+                    containedMaterial = "WALL_BANNER";
+                }
+                else if (materialString.contains("BANNER"))
+                {
+                    containedMaterial = "BANNER";
+                }
+                else if (materialString.contains("BED"))
+                {
+                    containedMaterial = "BED";
+                }
+                else if (materialString.contains("CARPET"))
+                {
+                    containedMaterial = "CARPET";
+                }
+                else if (materialString.contains("CONCRETE_POWDER"))
+                {
+                    containedMaterial = "CONCRETE_POWDER";
+                }
+                else if (materialString.contains("CONCRETE"))
+                {
+                    containedMaterial = "CONCRETE";
+                }
+                
+                if (!materialString.equals(""))
+                {
+                    List<Material> woolList = new ArrayList<>();
+                    woolList.add(XMaterial.matchXMaterial(materialString).get().parseMaterial());
+                    for (int i = 1; i <= 15; i++)
+                    {
+                        Material material = XMaterial.matchXMaterial(materialString + ":" + i).get().parseMaterial();
+                        woolList.add(material);
+                    }
+                    breakableBlocks.addAll(woolList);
+                }
+                else
+                {
+                    Material material = XMaterial.matchXMaterial(materialString).get().parseMaterial();
+                    breakableBlocks.add(material);
+                }
             }
             catch (IllegalArgumentException exception)
             {
@@ -498,8 +559,69 @@ public class Map
         {
             try
             {
-                Material material = XMaterial.matchXMaterial(object.toString()).get().parseMaterial();
-                placeableBlocks.add(material);
+                String materialString = object.toString().toUpperCase();
+                String containedMaterial = "";
+                if (materialString.toLowerCase().contains("WOOL"))
+                {
+                    containedMaterial = "WOOL";
+                }
+                else if (materialString.contains("GLAZED_TERRACOTTA"))
+                {
+                    containedMaterial = "GLAZED_TERRACOTTA";
+                }
+                else if (materialString.contains("STAINED_CLAY") || materialString.contains("TERRACOTTA"))
+                {
+                    containedMaterial = "STAINED_CLAY";
+                }
+                else if (materialString.contains("THIN_GLASS") || materialString.contains("STAINED_GLASS_PANE"))
+                {
+                    containedMaterial = "THIN_GLASS";
+                }
+                else if (materialString.contains("STAINED_GLASS"))
+                {
+                    containedMaterial = "STAINED_GLASS";
+                }
+                else if (materialString.contains("WALL_BANNER"))
+                {
+                    containedMaterial = "WALL_BANNER";
+                }
+                else if (materialString.contains("BANNER"))
+                {
+                    containedMaterial = "BANNER";
+                }
+                else if (materialString.contains("BED"))
+                {
+                    containedMaterial = "BED";
+                }
+                else if (materialString.contains("CARPET"))
+                {
+                    containedMaterial = "CARPET";
+                }
+                else if (materialString.contains("CONCRETE_POWDER"))
+                {
+                    containedMaterial = "CONCRETE_POWDER";
+                }
+                else if (materialString.contains("CONCRETE"))
+                {
+                    containedMaterial = "CONCRETE";
+                }
+    
+                if (!materialString.equals(""))
+                {
+                    List<Material> woolList = new ArrayList<>();
+                    woolList.add(XMaterial.matchXMaterial(materialString).get().parseMaterial());
+                    for (int i = 1; i <= 15; i++)
+                    {
+                        Material material = XMaterial.matchXMaterial(materialString + ":" + i).get().parseMaterial();
+                        woolList.add(material);
+                    }
+                    placeableBlocks.addAll(woolList);
+                }
+                else
+                {
+                    Material material = XMaterial.matchXMaterial(materialString).get().parseMaterial();
+                    placeableBlocks.add(material);
+                }
             }
             catch (IllegalArgumentException exception)
             {

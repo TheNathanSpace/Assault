@@ -28,7 +28,6 @@ import com.thekingelessar.assault.util.version.XMaterial;
 import com.thekingelessar.assault.util.version.XSound;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.npc.skin.SkinnableEntity;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -457,7 +456,7 @@ public class GameInstance
         
         ItemStack shopItemBoughtStack = new ItemStack(Util.getRandomItemStack());
         int coinCost = Util.weightedInt(6, 16, 1, 64);
-        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + ChatColor.RESET + WordUtils.capitalize(shopItemBoughtStack.getType().name().toLowerCase()), coinCost, Currency.COINS);
+        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + ChatColor.RESET + XMaterial.matchXMaterial(shopItemBoughtStack).toString(), coinCost, Currency.COINS);
         ShopItem shopItem = new ShopItem(coinCost, Currency.COINS, shopItemStack, shopItemBoughtStack);
         this.randomShopItems.add(shopItem);
         
