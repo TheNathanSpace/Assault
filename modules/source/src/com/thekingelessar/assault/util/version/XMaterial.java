@@ -33,6 +33,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -2148,6 +2149,12 @@ public enum XMaterial
         Objects.requireNonNull(item, "Cannot compare with null ItemStack");
         if (item.getType() != this.parseMaterial()) return false;
         return Data.ISFLAT || item.getDurability() == this.data || item.getType().getMaxDurability() > 0;
+    }
+    
+    public static boolean isWater(Block block)
+    {
+        String name = block.getType().name();
+        return name.equals("WATER") || name.equals("STATIONARY_WATER");
     }
     
     /**

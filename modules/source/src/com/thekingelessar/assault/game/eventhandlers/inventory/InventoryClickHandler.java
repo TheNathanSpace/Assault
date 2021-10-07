@@ -3,11 +3,13 @@ package com.thekingelessar.assault.game.eventhandlers.inventory;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
+import com.thekingelessar.assault.game.Objective;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shops.ShopAttacking;
 import com.thekingelessar.assault.game.inventory.shops.ShopBuilding;
 import com.thekingelessar.assault.game.inventory.shops.ShopTeamBuffs;
 import com.thekingelessar.assault.game.player.GamePlayer;
+import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.pregame.modifiers.PlayerShopModifiers;
 import com.thekingelessar.assault.game.pregame.teamselection.PlayerShopTeamSelection;
 import com.thekingelessar.assault.game.team.GameTeam;
@@ -18,9 +20,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class InventoryClickHandler implements Listener
 {
@@ -82,6 +88,31 @@ public class InventoryClickHandler implements Listener
         
         if (playerTeam != null)
         {
+            List<InventoryAction> dropActions = Arrays.asList(InventoryAction.DROP_ALL_CURSOR, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ONE_SLOT);
+            if (inventoryClickEvent.getClick().equals(ClickType.DROP) && dropActions.contains(inventoryClickEvent.getAction()))
+            {
+                if (PlayerMode.getPlayerMode(player).equals(PlayerMode.BUILDING) && gameInstance.modManualStar.enabled)
+                {
+                    if (itemStack.getType().equals(XMaterial.NETHER_STAR.parseMaterial()))
+                    {
+                        boolean droppedObjective = Objective.dropObjective(gamePlayer);
+                        if (droppedObjective)
+                        {
+                            player.getInventory().setItem(inventoryClickEvent.getSlot(), GameInstance.retrieveObjectiveItem.clone());
+                        }
+                        inventoryClickEvent.setCancelled(true);
+                        return;
+                    }
+                    else if (itemStack.getType().equals(XMaterial.BARRIER.parseMaterial()))
+                    {
+                        Objective.recallObjective(gamePlayer);
+                        inventoryClickEvent.setCancelled(true);
+                        player.getInventory().setItem(inventoryClickEvent.getSlot(), GameInstance.manualPlacementStar.clone());
+                        return;
+                    }
+                }
+            }
+            
             if (!playerTeam.getShopInventories().contains(inventoryClickEvent.getInventory()) && !inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
             {
                 return;

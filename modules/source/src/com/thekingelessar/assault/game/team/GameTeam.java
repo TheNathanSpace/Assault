@@ -54,6 +54,8 @@ public class GameTeam
     
     public List<IBuff> buffList = new ArrayList<>();
     
+    public List<Objective> objectiveList = new ArrayList<>();
+    
     public int starsPickedUp = 0;
     
     public double displaySeconds = 0;
@@ -68,7 +70,6 @@ public class GameTeam
         this.color = color;
         this.gameInstance = instance;
         createScoreboard();
-        
     }
     
     public void setSecretStorage()
@@ -323,32 +324,4 @@ public class GameTeam
         
         return shopInventories;
     }
-    
-    public List<Objective> getObjectives()
-    {
-        List<Objective> objectives = new ArrayList<>();
-        if (this.gameInstance.gameStage.equals(GameStage.BUILDING))
-        {
-            for (Objective objective : this.gameInstance.buildingObjectives)
-            {
-                if (objective.gameTeam.equals(this))
-                {
-                    objectives.add(objective);
-                }
-            }
-        }
-        if (this.gameInstance.gameStage.equals(GameStage.ATTACKING))
-        {
-            for (Objective objective : this.gameInstance.attackingObjectives)
-            {
-                if (objective.gameTeam.equals(this))
-                {
-                    objectives.add(objective);
-                }
-            }
-        }
-        
-        return objectives;
-    }
-    
 }

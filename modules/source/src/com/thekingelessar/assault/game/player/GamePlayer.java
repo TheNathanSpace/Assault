@@ -1,6 +1,5 @@
 package com.thekingelessar.assault.game.player;
 
-import fr.mrmicky.fastboard.FastBoard;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.database.AssaultTableManager;
 import com.thekingelessar.assault.database.Statistic;
@@ -16,6 +15,7 @@ import com.thekingelessar.assault.game.timertasks.TaskCountdownRespawn;
 import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import com.thekingelessar.assault.util.version.XSound;
+import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -668,13 +668,24 @@ public class GamePlayer
             Location playerLocation = this.player.getLocation();
             Objective closestObjective = null;
             double smallestDistance = Double.MAX_VALUE;
-            for (Objective objective : this.gameInstance.getObjectives())
+            
+            List<Objective> compassObjectives = this.gameInstance.getCompassObjectives(this);
+            if (compassObjectives == null || compassObjectives.size() == 0)
             {
-                double distanceSquare = objective.item.getLocation().distanceSquared(playerLocation);
-                if (distanceSquare < smallestDistance)
+                this.player.setCompassTarget(new Location(this.gameInstance.gameWorld, 0, 0, 0));
+                return;
+            }
+            
+            for (Objective objective : compassObjectives)
+            {
+                if (objective.item != null)
                 {
-                    closestObjective = objective;
-                    smallestDistance = distanceSquare;
+                    double distanceSquare = objective.item.getLocation().distanceSquared(playerLocation);
+                    if (distanceSquare < smallestDistance)
+                    {
+                        closestObjective = objective;
+                        smallestDistance = distanceSquare;
+                    }
                 }
             }
             

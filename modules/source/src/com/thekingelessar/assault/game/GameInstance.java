@@ -61,11 +61,14 @@ public class GameInstance
     
     public static ItemStack gameModifierItemStack = ItemInit.initGameModifierItemStack();
     public HashMap<Player, PlayerShopModifiers> modifierShopMap = new HashMap<>();
-    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars, modDisableWildcardItems, modDontUseTeamSelector);
+    public List<GameModifier> modifierList = Arrays.asList(modInfiniteTime, modFirstTo5Stars, modDisableWildcardItems, modDontUseTeamSelector, modManualStar);
     
     public static ItemStack teamSelectionItemStack = ItemInit.initTeamSelectionItemStack();
     public HashMap<Player, PlayerShopTeamSelection> teamSelectionShopMap = new HashMap<>();
     public List<SelectedTeam> selectedTeamList = new ArrayList<>();
+    
+    public static ItemStack manualPlacementStar = ItemInit.initManualStar();
+    public static ItemStack retrieveObjectiveItem = ItemInit.initRetrieveStar();
     
     public HashMap<Player, PlayerMode> playerModes = new HashMap<>();
     
@@ -100,9 +103,6 @@ public class GameInstance
     public HashMap<String, Player> fallingBlockCoordinateMap = new HashMap<>();
     
     public List<ThrownPotion> fixedPotions = new ArrayList<>();
-    
-    public List<Objective> buildingObjectives = new ArrayList<>();
-    public List<Objective> attackingObjectives = new ArrayList<>();
     
     public HashMap<Player, Player> lastDamagedBy = new HashMap<>();
     
@@ -460,25 +460,25 @@ public class GameInstance
         
         for (GameTeam team : this.teams)
         {
-            List<Location> objectiveLocations = new ArrayList<>();
-            for (Coordinate coordinate : team.mapBase.objectives)
+            if (!this.modManualStar.enabled)
             {
-                Location objectiveLocation = coordinate.toLocation(this.gameWorld);
-                objectiveLocations.add(objectiveLocation);
-                
-                ItemStack objectiveItem = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
-                
-                Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
-                
-                Vector velocity = guidingItem.getVelocity();
-                guidingItem.setVelocity(velocity.zero());
-                
-                guidingItem.teleport(objectiveLocation);
-                
-                Objective objective = new Objective(this, this.getDefendingTeam(), guidingItem, objectiveLocation);
-                this.buildingObjectives.add(objective);
+                for (Coordinate coordinate : team.mapBase.objectives)
+                {
+                    Location objectiveLocation = coordinate.toLocation(this.gameWorld);
+                    
+                    ItemStack objectiveItem = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
+                    
+                    Item guidingItem = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+                    
+                    Vector velocity = guidingItem.getVelocity();
+                    guidingItem.setVelocity(velocity.zero());
+                    
+                    guidingItem.teleport(objectiveLocation);
+                    
+                    Objective objective = new Objective(this, this.getDefendingTeam(), guidingItem, objectiveLocation);
+                    team.objectiveList.add(objective);
+                }
             }
-            
             
             for (Player player : team.getPlayers())
             {
@@ -488,6 +488,10 @@ public class GameInstance
                 
                 GameTeam gameTeam = getPlayerTeam(player);
                 gamePlayer.spawn(PlayerMode.BUILDING, false);
+                if (this.modManualStar.enabled)
+                {
+                    player.getInventory().setItem(8, manualPlacementStar.clone());
+                }
                 
                 Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
                 title.clearTitle(player);
@@ -512,9 +516,12 @@ public class GameInstance
     
     public void startAttackMode()
     {
-        for (Objective objective : this.buildingObjectives)
+        for (GameTeam gameTeam : this.teams)
         {
-            objective.delete();
+            for (Objective objective : gameTeam.objectiveList)
+            {
+                objective.despawnItem();
+            }
         }
         
         taskTickTimer = new TaskTickTimer(0, 1, this);
@@ -634,20 +641,30 @@ public class GameInstance
         this.getDefendingTeam().mapBase.spawnShops(this);
         this.getAttackingTeam().displaySeconds = 0;
         
-        for (Coordinate coordinate : this.getDefendingTeam().mapBase.objectives)
+        if (!this.modManualStar.enabled || this.getDefendingTeam().objectiveList.isEmpty())
         {
-            Location objectiveLocation = coordinate.toLocation(this.gameWorld);
-            
-            ItemStack objectiveItem = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
-            
-            Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
-            
-            Vector velocity = objectiveEntity.getVelocity();
-            objectiveEntity.setVelocity(velocity.zero());
-            
-            objectiveEntity.teleport(objectiveLocation);
-            Objective objective = new Objective(this, this.getDefendingTeam(), objectiveEntity, objectiveLocation);
-            this.attackingObjectives.add(objective);
+            for (Coordinate coordinate : this.getDefendingTeam().mapBase.objectives)
+            {
+                Location objectiveLocation = coordinate.toLocation(this.gameWorld);
+                
+                ItemStack objectiveItem = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
+                
+                Item objectiveEntity = this.gameWorld.dropItem(objectiveLocation, objectiveItem);
+                
+                Vector velocity = objectiveEntity.getVelocity();
+                objectiveEntity.setVelocity(velocity.zero());
+                
+                objectiveEntity.teleport(objectiveLocation);
+                Objective objective = new Objective(this, this.getDefendingTeam(), objectiveEntity, objectiveLocation);
+                this.getDefendingTeam().objectiveList.add(objective);
+            }
+        }
+        else
+        {
+            for (Objective objective : this.getDefendingTeam().objectiveList)
+            {
+                objective.spawnItem();
+            }
         }
     }
     
@@ -719,12 +736,10 @@ public class GameInstance
     
     public void endRound(boolean attackersForfeit)
     {
-        for (Objective objective : new ArrayList<>(this.attackingObjectives))
+        for (Objective objective : new ArrayList<>(this.getDefendingTeam().objectiveList))
         {
-            objective.delete();
+            objective.despawnItem();
         }
-        
-        this.attackingObjectives = new ArrayList<>();
         
         if (this.taskAttackTimer != null)
         {
@@ -1016,14 +1031,25 @@ public class GameInstance
         }
     }
     
-    public List<Objective> getObjectives()
+    public List<Objective> getCompassObjectives(GamePlayer gamePlayer)
     {
-        List<Objective> objectiveList = new ArrayList<>();
-        for (GameTeam gameTeam : this.teams)
+        if (this.gameStage.equals(GameStage.BUILDING))
         {
-            objectiveList.addAll(gameTeam.getObjectives());
+            return gamePlayer.gameTeam.objectiveList;
         }
-        return objectiveList;
+        else if (this.gameStage.equals(GameStage.ATTACKING))
+        {
+            if (gamePlayer.gameTeam.teamStage.equals(TeamStage.DEFENDING))
+            {
+                return gamePlayer.gameTeam.objectiveList;
+            }
+            else
+            {
+                return gamePlayer.gameTeam.getOppositeTeam().objectiveList;
+            }
+        }
+        
+        return null;
     }
     
     public static GameInstance getPlayerGameInstance(Player player)

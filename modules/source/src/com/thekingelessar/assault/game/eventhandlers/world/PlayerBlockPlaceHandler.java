@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.eventhandlers.world;
 
 import com.thekingelessar.assault.game.GameInstance;
+import com.thekingelessar.assault.game.Objective;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.team.TeamStage;
@@ -9,6 +10,7 @@ import com.thekingelessar.assault.util.Coordinate;
 import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -19,11 +21,23 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PlayerBlockPlaceHandler implements Listener
 {
+    
+    public static final List<Material> UNPLACEABLES = Arrays.asList(XMaterial.BEDROCK.parseMaterial(), XMaterial.BARRIER.parseMaterial());
+    
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent blockPlaceEvent)
     {
+        if (UNPLACEABLES.contains(blockPlaceEvent.getBlockPlaced().getType()))
+        {
+            blockPlaceEvent.setCancelled(true);
+            return;
+        }
+        
         Player player = blockPlaceEvent.getPlayer();
         GameInstance gameInstance = GameInstance.getPlayerGameInstance(player);
         
@@ -78,9 +92,9 @@ public class PlayerBlockPlaceHandler implements Listener
                     return;
                 }
                 
-                for (Coordinate objectiveCoord : mapBase.objectives)
+                for (Objective objective : gameTeam.objectiveList)
                 {
-                    Location objectiveLocation = objectiveCoord.toLocation(gameInstance.gameWorld);
+                    Location objectiveLocation = objective.intendedLocation;
                     if (Util.blockLocationsEqual(objectiveLocation, placedLocation))
                     {
                         blockPlaceEvent.setCancelled(true);

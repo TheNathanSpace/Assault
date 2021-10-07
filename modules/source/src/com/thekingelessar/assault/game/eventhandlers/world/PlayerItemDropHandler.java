@@ -7,9 +7,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.lobby.LobbyUtil;
 import com.thekingelessar.assault.util.version.XMaterial;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,20 +33,31 @@ public class PlayerItemDropHandler implements Listener
             if (!playerMode.canDropItems)
             {
                 playerDropItemEvent.setCancelled(true);
+                return;
             }
             
-            if (itemStack.getType().equals(XMaterial.NETHER_STAR.parseMaterial()))
+            if (playerMode.equals(PlayerMode.BUILDING) && gameInstance.modManualStar.enabled)
             {
-                if (playerMode.equals(PlayerMode.BUILDING) && gameInstance.modManualStar.enabled)
+                if (itemStack.getType().equals(XMaterial.NETHER_STAR.parseMaterial()))
                 {
-                    Item droppedItem = playerDropItemEvent.getItemDrop();
-                    int highestY = player.getWorld().getHighestBlockYAt(player.getLocation());
-                    Location objectiveLocation = player.getLocation().clone();
-                    objectiveLocation.setY(highestY);
+                    boolean objectiveMade = Objective.dropObjective(gamePlayer);
                     
-                    Objective objective = new Objective(gameInstance, gamePlayer.gameTeam, droppedItem, objectiveLocation, player.getUniqueId());
-                    objective.sendToLocation();
-                    gameInstance.buildingObjectives.add(objective);
+                    if (objectiveMade)
+                    {
+                        player.getInventory().setItem(player.getInventory().getHeldItemSlot(), GameInstance.retrieveObjectiveItem.clone());
+                        playerDropItemEvent.getItemDrop().remove();
+                    }
+                    else
+                    {
+                        playerDropItemEvent.setCancelled(true);
+                    }
+                    return;
+                }
+                else if (itemStack.getType().equals(XMaterial.BARRIER.parseMaterial()))
+                {
+                    Objective.recallObjective(gamePlayer);
+                    player.getInventory().setItem(player.getInventory().getHeldItemSlot(), GameInstance.manualPlacementStar.clone());
+                    playerDropItemEvent.getItemDrop().remove();
                 }
             }
         }

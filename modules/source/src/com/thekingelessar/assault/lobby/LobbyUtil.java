@@ -118,7 +118,7 @@ public class LobbyUtil
     public static void sendRules(Player player)
     {
         LobbyUtil.sendGuideURL(player);
-        player.playSound(player.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1.0F, 1.0F);
+        player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_HARP.parseSound(), 1.0F, 1.0F);
     }
     
     private static void sendGuideURL(Player player)

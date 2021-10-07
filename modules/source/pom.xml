@@ -55,28 +55,23 @@
                                     <resource>META-INF/services/java.sql.Driver</resource>
                                 </transformer>
                             </transformers>
+<!--                            <relocations>-->
+<!--                                <relocation>-->
+<!--                                    <pattern>fr.mrmicky.fastboard</pattern>-->
+<!--                                    &lt;!&ndash; Replace 'com.yourpackage' with the package of your plugin ! &ndash;&gt;-->
+<!--&lt;!&ndash;                                    <shadedPattern>com.thekingelessar.fastboard</shadedPattern>&ndash;&gt;-->
+<!--                                </relocation>-->
+<!--                            </relocations>-->
+                            <artifactSet>
+                                <includes>
+                                    <include>com.thekingelessar:assault-*</include>
+                                    <include>fr.mrmicky:FastBoard</include>
+                                    <include>org.xerial:sqlite-jdbc</include>
+                                </includes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>fr.mrmicky.fastboard</pattern>
-                            <!-- Replace with the package of your plugin ! -->
-                            <shadedPattern>com.thekingelessar.fastboard</shadedPattern>
-                        </relocation>
-                    </relocations>
-                    <artifactSet>
-                        <includes>com.thekingelessar:assault-*</includes>
-                        <excludes>
-                            <exclude>net.citizensnpcs</exclude>
-                            <exclude>junit:junit</exclude>
-                            <exclude>org.hamcrest</exclude>
-                            <exclude>net.sf.trove4j</exclude>
-                            <exclude>ch.ethz.globis.phtree</exclude>
-                        </excludes>
-                    </artifactSet>
-                </configuration>
             </plugin>
         </plugins>
     </build>

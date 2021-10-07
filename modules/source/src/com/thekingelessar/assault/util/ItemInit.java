@@ -23,6 +23,39 @@ public class ItemInit
         return itemStack;
     }
     
+    public static ItemStack initManualStar()
+    {
+        ItemStack itemStack = new ItemStack(XMaterial.NETHER_STAR.parseMaterial());
+        
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Objective");
+        itemMeta.setLore(Arrays.asList(
+                ChatColor.RESET + "This is your team's objective!",
+                ChatColor.RESET + "To place, drop this at the chosen location!",
+                ChatColor.RESET + "You don't " + ChatColor.ITALIC + "have" + ChatColor.RESET + " to place this.",
+                ChatColor.RESET + "If you aren't sure, you can always pick this up during the Building phase.",
+                ChatColor.RESET + "If your team drops more than one, they'll have multiple objectives!"));
+        
+        itemStack.setItemMeta(itemMeta);
+        
+        return itemStack;
+    }
+    
+    public static ItemStack initRetrieveStar()
+    {
+        ItemStack itemStack = new ItemStack(XMaterial.BARRIER.parseMaterial());
+        
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Retrieve Objective");
+        itemMeta.setLore(Arrays.asList(
+                ChatColor.RESET + "To retrieve your objective, drop this!",
+                ChatColor.RESET + ChatColor.BOLD.toString() + "This cannot be undone!"));
+        
+        itemStack.setItemMeta(itemMeta);
+        
+        return itemStack;
+    }
+    
     public static ItemStack initTeamSelectionItemStack()
     {
         ItemStack itemStack = new ItemStack(XMaterial.PAPER.parseMaterial());

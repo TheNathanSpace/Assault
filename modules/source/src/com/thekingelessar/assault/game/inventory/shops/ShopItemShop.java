@@ -44,8 +44,8 @@ public class ShopItemShop implements IShop
     
     public void constructColoredBlockShopItem(ItemStack boughtItemStack, int amount, String name, int cost, Currency currency, boolean newRow)
     {
+        boughtItemStack.setAmount(amount);
         ItemStack shopItemStack = ShopUtil.constructShopItemStack(boughtItemStack.clone(), name, cost, currency);
-        shopItemStack.setAmount(amount);
         ShopItem shopItem = new ShopItem(cost, currency, shopItemStack, boughtItemStack);
         
         this.shopItemMap.put(shopItemStack, shopItem);
