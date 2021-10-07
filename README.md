@@ -24,7 +24,6 @@ phase and Attacking phase.
     - Wrong nametag color
     - Wrong scoreboard coins
 - Forfeit times weird
-- Nether star die in void
 - Store PlayerMode in GamePlayer
 
 ### Features
