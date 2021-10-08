@@ -35,4 +35,4 @@ phase and Attacking phase.
 - Maps:
     - Arcade
     - Chess
-    - Tunnels
+    - Blasting Area

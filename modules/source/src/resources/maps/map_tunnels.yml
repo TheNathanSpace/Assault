@@ -1,0 +1,116 @@
+world_name: tunnels
+
+waiting_spawn: 42. 109. -22. 0. 0.
+delete_waiting_platform: false
+waiting_platform_bounding_box:
+  - 0. 0. 0.
+  - 0. 0. 0.
+
+void_enabled: true
+void_level: 94.
+
+building_time: 200
+building_coins: 150
+
+give_coin_delay: 5.0
+give_coin_amount: 8
+
+flat_coins_on_kill: false
+coins_on_kill: 0
+percent_coins_on_kill: true
+rate_on_kill: 0.2
+
+coin_cap: 0
+
+attack_time_limit: 480
+first_to_five_stars_time_limit: 480
+
+border_x: 8
+
+max_z: 44.
+min_z: -24.
+
+max_y: 118.
+
+attacker_base_prot_max_z: -0.5
+
+emerald_spawn_delay: 20
+
+enable_placeable_blocks: false
+enable_breakable_blocks: true
+
+# Modern: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# 1.8: https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
+placeable_blocks:
+  - WOOL
+  - STAINED_CLAY
+  - STAINED_GLASS
+  - WOOD
+  - COBBLESTONE
+  - WEB
+  - GRAVEL
+  - VINE
+  - FLOWERING_AZALEA_LEAVES
+  - FLOWERING_AZALEA
+  - MOSS_CARPET
+  - GLOW_LICHEN
+  - HANGING_ROOTS
+  - POINTED_DRIPSTONE
+
+breakable_blocks:
+  - VINE
+  - FLOWERING_AZALEA_LEAVES
+  - FLOWERING_AZALEA
+  - MOSS_CARPET
+  - GLOW_LICHEN
+  - HANGING_ROOTS
+  - POINTED_DRIPSTONE
+
+# This refers to the base that each team is DEFENDING.
+bases:
+  - GOLD:
+      defender_spawns:
+        - 20. 98. 40. -90. 0.
+        - 60. 98. 40. 90. 0.
+      # This is a list of lists. Each sub-list inside the main list is one bounding box, with two opposite corners.
+      defender_bounding_boxes:
+        - - 35. 102. 36.
+          - 19. 97. 42.
+        - - 45. 102. 36.
+          - 61. 97. 42.
+      objectives:
+        - 39.937 97.5 40.063
+      attacker_spawns:
+        - 42. 109. -22. 0. 0.
+      attacker_buff_shops:
+        - 44. 109. -20. 135. 0.
+      item_shops:
+        - 22.5 98. 38.5 57. 0.
+        - 57.5 98. 38.5 -57. 0.
+        - 40. 109. -20. -135. 0.
+      emerald_spawns:
+        - 18.5 99. 12.5
+        - 46.5 101. -3.5
+
+  - DARK_GREEN:
+      defender_spawns:
+        - -3. 98. 40. 90. 0.
+        - -43. 98. 40. -90. 0.
+      defender_bounding_boxes:
+        - - -18. 102. 36.
+          - -2. 97. 42.
+        - - -28. 102. 36.
+          - -44. 97. 42.
+      objectives:
+        - -23.063 97.5 40.063
+      attacker_spawns:
+        - -21. 109. -23. 0. 0.
+      attacker_buff_shops:
+        - -19. 109. -20. 135. 0.
+      item_shops:
+        - -23. 109. -20. -135. 0.
+        - -5.5 98 38.5 -57. 0.
+        - -40.5 98 38.5 57. 0.
+      emerald_spawns:
+        - -44.5 99. 12.5
+        - -16.5 101 -3.5
