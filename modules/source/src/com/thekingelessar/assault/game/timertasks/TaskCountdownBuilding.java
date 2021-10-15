@@ -2,7 +2,6 @@ package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.GameStage;
-import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,8 +20,6 @@ public class TaskCountdownBuilding extends BukkitRunnable
     public GameInstance gameInstance;
     
     public boolean doneFirst = false;
-    
-    private Title title = new Title();
     
     public TaskCountdownBuilding(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
@@ -51,11 +48,9 @@ public class TaskCountdownBuilding extends BukkitRunnable
         if (ticksLeft < 201)
         {
             List<Player> players = gameInstance.getPlayers();
-            title = new Title(" ", ChatColor.WHITE + "Building finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
             for (Player player : players)
             {
-                title.clearTitle(player);
-                title.send(player);
+                player.sendTitle(" ", ChatColor.WHITE + "Building finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
             }
         }
         

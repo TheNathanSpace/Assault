@@ -60,7 +60,14 @@ public class ShopItemModifier extends ShopItem
         
         int votes = this.gameModifier.votedPlayers.size();
         
-        newItemStack.setAmount(votes);
+        if (votes == 0)
+        {
+            newItemStack.setAmount(1);
+        }
+        else
+        {
+            newItemStack.setAmount(votes);
+        }
         
         ItemMeta itemMeta = newItemStack.getItemMeta();
         String name = itemMeta.getDisplayName();

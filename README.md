@@ -19,6 +19,8 @@ phase and Attacking phase.
 
 ### Bugs
 
+- Borders not throwing players
+- Map<UUID, List<Map<Statistic, Object>>> shouldn't be individual maps
 - Teams not balanced
 - Mixed teams when leaving and rejoining:
     - Wrong nametag color

@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.game.inventory;
 
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -69,13 +70,13 @@ public class ShopUtil
     public static ItemStack constructShopItemStack(ItemStack itemStack, String name, int cost, Currency currency)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RESET + name);
+        itemMeta.setDisplayName(Util.RESET_CHAT + name);
         itemMeta.setLore(null);
         
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Cost: " + ChatColor.RESET + cost + " " + currency.name);
+        lore.add(ChatColor.GRAY + "Cost: " + Util.RESET_CHAT + cost + " " + currency.name);
         lore.add("");
-        lore.add(ChatColor.RESET + "Click to buy!");
+        lore.add(Util.RESET_CHAT + "Click to buy!");
         itemMeta.setLore(lore);
         
         itemStack.setItemMeta(itemMeta);

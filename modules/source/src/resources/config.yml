@@ -12,3 +12,4 @@ game_start_countdown: 20
 # They can take these forms: saloon, map_saloon, saloon.yml, or map_saloon.yml.
 map_list:
   - map_saloon
+  - map_tunnels

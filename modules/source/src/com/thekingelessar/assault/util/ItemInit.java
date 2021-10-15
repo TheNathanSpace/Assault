@@ -16,7 +16,7 @@ public class ItemInit
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Modifiers");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the modifier voting menu!"));
+        itemMeta.setLore(Collections.singletonList(Util.RESET_CHAT + "Click this to open up the modifier voting menu!"));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -30,11 +30,11 @@ public class ItemInit
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Objective");
         itemMeta.setLore(Arrays.asList(
-                ChatColor.RESET + "This is your team's objective!",
-                ChatColor.RESET + "To place, drop this at the chosen location!",
-                ChatColor.RESET + "You don't " + ChatColor.ITALIC + "have" + ChatColor.RESET + " to place this.",
-                ChatColor.RESET + "If you aren't sure, you can always pick this up during the Building phase.",
-                ChatColor.RESET + "If your team drops more than one, they'll have multiple objectives!"));
+                Util.RESET_CHAT + "This is your team's objective!",
+                Util.RESET_CHAT + "To place, drop this at the chosen location!",
+                Util.RESET_CHAT + "You don't " + ChatColor.ITALIC + "have" + Util.RESET_CHAT + " to place this.",
+                Util.RESET_CHAT + "If you aren't sure, you can always pick this up during the Building phase.",
+                Util.RESET_CHAT + "If your team drops more than one, they'll have multiple objectives!"));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -48,8 +48,8 @@ public class ItemInit
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Retrieve Objective");
         itemMeta.setLore(Arrays.asList(
-                ChatColor.RESET + "To retrieve your objective, drop this!",
-                ChatColor.RESET + ChatColor.BOLD.toString() + "This cannot be undone!"));
+                Util.RESET_CHAT + "To retrieve your objective, drop this!",
+                Util.RESET_CHAT + ChatColor.BOLD.toString() + "This cannot be undone!"));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -62,7 +62,7 @@ public class ItemInit
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Team Selection");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the team selection menu!"));
+        itemMeta.setLore(Collections.singletonList(Util.RESET_CHAT + "Click this to open up the team selection menu!"));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -75,7 +75,7 @@ public class ItemInit
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Join Game");
-        itemMeta.setLore(Arrays.asList(ChatColor.RESET + "Click this to join a game of Assault!", ChatColor.RESET + "", ChatColor.RESET + "If there's no game available,", ChatColor.RESET + "you'll be added to the queue."));
+        itemMeta.setLore(Arrays.asList(Util.RESET_CHAT + "Click this to join a game of Assault!", Util.RESET_CHAT + "", Util.RESET_CHAT + "If there's no game available,", Util.RESET_CHAT + "you'll be added to the queue."));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -88,7 +88,7 @@ public class ItemInit
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "You are in the queue!");
-        itemMeta.setLore(Arrays.asList(ChatColor.RESET + "You have been added to the queue!", ChatColor.RESET + "", ChatColor.RESET + "When there are enough players,", ChatColor.RESET + "the game will start."));
+        itemMeta.setLore(Arrays.asList(Util.RESET_CHAT + "You have been added to the queue!", Util.RESET_CHAT + "", Util.RESET_CHAT + "When there are enough players,", Util.RESET_CHAT + "the game will start."));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -101,7 +101,7 @@ public class ItemInit
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Leave Queue");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to leave the queue."));
+        itemMeta.setLore(Collections.singletonList(Util.RESET_CHAT + "Click this to leave the queue."));
         
         itemStack.setItemMeta(itemMeta);
         
@@ -114,7 +114,7 @@ public class ItemInit
         
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.BLUE + ChatColor.BOLD.toString() + "Guide");
-        itemMeta.setLore(Collections.singletonList(ChatColor.RESET + "Click this to open up the guide!"));
+        itemMeta.setLore(Collections.singletonList(Util.RESET_CHAT + "Click this to open up the guide!"));
         
         itemStack.setItemMeta(itemMeta);
         

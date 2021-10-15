@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.util;
 
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemArmor;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,6 +13,8 @@ import java.util.*;
 
 public class Util
 {
+    
+    public static final String RESET_CHAT = ChatColor.RESET + ChatColor.WHITE.toString();
     
     public static Location getRandomNearby(Location location, double blocks)
     {

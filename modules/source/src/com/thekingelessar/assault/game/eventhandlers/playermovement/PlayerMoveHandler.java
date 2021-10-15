@@ -25,7 +25,7 @@ import java.util.List;
 
 public class PlayerMoveHandler implements Listener
 {
-    public final static List<Material> FLYING_BLOCKS = Arrays.asList(XMaterial.COBWEB.parseMaterial(), XMaterial.LADDER.parseMaterial(), XMaterial.WATER.parseMaterial());
+    public final static List<Material> FLYING_BLOCKS = Arrays.asList(XMaterial.COBWEB.parseMaterial(), XMaterial.LADDER.parseMaterial(), XMaterial.VINE.parseMaterial(), XMaterial.WATER.parseMaterial());
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent playerMoveEvent)
@@ -206,13 +206,18 @@ public class PlayerMoveHandler implements Listener
     
     private void cancelMovement(PlayerMoveEvent playerMoveEvent)
     {
+        System.out.println("Canceling movement");
         Player player = playerMoveEvent.getPlayer();
         
         Vector fromVec = playerMoveEvent.getFrom().toVector();
+        System.out.println(String.format("fromVec: %s %s %s", fromVec.getX(), fromVec.getY(), fromVec.getZ()));
         Vector toVec = playerMoveEvent.getTo().toVector();
-        Vector newVec = fromVec.subtract(toVec).normalize();
-        newVec.setY(0.5);
-        
+        System.out.println(String.format("toVec: %s %s %s", toVec.getX(), toVec.getY(), toVec.getZ()));
+        System.out.println(String.format("Subtracted: %s %s %s", fromVec.getX() - toVec.getX(), fromVec.getY() - toVec.getY(), fromVec.getZ() - toVec.getZ()));
+        Vector newVec = fromVec.subtract(toVec).normalize(); // x not finite
+        newVec.setY(5);
+        newVec.setZ(5);
+        System.out.println(String.format("newVec: %s %s %s", newVec.getX(), newVec.getY(), newVec.getZ()));
         player.setVelocity(newVec);
         
         playerMoveEvent.setCancelled(true);

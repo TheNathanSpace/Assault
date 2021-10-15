@@ -8,7 +8,7 @@ import com.thekingelessar.assault.game.GameStage;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.util.FireworkUtils;
-import com.thekingelessar.assault.util.Title;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -106,13 +106,11 @@ public class PlayerPickupItemHandler implements Listener
                     }
                     
                     String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + " reached a star!";
-                    Title title = new Title(mainTitle, String.format("%s%s✬%s remaining!", ChatColor.BOLD, 5 - gameTeam.starsPickedUp, ChatColor.RESET));
                     
                     List<Player> players = gameInstance.gameWorld.getPlayers();
                     for (Player player1 : players)
                     {
-                        title.clearTitle(player1);
-                        title.send(player1);
+                        player1.sendTitle(mainTitle, String.format("%s%s✬%s remaining!", ChatColor.BOLD, 5 - gameTeam.starsPickedUp, Util.RESET_CHAT));
                     }
                     
                     playerPickupItemEvent.setCancelled(true);

@@ -14,6 +14,7 @@ import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.player.PlayerMode;
 import com.thekingelessar.assault.game.teambuffs.IBuff;
 import com.thekingelessar.assault.game.world.map.MapBase;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -78,8 +79,8 @@ public class GameTeam
         
         goldItem = new ItemStack(XMaterial.GOLD_INGOT.parseMaterial());
         ItemMeta goldMeta = goldItem.getItemMeta();
-        goldMeta.setDisplayName(ChatColor.RESET + "Return to shop");
-        goldMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to return to the shop.", ChatColor.RESET + "This storage can be used", ChatColor.RESET + "by your" + this.color.chatColor + " entire team§r."));
+        goldMeta.setDisplayName(Util.RESET_CHAT + "Return to shop");
+        goldMeta.setLore(Arrays.asList(Util.RESET_CHAT + "Click to return to the shop.", Util.RESET_CHAT + "This storage can be used", Util.RESET_CHAT + "by your" + this.color.chatColor + " entire team§r."));
         goldItem.setItemMeta(goldMeta);
         
         secretStorage.setItem(0, goldItem);
@@ -116,7 +117,7 @@ public class GameTeam
     {
         GamePlayer gamePlayer = new GamePlayer(player, gameInstance, this);
         
-        if (gameInstance.gameStage.equals(GameStage.BUILDING))
+        if (gameInstance.gameStage.equals(GameStage.BUILDING) || gameInstance.gameStage.equals(GameStage.PREGAME))
         {
             if (gameInstance.buildingCoinsRemaining.containsKey(player))
             {
@@ -137,8 +138,8 @@ public class GameTeam
         members.add(gamePlayer);
         teamScoreboard.addEntry(player.getName());
         
-        player.setPlayerListName(color.chatColor + ChatColor.BOLD.toString() + "[" + color.toString().charAt(0) + "]" + ChatColor.RESET + " " + this.color.chatColor + player.getName() + ChatColor.RESET);
-        player.setDisplayName(color.chatColor + player.getName() + ChatColor.RESET);
+        player.setPlayerListName(color.chatColor + ChatColor.BOLD.toString() + "[" + color.toString().charAt(0) + "]" + Util.RESET_CHAT + " " + this.color.chatColor + player.getName() + Util.RESET_CHAT);
+        player.setDisplayName(color.chatColor + player.getName() + Util.RESET_CHAT);
         
         gamePlayer.swapReset();
         gamePlayer.spawn(PlayerMode.getTeamMode(this), false);
@@ -256,12 +257,12 @@ public class GameTeam
         if (this.forfeitList.contains(player))
         {
             this.forfeitList.remove(player);
-            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.GREEN + "not forfeit" + ChatColor.RESET + "!");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.GREEN + "not forfeit" + Util.RESET_CHAT + "!");
         }
         else
         {
             this.forfeitList.add(player);
-            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.DARK_RED + "forfeit" + ChatColor.RESET + "!");
+            player.sendRawMessage(Assault.ASSAULT_PREFIX + "You've voted to " + ChatColor.DARK_RED + "forfeit" + Util.RESET_CHAT + "!");
         }
         
         this.evaluateForfeit();
@@ -278,11 +279,11 @@ public class GameTeam
         {
             for (Player player : this.getPlayers())
             {
-                player.sendRawMessage(Assault.ASSAULT_PREFIX + this.color.chatColor + "Your team " + ChatColor.DARK_RED + "forfeits" + ChatColor.RESET + "!");
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + this.color.chatColor + "Your team " + ChatColor.DARK_RED + "forfeits" + Util.RESET_CHAT + "!");
             }
             for (Player player : this.getOppositeTeam().getPlayers())
             {
-                player.sendRawMessage(Assault.ASSAULT_PREFIX + "The" + this.color.chatColor + " other team " + ChatColor.DARK_RED + "forfeits" + ChatColor.RESET + "!");
+                player.sendRawMessage(Assault.ASSAULT_PREFIX + "The" + this.color.chatColor + " other team " + ChatColor.DARK_RED + "forfeits" + Util.RESET_CHAT + "!");
             }
             
             gameInstance.endRound(true);

@@ -66,53 +66,53 @@ public class EntityDamageHandler implements Listener
                     }
                 }
             }
+        }
+        
+        if (entityDamageEvent.getEntity() instanceof Player)
+        
+        {
+            Player damagedPlayer = (Player) entityDamageEvent.getEntity();
             
-            if (entityDamageEvent.getEntity() instanceof Player)
-            
+            if (damagedPlayer.getWorld().equals(Assault.lobbyWorld))
             {
-                Player damagedPlayer = (Player) entityDamageEvent.getEntity();
-                
-                if (damagedPlayer.getWorld().equals(Assault.lobbyWorld))
+                entityDamageEvent.setCancelled(true);
+            }
+            
+            GameInstance playerGameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
+            if (damagedPlayer.getHealth() - entityDamageEvent.getFinalDamage() <= 0)
+            {
+                if (playerGameInstance == null)
                 {
-                    entityDamageEvent.setCancelled(true);
+                    return;
                 }
                 
-                GameInstance playerGameInstance = GameInstance.getPlayerGameInstance(damagedPlayer);
-                if (damagedPlayer.getHealth() - entityDamageEvent.getFinalDamage() <= 0)
+                GamePlayer gamePlayer = playerGameInstance.getGamePlayer(damagedPlayer);
+                
+                playerGameInstance.lastDamagedBy.put(damagedPlayer, null);
+                
+                switch (entityDamageEvent.getCause())
                 {
-                    if (playerGameInstance == null)
-                    {
-                        return;
-                    }
-                    
-                    GamePlayer gamePlayer = playerGameInstance.getGamePlayer(damagedPlayer);
-                    
-                    playerGameInstance.lastDamagedBy.put(damagedPlayer, null);
-                    
-                    switch (entityDamageEvent.getCause())
-                    {
-                        case ENTITY_ATTACK:
-                            gamePlayer.respawn(null, true, DeathType.SWORD);
-                            break;
-                        case CONTACT:
-                            gamePlayer.respawn(null, true, DeathType.CONTACT);
-                            break;
-                        case PROJECTILE:
-                            gamePlayer.respawn(null, true, DeathType.BOW);
-                            break;
-                        case FALL:
-                            gamePlayer.respawn(null, true, DeathType.FALL);
-                            break;
-                        case DROWNING:
-                            gamePlayer.respawn(null, true, DeathType.DROWNING);
-                            break;
-                        case ENTITY_EXPLOSION:
-                            gamePlayer.respawn(null, true, DeathType.EXPLOSION);
-                            break;
-                    }
-                    
-                    entityDamageEvent.setCancelled(true);
+                    case ENTITY_ATTACK:
+                        gamePlayer.respawn(null, true, DeathType.SWORD);
+                        break;
+                    case CONTACT:
+                        gamePlayer.respawn(null, true, DeathType.CONTACT);
+                        break;
+                    case PROJECTILE:
+                        gamePlayer.respawn(null, true, DeathType.BOW);
+                        break;
+                    case FALL:
+                        gamePlayer.respawn(null, true, DeathType.FALL);
+                        break;
+                    case DROWNING:
+                        gamePlayer.respawn(null, true, DeathType.DROWNING);
+                        break;
+                    case ENTITY_EXPLOSION:
+                        gamePlayer.respawn(null, true, DeathType.EXPLOSION);
+                        break;
                 }
+                
+                entityDamageEvent.setCancelled(true);
             }
         }
     }

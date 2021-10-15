@@ -181,22 +181,20 @@ public class AssaultTableManager
         return null;
     }
     
-    public List<Map<Statistic, Object>> getPlayerData(UUID playerUUID)
+    public Map<Statistic, Object> getPlayerData(UUID playerUUID)
     {
-        List<Map<Statistic, Object>> playerStats = new ArrayList<>();
+        Map<Statistic, Object> playerStats = new HashMap<>();
         for (Statistic statistic : Statistic.values())
         {
             if (statistic.equals(Statistic.PLAYER_UUID)) continue;
             
             Object value = getValue(playerUUID, statistic);
-            HashMap<Statistic, Object> valueMap = new HashMap<>();
-            valueMap.put(statistic, value);
-            playerStats.add(valueMap);
+            playerStats.put(statistic, value);
         }
         return playerStats;
     }
     
-    public Map<UUID, List<Map<Statistic, Object>>> getAllPlayerData()
+    public Map<UUID, Map<Statistic, Object>> getAllPlayerData()
     {
         this.createTable();
         try
@@ -207,7 +205,7 @@ public class AssaultTableManager
                     .append(String.format("FROM %s;", TABLE_NAME))
                     .toString());
             
-            Map<UUID, List<Map<Statistic, Object>>> playerMap = new HashMap<>();
+            Map<UUID, Map<Statistic, Object>> playerMap = new HashMap<>();
             while (playerUUIDs.next())
             {
                 UUID playerUUID = UUID.fromString(playerUUIDs.getString(Statistic.PLAYER_UUID.toString()));
@@ -225,7 +223,7 @@ public class AssaultTableManager
     
     public File exportStatistics(File exportFile)
     {
-        Map<UUID, List<Map<Statistic, Object>>> allPlayerData = this.getAllPlayerData();
+        Map<UUID, Map<Statistic, Object>> allPlayerData = this.getAllPlayerData();
         JSONObject jsonObject = new JSONObject(allPlayerData);
         
         if (exportFile == null)
@@ -235,6 +233,7 @@ public class AssaultTableManager
             exportFile = new File(String.format("plugins/Assault/exported/statistics_%s.json", dateFormat.format(date)));
         }
         
+        exportFile.getParentFile().mkdirs();
         try
         {
             exportFile.createNewFile();

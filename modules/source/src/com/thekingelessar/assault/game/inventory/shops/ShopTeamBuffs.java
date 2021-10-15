@@ -7,6 +7,7 @@ import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItemBuff;
 import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.teambuffs.*;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,23 +53,23 @@ public class ShopTeamBuffs implements IShop
     private void constructShopItemBuff(ItemStack shopItemStack, IBuff buff, String name, String description, int cost, boolean newRow)
     {
         ItemMeta itemMeta = shopItemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RESET + name);
+        itemMeta.setDisplayName(Util.RESET_CHAT + name);
         
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.RESET + description);
+        lore.add(Util.RESET_CHAT + description);
         lore.add("");
-        lore.add(ChatColor.GRAY + "Cost: " + ChatColor.RESET + cost + " " + Currency.GAMER_POINTS.name);
-        lore.add(ChatColor.RESET + "Click to buy!");
+        lore.add(ChatColor.GRAY + "Cost: " + Util.RESET_CHAT + cost + " " + Currency.GAMER_POINTS.name);
+        lore.add(Util.RESET_CHAT + "Click to buy!");
         itemMeta.setLore(lore);
         
         shopItemStack.setItemMeta(itemMeta);
         
         ItemStack alreadyPurchasedItemStack = shopItemStack.clone();
         ItemMeta alreadyPurchasedMeta = alreadyPurchasedItemStack.getItemMeta();
-        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[PURCHASED] " + ChatColor.RESET + name);
+        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[PURCHASED] " + Util.RESET_CHAT + name);
         
         List<String> alreadyPurchasedLore = new ArrayList<>();
-        alreadyPurchasedLore.add(ChatColor.RESET + description);
+        alreadyPurchasedLore.add(Util.RESET_CHAT + description);
         alreadyPurchasedLore.add("");
         alreadyPurchasedLore.add(ChatColor.GREEN + "Your team already purchased this!");
         alreadyPurchasedMeta.setLore(alreadyPurchasedLore);

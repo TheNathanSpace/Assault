@@ -8,6 +8,7 @@ import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumAxeTier;
 import com.thekingelessar.assault.game.inventory.shopitems.tools.EnumPickaxeTier;
 import com.thekingelessar.assault.game.player.GamePlayer;
 import com.thekingelessar.assault.game.team.TeamColor;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -89,8 +90,8 @@ public class ShopAttacking extends ShopItemShop implements IShop
         
         storageItem = new ItemStack(XMaterial.CHEST.parseMaterial());
         ItemMeta chestMeta = storageItem.getItemMeta();
-        chestMeta.setDisplayName(ChatColor.RESET + "Secret Storage");
-        chestMeta.setLore(Arrays.asList(ChatColor.RESET + "Click to open the secret storage.", ChatColor.RESET + "The secret storage can be used", ChatColor.RESET + "by your" + teamColor.chatColor + " entire team§r."));
+        chestMeta.setDisplayName(Util.RESET_CHAT + "Secret Storage");
+        chestMeta.setLore(Arrays.asList(Util.RESET_CHAT + "Click to open the secret storage.", Util.RESET_CHAT + "The secret storage can be used", Util.RESET_CHAT + "by your" + teamColor.chatColor + " entire team§r."));
         storageItem.setItemMeta(chestMeta);
         
         inventory.setItem(53, storageItem);

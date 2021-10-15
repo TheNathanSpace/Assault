@@ -1,6 +1,7 @@
 package com.thekingelessar.assault.commands;
 
 import com.thekingelessar.assault.Assault;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.bukkit.ChatColor.GRAY;
-import static org.bukkit.ChatColor.RESET;
 
 public class CommandAssaultHelp implements CommandExecutor
 {
@@ -31,10 +31,10 @@ public class CommandAssaultHelp implements CommandExecutor
             List<String> helpResponse = new ArrayList<>();
             helpResponse.add("-------------");
             helpResponse.add(Assault.ASSAULT_PREFIX + "Help");
-            helpResponse.add(GRAY + "/assaulthelp" + RESET + ": Explanation of commands.");
-            helpResponse.add(GRAY + "/all <message>" + RESET + ": Shows a chat message to all players in the game.");
-            helpResponse.add(GRAY + "/respawn" + RESET + ": Kills you (in case you get stuck somewhere).");
-            helpResponse.add(GRAY + "/forfeit" + RESET + ": Toggles your vote to forfeit.");
+            helpResponse.add(GRAY + "/assaulthelp" + Util.RESET_CHAT + ": Explanation of commands.");
+            helpResponse.add(GRAY + "/all <message>" + Util.RESET_CHAT + ": Shows a chat message to all players in the game.");
+            helpResponse.add(GRAY + "/respawn" + Util.RESET_CHAT + ": Kills you (in case you get stuck somewhere).");
+            helpResponse.add(GRAY + "/forfeit" + Util.RESET_CHAT + ": Toggles your vote to forfeit.");
             helpResponse.add("-------------");
             
             player.sendMessage(String.join("\n", helpResponse));

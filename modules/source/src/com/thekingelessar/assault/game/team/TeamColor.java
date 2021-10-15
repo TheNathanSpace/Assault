@@ -1,7 +1,7 @@
 package com.thekingelessar.assault.game.team;
 
 import com.thekingelessar.assault.util.version.XMaterial;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +20,7 @@ public enum TeamColor
     BLUE(ChatColor.BLUE, Color.BLUE, "LIGHT_BLUE", "WARPED", "BIRCH"),
     GREEN(ChatColor.GREEN, Color.LIME, "LIME", "WARPED", "BIRCH"),
     AQUA(ChatColor.AQUA, Color.AQUA, "CYAN", "WARPED", "SPRUCE"),
-    RED(ChatColor.RED, Color.RED, "RED", "CRIMSON", "JUNGLE"),
+    RED(ChatColor.RED, Color.RED, "RED", "ACACIA", null),
     LIGHT_PURPLE(ChatColor.LIGHT_PURPLE, Color.FUCHSIA, "MAGENTA", "CRIMSON", "JUNGLE"),
     YELLOW(ChatColor.YELLOW, Color.YELLOW, "YELLOW", "BIRCH", null),
     WHITE(ChatColor.WHITE, Color.WHITE, "WHITE", "BIRCH", null);
@@ -56,7 +56,7 @@ public enum TeamColor
         
         if (capitalized)
         {
-            fixedName = StringUtils.capitalize(fixedName);
+            fixedName = WordUtils.capitalize(fixedName);
         }
         
         if (formatting != null)

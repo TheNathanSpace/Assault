@@ -136,40 +136,44 @@ public class InventoryClickHandler implements Listener
             PlayerShopTeamSelection shop = gameInstance.teamSelectionShopMap.get(player);
             shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
         }
-        else if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))
+        
+        if (playerTeam != null)
         {
-            ShopBuilding shop = playerTeam.shopBuilding;
-            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
-        }
-        else if (inventoryOpen.equals(gamePlayer.shopAttacking.inventory))
-        {
-            if (itemClicked.equals(gamePlayer.shopAttacking.storageItem))
+            if (playerTeam.shopBuilding != null && inventoryOpen.equals(playerTeam.shopBuilding.inventory))
             {
-                player.playSound(player.getLocation(), XSound.BLOCK_CHEST_OPEN.parseSound(), 0.5F, 1.3F);
-                
-                player.openInventory(playerTeam.secretStorage);
-                inventoryClickEvent.setCancelled(true);
-                return;
+                ShopBuilding shop = playerTeam.shopBuilding;
+                shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
             }
-            
-            ShopAttacking shop = gamePlayer.shopAttacking;
-            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
-        }
-        else if (inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
-        {
-            if (itemClicked.equals(playerTeam.goldItem))
+            else if (inventoryOpen.equals(gamePlayer.shopAttacking.inventory))
             {
-                player.playSound(player.getLocation(), XSound.BLOCK_CHEST_CLOSE.parseSound(), 0.5F, 1.3F);
+                if (itemClicked.equals(gamePlayer.shopAttacking.storageItem))
+                {
+                    player.playSound(player.getLocation(), XSound.BLOCK_CHEST_OPEN.parseSound(), 0.5F, 1.3F);
+                    
+                    player.openInventory(playerTeam.secretStorage);
+                    inventoryClickEvent.setCancelled(true);
+                    return;
+                }
                 
-                player.openInventory(gamePlayer.shopAttacking.inventory);
-                inventoryClickEvent.setCancelled(true);
-                return;
+                ShopAttacking shop = gamePlayer.shopAttacking;
+                shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
             }
-        }
-        else if (playerTeam.shopTeamBuffs != null && inventoryOpen.equals(playerTeam.shopTeamBuffs.inventory))
-        {
-            ShopTeamBuffs shop = playerTeam.shopTeamBuffs;
-            shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
+            else if (inventoryClickEvent.getInventory().equals(playerTeam.secretStorage))
+            {
+                if (itemClicked.equals(playerTeam.goldItem))
+                {
+                    player.playSound(player.getLocation(), XSound.BLOCK_CHEST_CLOSE.parseSound(), 0.5F, 1.3F);
+                    
+                    player.openInventory(gamePlayer.shopAttacking.inventory);
+                    inventoryClickEvent.setCancelled(true);
+                    return;
+                }
+            }
+            else if (playerTeam.shopTeamBuffs != null && inventoryOpen.equals(playerTeam.shopTeamBuffs.inventory))
+            {
+                ShopTeamBuffs shop = playerTeam.shopTeamBuffs;
+                shopItemClicked = ShopItem.getShopItem(shop, itemClicked);
+            }
         }
         
         if (shopItemClicked == null)

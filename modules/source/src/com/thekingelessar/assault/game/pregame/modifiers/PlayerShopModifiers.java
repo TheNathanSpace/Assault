@@ -4,11 +4,14 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.IShop;
 import com.thekingelessar.assault.game.inventory.ShopUtil;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.util.Util;
+import com.thekingelessar.assault.util.version.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import com.thekingelessar.assault.util.version.XMaterial;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -43,34 +46,37 @@ public class PlayerShopModifiers implements IShop
         
         inventory = Bukkit.createInventory(null, 27, ChatColor.DARK_GRAY + "Game Modifiers");
         
-        constructShopItemModifier(new ItemStack(XMaterial.CLOCK.parseMaterial(), 0), gameInstance.modInfiniteTime, gameInstance.modInfiniteTime.name, gameInstance.modInfiniteTime.description, false);
-        constructShopItemModifier(new ItemStack(XMaterial.QUARTZ_BLOCK.parseMaterial(), 0), gameInstance.modFirstTo5Stars, gameInstance.modFirstTo5Stars.name, gameInstance.modFirstTo5Stars.description, false);
-        constructShopItemModifier(new ItemStack(XMaterial.ENDER_EYE.parseMaterial(), 0), gameInstance.modDisableWildcardItems, gameInstance.modDisableWildcardItems.name, gameInstance.modDisableWildcardItems.description, false);
-        constructShopItemModifier(new ItemStack(XMaterial.PAPER.parseMaterial(), 0), gameInstance.modDontUseTeamSelector, gameInstance.modDontUseTeamSelector.name, gameInstance.modDontUseTeamSelector.description, false);
-        constructShopItemModifier(new ItemStack(XMaterial.IRON_SHOVEL.parseMaterial(), 0), gameInstance.modManualStar, gameInstance.modManualStar.name, gameInstance.modManualStar.description, false);
+        constructShopItemModifier(XMaterial.CLOCK.parseItem(), gameInstance.modInfiniteTime, gameInstance.modInfiniteTime.name, gameInstance.modInfiniteTime.description, false);
+        constructShopItemModifier(XMaterial.QUARTZ_BLOCK.parseItem(), gameInstance.modFirstTo5Stars, gameInstance.modFirstTo5Stars.name, gameInstance.modFirstTo5Stars.description, false);
+        constructShopItemModifier(XMaterial.ENDER_EYE.parseItem(), gameInstance.modDisableWildcardItems, gameInstance.modDisableWildcardItems.name, gameInstance.modDisableWildcardItems.description, false);
+        constructShopItemModifier(XMaterial.PAPER.parseItem(), gameInstance.modDontUseTeamSelector, gameInstance.modDontUseTeamSelector.name, gameInstance.modDontUseTeamSelector.description, false);
+        constructShopItemModifier(XMaterial.IRON_SHOVEL.parseItem(), gameInstance.modManualStar, gameInstance.modManualStar.name, gameInstance.modManualStar.description, false);
     }
     
     private void constructShopItemModifier(ItemStack notVotedItemStack, GameModifier gameModifier, String name, String description, boolean newRow)
     {
         ItemMeta itemMeta = notVotedItemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RESET.toString() + ChatColor.BOLD + name + ChatColor.RESET);
+        itemMeta.setDisplayName(Util.RESET_CHAT.toString() + ChatColor.BOLD + name + Util.RESET_CHAT);
         
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.RESET + description);
+        lore.add(Util.RESET_CHAT + description);
         lore.add("");
-        lore.add(ChatColor.RESET + "Click to " + ChatColor.GREEN + "vote" + ChatColor.RESET + "!");
+        lore.add(Util.RESET_CHAT + "Click to " + ChatColor.GREEN + "vote" + Util.RESET_CHAT + "!");
         itemMeta.setLore(lore);
         
         notVotedItemStack.setItemMeta(itemMeta);
         
         ItemStack alreadyVotedItemStack = notVotedItemStack.clone();
+        alreadyVotedItemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+    
         ItemMeta alreadyPurchasedMeta = alreadyVotedItemStack.getItemMeta();
-        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[VOTED] " + ChatColor.RESET + ChatColor.BOLD + name);
+        alreadyPurchasedMeta.setDisplayName(ChatColor.GREEN + "[VOTED] " + Util.RESET_CHAT + ChatColor.BOLD + name);
         
         List<String> alreadyPurchasedLore = new ArrayList<>();
-        alreadyPurchasedLore.add(ChatColor.RESET + description);
+        alreadyPurchasedLore.add(Util.RESET_CHAT + description);
         alreadyPurchasedLore.add("");
-        alreadyPurchasedLore.add(ChatColor.RESET + "Click to " + ChatColor.RED + "remove vote" + ChatColor.RESET + "!");
+        alreadyPurchasedLore.add(Util.RESET_CHAT + "Click to " + ChatColor.RED + "remove vote" + Util.RESET_CHAT + "!");
+        alreadyPurchasedMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         alreadyPurchasedMeta.setLore(alreadyPurchasedLore);
         
         alreadyVotedItemStack.setItemMeta(alreadyPurchasedMeta);
@@ -85,20 +91,14 @@ public class PlayerShopModifiers implements IShop
     public void updateCounts()
     {
         Map<ItemStack, ShopItemModifier> addItems = new HashMap<>();
-        List<ItemStack> removeItems = new ArrayList<>();
         
-        for (ShopItemModifier shopItemModifier : this.shopItemMap.values())
+        for (ShopItemModifier shopItemModifier : new ArrayList<>(this.shopItemMap.values()))
         {
-            removeItems.add(shopItemModifier.alreadyVotedItemStack);
-            removeItems.add(shopItemModifier.shopItemStack);
-            
             ItemStack newItem = shopItemModifier.updateCount(this);
             addItems.put(newItem, shopItemModifier);
-        }
-        
-        for (ItemStack itemStack : removeItems)
-        {
-            this.shopItemMap.remove(itemStack);
+    
+            this.shopItemMap.remove(shopItemModifier.alreadyVotedItemStack);
+            this.shopItemMap.remove(shopItemModifier.shopItemStack);
         }
         
         for (Map.Entry<ItemStack, ShopItemModifier> entry : addItems.entrySet())

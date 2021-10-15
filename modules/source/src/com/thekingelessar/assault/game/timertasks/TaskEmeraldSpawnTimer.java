@@ -25,7 +25,6 @@ public class TaskEmeraldSpawnTimer extends BukkitRunnable
     public GameInstance gameInstance;
     
     public Item spawnedItem = null;
-    public boolean modSpawned = false;
     
     public TaskEmeraldSpawnTimer(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance, int secondsBetweenEmeralds)
     {
@@ -46,17 +45,6 @@ public class TaskEmeraldSpawnTimer extends BukkitRunnable
     
     public void advanceTimer()
     {
-        
-        if (spawnedItem != null && modSpawned)
-        {
-            modSpawned = false;
-            Location objectiveLocation = gameInstance.getDefendingTeam().mapBase.emeraldSpawns.get(0).toLocation(gameInstance.gameWorld);
-            
-            Vector velocity = spawnedItem.getVelocity();
-            spawnedItem.setVelocity(velocity.zero());
-            spawnedItem.teleport(objectiveLocation);
-        }
-        
         double remainder = currentTicks % 20;
         
         if (Assault.useHolographicDisplays)
@@ -82,7 +70,6 @@ public class TaskEmeraldSpawnTimer extends BukkitRunnable
             {
                 Location location = coordinate.toLocation(gameInstance.gameWorld);
                 this.spawnedItem = gameInstance.gameWorld.dropItem(location, new ItemStack(Material.EMERALD));
-                modSpawned = true;
                 
                 Vector velocity = spawnedItem.getVelocity();
                 this.spawnedItem.setVelocity(velocity.zero());

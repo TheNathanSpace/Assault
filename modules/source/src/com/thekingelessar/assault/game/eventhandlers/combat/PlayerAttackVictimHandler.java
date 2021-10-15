@@ -167,6 +167,8 @@ public class PlayerAttackVictimHandler implements Listener
                         }
                         
                         entityAttackEvent.setCancelled(true);
+    
+                        System.out.println("Attack event canceled");
                     }
                 }
             }

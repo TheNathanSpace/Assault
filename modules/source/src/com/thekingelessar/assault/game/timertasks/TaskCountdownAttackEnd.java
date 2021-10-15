@@ -2,7 +2,6 @@ package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameEndManager;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,8 +18,6 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
     public int ticksLeft;
     
     public GameInstance gameInstance;
-    
-    private Title title = new Title();
     
     public TaskCountdownAttackEnd(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
@@ -49,16 +46,9 @@ public class TaskCountdownAttackEnd extends BukkitRunnable
         List<Player> players = gameInstance.getPlayers();
         for (Player player : players)
         {
-            title.clearTitle(player);
+            player.sendTitle(" ", ChatColor.WHITE + "This round finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         }
-        
-        title = new Title(" ", ChatColor.WHITE + "This round finished in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
-        
-        for (Player player : players)
-        {
-            title.send(player);
-        }
-        
+
         ticksLeft = ticksLeft - tickDelay;
     }
     

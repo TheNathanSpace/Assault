@@ -4,6 +4,7 @@ import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.IShop;
 import com.thekingelessar.assault.game.inventory.ShopUtil;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
@@ -54,13 +55,13 @@ public class PlayerShopTeamSelection implements IShop
     private void constructShopItemTeamSelector(ItemStack notVotedItemStack, SelectedTeam selectedTeam, boolean newRow)
     {
         String teamName = selectedTeam.teamColor.getFormattedName(true, true, ChatColor.BOLD);
-        teamName += ChatColor.RESET + ChatColor.BOLD.toString() + " Team" + ChatColor.RESET;
+        teamName += Util.RESET_CHAT + ChatColor.BOLD.toString() + " Team" + Util.RESET_CHAT;
         
         ItemMeta itemMeta = notVotedItemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.RESET + teamName + ChatColor.RESET);
+        itemMeta.setDisplayName(Util.RESET_CHAT + teamName + Util.RESET_CHAT);
         
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.RESET + "Click to join " + teamName + "!");
+        lore.add(Util.RESET_CHAT + "Click to join " + teamName + "!");
         itemMeta.setLore(lore);
         
         notVotedItemStack.setItemMeta(itemMeta);
@@ -69,10 +70,10 @@ public class PlayerShopTeamSelection implements IShop
         alreadySelectedItemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         
         ItemMeta alreadySelectedMeta = alreadySelectedItemStack.getItemMeta();
-        alreadySelectedMeta.setDisplayName(ChatColor.GREEN + "[JOINED] " + ChatColor.RESET + teamName);
+        alreadySelectedMeta.setDisplayName(ChatColor.GREEN + "[JOINED] " + Util.RESET_CHAT + teamName);
         
         List<String> alreadyPurchasedLore = new ArrayList<>();
-        alreadyPurchasedLore.add(ChatColor.RESET + "Click to " + ChatColor.RED + "leave team" + ChatColor.RESET + "!");
+        alreadyPurchasedLore.add(Util.RESET_CHAT + "Click to " + ChatColor.RED + "leave team" + Util.RESET_CHAT + "!");
         alreadySelectedMeta.setLore(alreadyPurchasedLore);
         alreadySelectedMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         

@@ -60,7 +60,14 @@ public class GamePlayer
         this.player = player;
         this.gameInstance = gameInstance;
         this.playerBank = new PlayerBank(0, this);
-        this.scoreboard = new FastBoard(player);
+        this.scoreboard = new FastBoard(player)
+        {
+            @Override
+            public boolean hasLinesMaxLength()
+            {
+                return true;
+            }
+        };
         this.gameTeam = gameTeam;
     }
     
@@ -98,7 +105,7 @@ public class GamePlayer
         ItemStack compass = new ItemStack(XMaterial.COMPASS.parseMaterial());
         ItemMeta compassMeta = compass.getItemMeta();
         compassMeta.setDisplayName(ChatColor.AQUA + ChatColor.BOLD.toString() + "Nearest Star");
-        compassMeta.setLore(Arrays.asList(ChatColor.RESET + "This compass points towards the", ChatColor.RESET + "nearest Nether Star!"));
+        compassMeta.setLore(Arrays.asList(Util.RESET_CHAT + "This compass points towards the", Util.RESET_CHAT + "nearest Nether Star!"));
         compass.setItemMeta(compassMeta);
         spawnItems.add(compass);
     }
@@ -407,7 +414,7 @@ public class GamePlayer
     
     public String addSwordDeathFeed(Player killer)
     {
-        String message = killer.getDisplayName() + ChatColor.RESET + " stabbed " + this.player.getDisplayName() + ChatColor.RESET + " to death";
+        String message = killer.getDisplayName() + Util.RESET_CHAT + " stabbed " + this.player.getDisplayName() + Util.RESET_CHAT + " to death";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -417,7 +424,7 @@ public class GamePlayer
     
     public String addBowDeathFeed(Player killer)
     {
-        String message = killer.getDisplayName() + ChatColor.RESET + " shot " + this.player.getDisplayName() + ChatColor.RESET + " to death";
+        String message = killer.getDisplayName() + Util.RESET_CHAT + " shot " + this.player.getDisplayName() + Util.RESET_CHAT + " to death";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -427,7 +434,7 @@ public class GamePlayer
     
     public String addVoidFallFeed()
     {
-        String message = this.player.getDisplayName() + ChatColor.RESET + " fell into the void";
+        String message = this.player.getDisplayName() + Util.RESET_CHAT + " fell into the void";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -437,7 +444,7 @@ public class GamePlayer
     
     public String addVoidDeathFeed(Player killer)
     {
-        String message = killer.getDisplayName() + ChatColor.RESET + " knocked " + this.player.getDisplayName() + ChatColor.RESET + " into the void";
+        String message = killer.getDisplayName() + Util.RESET_CHAT + " knocked " + this.player.getDisplayName() + Util.RESET_CHAT + " into the void";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -447,7 +454,7 @@ public class GamePlayer
     
     public String addRespawnDeathFeed(Player killer)
     {
-        String message = killer.getDisplayName() + ChatColor.RESET + " fought " + this.player.getDisplayName() + ChatColor.RESET + " to the edge";
+        String message = killer.getDisplayName() + Util.RESET_CHAT + " fought " + this.player.getDisplayName() + Util.RESET_CHAT + " to the edge";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -457,7 +464,7 @@ public class GamePlayer
     
     public String addDeathFeed()
     {
-        String message = this.player.getDisplayName() + ChatColor.RESET + " died";
+        String message = this.player.getDisplayName() + Util.RESET_CHAT + " died";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -467,7 +474,7 @@ public class GamePlayer
     
     public String addContactDeathFeed()
     {
-        String message = this.player.getDisplayName() + ChatColor.RESET + " was pricked to death";
+        String message = this.player.getDisplayName() + Util.RESET_CHAT + " was pricked to death";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -477,7 +484,7 @@ public class GamePlayer
     
     public String addFallDeathFeed()
     {
-        String message = this.player.getDisplayName() + ChatColor.RESET + " fell to their death";
+        String message = this.player.getDisplayName() + Util.RESET_CHAT + " fell to their death";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -487,7 +494,7 @@ public class GamePlayer
     
     public String addDrownDeathFeed()
     {
-        String message = this.player.getDisplayName() + ChatColor.RESET + " drowned";
+        String message = this.player.getDisplayName() + Util.RESET_CHAT + " drowned";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -497,7 +504,7 @@ public class GamePlayer
     
     public String addExplosionDeathFeed()
     {
-        String message = this.player.getDisplayName() + ChatColor.RESET + " blew up";
+        String message = this.player.getDisplayName() + Util.RESET_CHAT + " blew up";
         for (Player player : this.gameInstance.getPlayers())
         {
             player.sendRawMessage(message);
@@ -513,13 +520,12 @@ public class GamePlayer
         
         lines.add("");
         
-        lines.add("Your team: " + gameInstance.getPlayerTeam(player).color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.RESET);
-        
+        lines.add("Your team: " + gameInstance.getPlayerTeam(player).color.getFormattedName(false, false, ChatColor.BOLD) + Util.RESET_CHAT);
         lines.add("");
         
         if (gameInstance.gameStage.equals(GameStage.BUILDING))
         {
-            lines.add(ChatColor.WHITE.toString() + ChatColor.BOLD + "Building time: " + ChatColor.RESET + Util.secondsToMinutes(gameInstance.buildingSecondsLeft, true));
+            lines.add(ChatColor.WHITE.toString() + ChatColor.BOLD + "Building time: " + Util.RESET_CHAT + Util.secondsToMinutes(gameInstance.buildingSecondsLeft, true));
         }
         else
         {
@@ -550,14 +556,14 @@ public class GamePlayer
                 teamTwoTime += String.format(" %s%s✬", gameInstance.getTeamTwo().starsPickedUp, ChatColor.WHITE);
             }
             
-            lines.add(gameInstance.getTeamOne().color.getFormattedName(false, true, ChatColor.BOLD) + ChatColor.RESET + ": " + teamOneTime);
-            lines.add(gameInstance.getTeamTwo().color.getFormattedName(false, true, ChatColor.BOLD) + ChatColor.RESET + ": " + teamTwoTime);
+            lines.add(gameInstance.getTeamOne().color.getFormattedName(false, true, ChatColor.BOLD) + Util.RESET_CHAT + ": " + teamOneTime);
+            lines.add(gameInstance.getTeamTwo().color.getFormattedName(false, true, ChatColor.BOLD) + Util.RESET_CHAT + ": " + teamTwoTime);
         }
         
         lines.add("");
         
-        lines.add(ChatColor.GOLD.toString() + ChatColor.BOLD + "Coins" + ChatColor.RESET + ": " + playerBank.coins);
-        lines.add(ChatColor.AQUA.toString() + ChatColor.BOLD + "Team Gamer Points" + ChatColor.RESET + ": " + gameInstance.getPlayerTeam(player).gamerPoints);
+        lines.add(ChatColor.GOLD.toString() + ChatColor.BOLD + "Coins" + Util.RESET_CHAT + ": " + playerBank.coins);
+        lines.add(ChatColor.AQUA.toString() + ChatColor.BOLD + "Team Gamer Points" + Util.RESET_CHAT + ": " + gameInstance.getPlayerTeam(player).gamerPoints);
         
         lines.add("");
         

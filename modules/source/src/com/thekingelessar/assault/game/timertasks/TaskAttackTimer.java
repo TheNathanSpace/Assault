@@ -2,7 +2,6 @@ package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.version.XSound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,8 +18,6 @@ public class TaskAttackTimer extends BukkitRunnable
     
     public boolean doneFirst = false;
     public boolean forfeitAlerted = false;
-    
-    private Title title = new Title();
     
     public TaskAttackTimer(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {

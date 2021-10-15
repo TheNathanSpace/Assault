@@ -1,7 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -18,8 +17,6 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
     public int ticksLeft;
     
     public GameInstance gameInstance;
-    
-    private Title title = new Title();
     
     public TaskCountdownSwapAttackers(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
@@ -45,13 +42,11 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
         }
         
         String mainTitle = gameInstance.getAttackingTeam().color.getFormattedName(true, true, ChatColor.BOLD) + ChatColor.WHITE + ": " + Util.secondsToMinutes(gameInstance.getAttackingTeam().displaySeconds, false);
-        title = new Title(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         
         List<Player> players = gameInstance.gameWorld.getPlayers();
         for (Player player : players)
         {
-            title.clearTitle(player);
-            title.send(player);
+            player.sendTitle(mainTitle, ChatColor.WHITE + "Swapping teams in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + " seconds");
         }
         
         ticksLeft = ticksLeft - tickDelay;
@@ -62,7 +57,7 @@ public class TaskCountdownSwapAttackers extends BukkitRunnable
         List<Player> players = gameInstance.gameWorld.getPlayers();
         for (Player player : players)
         {
-            title.clearTitle(player);
+            player.resetTitle();
         }
         
         this.cancel();

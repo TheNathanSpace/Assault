@@ -9,7 +9,6 @@ import com.thekingelessar.assault.game.team.GameTeam;
 import com.thekingelessar.assault.game.timertasks.TaskCountdownGameEnd;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.util.FireworkUtils;
-import com.thekingelessar.assault.util.Title;
 import com.thekingelessar.assault.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -75,17 +74,17 @@ public class GameEndManager
                 break;
             
             case ATTACKERS_LEFT:
-                subtitleString = "All of the " + gameInstance.getAttackingTeam().color.chatColor + "attackers" + ChatColor.RESET + " left!";
+                subtitleString = "All of the " + gameInstance.getAttackingTeam().color.chatColor + "attackers" + Util.RESET_CHAT + " left!";
                 break;
             
             case DEFENDERS_LEFT:
                 GameTeam disconnectedTeam = gameInstance.getRemainingTeam().getOppositeTeam();
-                subtitleString = "The " + disconnectedTeam.color.chatColor + "enemy team" + ChatColor.RESET + " disconnected!";
+                subtitleString = "The " + disconnectedTeam.color.chatColor + "enemy team" + Util.RESET_CHAT + " disconnected!";
                 break;
             
             case BUILDING_LEFT:
                 disconnectedTeam = gameInstance.getRemainingTeam().getOppositeTeam();
-                subtitleString = "The " + disconnectedTeam.color.chatColor + "enemy team" + ChatColor.RESET + " disconnected!";
+                subtitleString = "The " + disconnectedTeam.color.chatColor + "enemy team" + Util.RESET_CHAT + " disconnected!";
                 break;
             
             case TIE:
@@ -99,9 +98,6 @@ public class GameEndManager
                 throw new IllegalStateException("Unexpected value: " + winState);
         }
         
-        Title winnerTitle = new Title(winnerTitleString, subtitleString, 0, 6, 1);
-        Title loserTitle = new Title(loserTitleString, subtitleString, 0, 6, 1);
-        
         for (Player player : gameInstance.winningTeam.getPlayers())
         {
             for (int i = 0; i < 5; i++)
@@ -109,8 +105,8 @@ public class GameEndManager
                 FireworkUtils.spawnRandomFirework(player.getLocation(), gameInstance.winningTeam.color);
             }
             
-            winnerTitle.clearTitle(player);
-            winnerTitle.send(player);
+            player.sendTitle(winnerTitleString, subtitleString, 0, 6, 1);
+            System.out.println("Sent winning title to " + player.getName());
             
             PlayerMode playerMode = PlayerMode.setPlayerMode(player, PlayerMode.HAM, gameInstance);
         }
@@ -125,9 +121,7 @@ public class GameEndManager
                 }
             }
             
-            loserTitle.clearTitle(player);
-            loserTitle.send(player);
-            
+            player.sendTitle(loserTitleString, subtitleString, 0, 6, 1);
             PlayerMode playerMode = PlayerMode.setPlayerMode(player, PlayerMode.HAM, gameInstance);
         }
         

@@ -3,6 +3,7 @@ package com.thekingelessar.assault.game.pregame.teamselection;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.game.inventory.Currency;
 import com.thekingelessar.assault.game.inventory.shopitems.ShopItem;
+import com.thekingelessar.assault.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -55,27 +56,33 @@ public class ShopItemTeam extends ShopItem
         }
         
         int players = this.selectedTeam.members.size();
-        
-        newItemStack.setAmount(players);
-        
+    
+        if (players == 0)
+        {
+            newItemStack.setAmount(1);
+        }
+        else
+        {
+            newItemStack.setAmount(players);
+        }
         ItemMeta itemMeta = newItemStack.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(ChatColor.RESET + ChatColor.UNDERLINE.toString() + String.format("Players (%s):", players));
+        loreList.add(Util.RESET_CHAT + ChatColor.UNDERLINE.toString() + String.format("Players (%s):", players));
         for (Player player : this.selectedTeam.members)
         {
-            loreList.add(ChatColor.RESET + " - " + player.getName());
+            loreList.add(Util.RESET_CHAT + " - " + player.getName());
         }
         
         loreList.add("");
         if (this.selectedTeam.members.contains(playerShopTeamSelection.player))
         {
-            loreList.add(ChatColor.RESET + "Click to " + ChatColor.RED + "leave team" + ChatColor.RESET + "!");
+            loreList.add(Util.RESET_CHAT + "Click to " + ChatColor.RED + "leave team" + Util.RESET_CHAT + "!");
         }
         else
         {
             String teamName = selectedTeam.teamColor.getFormattedName(true, true, ChatColor.BOLD);
-            teamName += ChatColor.RESET + ChatColor.BOLD.toString() + " Team" + ChatColor.RESET;
-            loreList.add(ChatColor.RESET + "Click to join " + teamName + "!");
+            teamName += Util.RESET_CHAT + ChatColor.BOLD.toString() + " Team" + Util.RESET_CHAT;
+            loreList.add(Util.RESET_CHAT + "Click to join " + teamName + "!");
         }
         
         itemMeta.setLore(loreList);

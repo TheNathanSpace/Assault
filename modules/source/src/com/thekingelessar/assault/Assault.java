@@ -1,8 +1,6 @@
 package com.thekingelessar.assault;
 
 import com.thekingelessar.assault.bridge.IUnbreakable;
-import com.thekingelessar.assault.version.v1_10_2.Unbreakable_v1_10_2;
-import com.thekingelessar.assault.version.v1_11.Unbreakable_v1_11;
 import com.thekingelessar.assault.commands.*;
 import com.thekingelessar.assault.config.MapConfig;
 import com.thekingelessar.assault.database.AssaultTableManager;
@@ -13,11 +11,17 @@ import com.thekingelessar.assault.game.world.map.BuffShopTrait;
 import com.thekingelessar.assault.game.world.map.ItemShopTrait;
 import com.thekingelessar.assault.game.world.map.Map;
 import com.thekingelessar.assault.util.Coordinate;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
+import com.thekingelessar.assault.version.v1_10_2.Unbreakable_v1_10_2;
+import com.thekingelessar.assault.version.v1_11.Unbreakable_v1_11;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,7 +46,7 @@ public class Assault extends JavaPlugin
     
     static public int gameStartCountdown = 20;
     
-    static public final String ASSAULT_PREFIX = "§5§l[§d§lAssault§5§l] " + ChatColor.RESET;
+    static public final String ASSAULT_PREFIX = "§5§l[§d§lAssault§5§l] " + Util.RESET_CHAT;
     
     static public HashMap<String, Map> maps = new HashMap<>();
     
@@ -181,7 +185,7 @@ public class Assault extends JavaPlugin
             }
         }
         
-        for (String worldString : WorldManager.gameWorlds)
+        for (String worldString : new ArrayList<>(WorldManager.gameWorlds))
         {
             World world = Bukkit.getWorld(worldString);
             WorldManager.deleteWorld(world);

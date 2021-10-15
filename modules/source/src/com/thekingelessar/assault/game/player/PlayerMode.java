@@ -84,6 +84,7 @@ public enum PlayerMode
     {
         switch (gameTeam.gameInstance.gameStage)
         {
+            case PREGAME:
             case BUILDING:
                 return PlayerMode.BUILDING;
             

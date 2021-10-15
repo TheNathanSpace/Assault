@@ -32,7 +32,7 @@ min_z: -24.
 
 max_y: 118.
 
-attacker_base_prot_max_z: -0.5
+attacker_base_prot_max_z: -13.
 
 emerald_spawn_delay: 20
 
@@ -79,7 +79,7 @@ bases:
         - - 45. 102. 36.
           - 61. 97. 42.
       objectives:
-        - 39.937 97.5 40.063
+        - 39.7 97.5 40.3
       attacker_spawns:
         - 42. 109. -22. 0. 0.
       attacker_buff_shops:
@@ -102,7 +102,7 @@ bases:
         - - -28. 102. 36.
           - -44. 97. 42.
       objectives:
-        - -23.063 97.5 40.063
+        - -23.3 97.5 40.3
       attacker_spawns:
         - -21. 109. -23. 0. 0.
       attacker_buff_shops:

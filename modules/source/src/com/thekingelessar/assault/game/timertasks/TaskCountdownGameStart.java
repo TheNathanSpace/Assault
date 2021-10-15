@@ -1,7 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
 import com.thekingelessar.assault.game.GameInstance;
-import com.thekingelessar.assault.util.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,8 +16,6 @@ public class TaskCountdownGameStart extends BukkitRunnable
     public int ticksLeft;
     
     public GameInstance gameInstance;
-    
-    private Title title = new Title();
     
     public TaskCountdownGameStart(int startTicks, int startDelay, int tickDelay, GameInstance gameInstance)
     {
@@ -46,14 +43,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
         List<Player> players = gameInstance.gameWorld.getPlayers();
         for (Player player : players)
         {
-            title.clearTitle(player);
-        }
-        
-        title = new Title(ChatColor.WHITE + "Starting in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + "!", "Vote for modifiers!");
-        
-        for (Player player : players)
-        {
-            title.send(player);
+            player.sendTitle(ChatColor.WHITE + "Starting in " + ChatColor.LIGHT_PURPLE + (ticksLeft / 20) + ChatColor.WHITE + "!", "Vote for modifiers!");
         }
         
         ticksLeft = ticksLeft - tickDelay;
@@ -64,7 +54,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
         List<Player> players = gameInstance.gameWorld.getPlayers();
         for (Player player : players)
         {
-            title.clearTitle(player);
+            player.resetTitle();
         }
         
         this.cancel();
@@ -77,15 +67,7 @@ public class TaskCountdownGameStart extends BukkitRunnable
         List<Player> players = gameInstance.gameWorld.getPlayers();
         for (Player player : players)
         {
-            title.clearTitle(player);
-        }
-        
-        title = new Title(" ", ChatColor.WHITE + "Game start " + ChatColor.RED + "canceled", 0, 20, 20);
-        title.setTimingsToTicks();
-        
-        for (Player player : players)
-        {
-            title.send(player);
+            player.sendTitle(" ", ChatColor.WHITE + "Game start " + ChatColor.RED + "canceled!", 0, 50, 10);
         }
         
         this.cancel();

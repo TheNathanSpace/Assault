@@ -20,7 +20,10 @@ import com.thekingelessar.assault.game.team.TeamStage;
 import com.thekingelessar.assault.game.timertasks.*;
 import com.thekingelessar.assault.game.world.WorldManager;
 import com.thekingelessar.assault.game.world.map.MapBase;
-import com.thekingelessar.assault.util.*;
+import com.thekingelessar.assault.util.Coordinate;
+import com.thekingelessar.assault.util.FireworkUtils;
+import com.thekingelessar.assault.util.ItemInit;
+import com.thekingelessar.assault.util.Util;
 import com.thekingelessar.assault.util.version.XMaterial;
 import com.thekingelessar.assault.util.version.XSound;
 import net.citizensnpcs.api.npc.NPC;
@@ -188,12 +191,11 @@ public class GameInstance
     {
         for (Player player : this.gameWorld.getPlayers())
         {
-            Title title = new Title();
-            title.clearTitle(player);
+            player.resetTitle();
             player.playSound(player.getLocation(), XSound.ENTITY_SKELETON_HURT.parseSound(), 1.0F, 1.0F);
             player.sendRawMessage(message);
         }
-        
+        this.taskCountdownGameStart.cancelTimer();
         WorldManager.closeWorld(this.gameWorld);
         Assault.gameInstances.remove(this);
     }
@@ -271,7 +273,7 @@ public class GameInstance
         {
             if (gameTeam.members.size() == 0)
             {
-                this.endPreGame(Assault.ASSAULT_PREFIX + "Ending game—there's nobody on " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.RESET + "!");
+                this.endPreGame(Assault.ASSAULT_PREFIX + "Ending game—there's nobody on " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + Util.RESET_CHAT + "!");
                 return false;
             }
         }
@@ -303,13 +305,6 @@ public class GameInstance
         
         this.teamSelectionShopMap.clear();
         this.teamSelectionShopMap = null;
-        
-        for (Player player : this.getPlayers())
-        {
-            player.getInventory().clear();
-            GamePlayer gamePlayer = this.getGamePlayer(player);
-            gamePlayer.swapReset();
-        }
         
         return true;
     }
@@ -367,9 +362,7 @@ public class GameInstance
         {
             for (Player player : this.getAttackingTeam().getPlayers())
             {
-                Title title = new Title(this.getDefendingTeam().color.chatColor + "Defending" + ChatColor.RESET + " team left!", "Someone may rejoin, so keep going!", 0, 5, 1);
-                title.clearTitle(player);
-                title.send(player);
+                player.sendTitle(this.getDefendingTeam().color.chatColor + "Defending" + Util.RESET_CHAT + " team left!", "Someone may rejoin, so keep going!", 0, 5, 1);
             }
         }
         else
@@ -414,14 +407,21 @@ public class GameInstance
     
     public void startBuildMode()
     {
-        this.gameStage = GameStage.BUILDING;
-        
         boolean success = createTeams();
         if (!success)
         {
             return;
         }
         
+        this.gameStage = GameStage.BUILDING;
+    
+        for (Player player : this.getPlayers())
+        {
+            player.getInventory().clear();
+            GamePlayer gamePlayer = this.getGamePlayer(player);
+            gamePlayer.swapReset();
+        }
+    
         boolean intro = false;
         for (GameModifier gameModifier : modifierList)
         {
@@ -432,7 +432,7 @@ public class GameInstance
                 {
                     for (Player player : this.getPlayers())
                     {
-                        player.sendMessage("§5§l[§d§lGame Modifiers§5§l]" + ChatColor.RESET);
+                        player.sendMessage("§5§l[§d§lGame Modifiers§5§l]" + Util.RESET_CHAT);
                     }
                     intro = true;
                 }
@@ -454,7 +454,7 @@ public class GameInstance
         
         ItemStack shopItemBoughtStack = new ItemStack(Util.getRandomItemStack());
         int coinCost = Util.weightedInt(6, 16, 1, 64);
-        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + ChatColor.RESET + XMaterial.matchXMaterial(shopItemBoughtStack).toString(), coinCost, Currency.COINS);
+        ItemStack shopItemStack = ShopUtil.constructShopItemStack(shopItemBoughtStack.clone(), ChatColor.BLUE + ChatColor.BOLD.toString() + "Wildcard: " + Util.RESET_CHAT + XMaterial.matchXMaterial(shopItemBoughtStack).toString(), coinCost, Currency.COINS);
         ShopItem shopItem = new ShopItem(coinCost, Currency.COINS, shopItemStack, shopItemBoughtStack);
         this.randomShopItems.add(shopItem);
         
@@ -493,10 +493,7 @@ public class GameInstance
                     player.getInventory().setItem(8, manualPlacementStar.clone());
                 }
                 
-                Title title = new Title(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
-                title.clearTitle(player);
-                
-                title.send(player);
+                player.sendTitle(ChatColor.WHITE + "You are on the " + gameTeam.color.getFormattedName(false, false, ChatColor.BOLD) + ChatColor.WHITE + " team!", "Begin building your defenses!");
                 
                 PlayerMode.setPlayerMode(player, PlayerMode.BUILDING, this);
             }
@@ -575,6 +572,9 @@ public class GameInstance
         emeraldSpawnTimer = new TaskEmeraldSpawnTimer(0, 0, 1, this, this.gameMap.emeraldSpawnDelay);
         emeraldSpawnTimer.runTaskTimer(Assault.INSTANCE, emeraldSpawnTimer.startDelay, emeraldSpawnTimer.tickDelay);
         
+        taskTickTimer = new TaskTickTimer(0, 1, this);
+        taskTickTimer.runTaskTimer(Assault.INSTANCE, taskTickTimer.startDelay, taskTickTimer.tickDelay);
+        
         if (Assault.useHolographicDisplays)
         {
             Location hologramLocation = this.getDefendingTeam().mapBase.emeraldSpawns.get(0).toLocation(this.gameWorld);
@@ -592,17 +592,13 @@ public class GameInstance
                 case DEFENDING:
                     for (Player player : gameTeam.getPlayers())
                     {
-                        Title title = new Title(gameTeam.color.chatColor + ChatColor.BOLD.toString() + "You" + ChatColor.RESET + " are DEFENDING!", "Defend the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " with your life!", 0, 4, 1);
-                        title.clearTitle(player);
-                        title.send(player);
+                        player.sendTitle(gameTeam.color.chatColor + ChatColor.BOLD.toString() + "You" + Util.RESET_CHAT + " are DEFENDING!", "Defend the " + ChatColor.LIGHT_PURPLE + "nether star" + Util.RESET_CHAT + " with your life!", 0, 4, 1);
                     }
                     break;
                 case ATTACKING:
                     for (Player player : gameTeam.getPlayers())
                     {
-                        Title title = new Title(gameTeam.color.chatColor + ChatColor.BOLD.toString() + "You" + ChatColor.RESET + " are ATTACKING!", "Get to the " + ChatColor.LIGHT_PURPLE + "nether star" + ChatColor.RESET + " as fast as you can!", 0, 4, 1);
-                        title.clearTitle(player);
-                        title.send(player);
+                        player.sendTitle(gameTeam.color.chatColor + ChatColor.BOLD.toString() + "You" + Util.RESET_CHAT + " are ATTACKING!", "Get to the " + ChatColor.LIGHT_PURPLE + "nether star" + Util.RESET_CHAT + " as fast as you can!", 0, 4, 1);
                     }
                     break;
             }
@@ -852,6 +848,11 @@ public class GameInstance
     
     public List<Player> getPlayers()
     {
+        if (this.gameStage.equals(GameStage.PREGAME))
+        {
+            return players;
+        }
+        
         List<Player> players = new ArrayList<>();
         for (GameTeam gameTeam : this.teams)
         {
