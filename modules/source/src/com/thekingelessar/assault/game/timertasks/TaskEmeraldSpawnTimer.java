@@ -1,5 +1,6 @@
 package com.thekingelessar.assault.game.timertasks;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.thekingelessar.assault.Assault;
 import com.thekingelessar.assault.game.GameInstance;
 import com.thekingelessar.assault.util.Coordinate;
@@ -84,7 +85,10 @@ public class TaskEmeraldSpawnTimer extends BukkitRunnable
     public void stopTimer()
     {
         this.gameInstance.emeraldSpawnTimer = null;
-        gameInstance.emeraldSpawnHologram.delete();
+        for (Hologram hologram : gameInstance.emeraldSpawnHologram)
+        {
+            hologram.delete();
+        }
         this.cancel();
     }
     

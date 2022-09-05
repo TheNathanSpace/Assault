@@ -463,6 +463,7 @@ public class Map
         
         for (Object object : breakableList)
         {
+            if (object.toString().equalsIgnoreCase("NONE")) break;
             try
             {
                 String materialString = object.toString().toUpperCase();

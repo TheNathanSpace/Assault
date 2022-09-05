@@ -20,13 +20,14 @@ phase and Attacking phase.
 ### Bugs
 
 - Borders not throwing players
-- Map<UUID, List<Map<Statistic, Object>>> shouldn't be individual maps
 - Teams not balanced
 - Mixed teams when leaving and rejoining:
     - Wrong nametag color
     - Wrong scoreboard coins
 - Forfeit times weird
 - Store PlayerMode in GamePlayer
+- Temp game map folders not being deleted (https://pastebin.com/raw/jbLBFnem)
+- ~~Change game guide location to GitHub wiki~~
 
 ### Features
 
@@ -34,7 +35,11 @@ phase and Attacking phase.
 - Map-specific items
 - Procedurally generated terrain map
 - Package maps with plugin
-- Maps:
-    - Arcade
-    - Chess
-    - Blasting Area
+- Store maps in subfolder to reduce top-level clutter
+- Map selection
+- Maps to implement:
+  - Sky Parkour
+  - Arcade
+  - Bee/Dragon Castle
+  - Trenches
+  - Blasting Area

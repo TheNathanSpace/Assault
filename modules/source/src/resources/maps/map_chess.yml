@@ -1,0 +1,95 @@
+world_name: chess
+
+waiting_spawn: 0.5 155. -12. 0. 0.
+delete_waiting_platform: false
+waiting_platform_bounding_box:
+  - 0. 0. 0.
+  - 0. 0. 0.
+
+void_enabled: true
+void_level: 85.
+
+building_time: 200
+building_coins: 200
+
+give_coin_delay: 5.0
+give_coin_amount: 8
+
+flat_coins_on_kill: false
+coins_on_kill: 0
+percent_coins_on_kill: true
+rate_on_kill: 0.2
+
+coin_cap: 0
+
+attack_time_limit: 480
+first_to_five_stars_time_limit: 480
+
+border_x: 0
+
+max_z: 34.
+min_z: -32.
+
+max_y: 149.
+
+attacker_base_prot_max_z: -20.
+
+emerald_spawn_delay: 20
+
+enable_placeable_blocks: false
+enable_breakable_blocks: true
+
+# Modern: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# 1.8: https://helpch.at/docs/1.8/index.html?org/bukkit/Material.html
+placeable_blocks:
+  - WOOL
+  - STAINED_CLAY
+  - STAINED_GLASS
+  - WOOD
+  - COBBLESTONE
+  - WEB
+  - GRAVEL
+
+breakable_blocks:
+  - NONE
+
+  # This refers to the base that each team is DEFENDING.
+bases:
+  - WHITE:
+      defender_spawns:
+        - -36.5 125. 30.5 180. 0.
+      # This is a list of lists. Each sub-list inside the main list is one bounding box, with two opposite corners.
+      defender_bounding_boxes:
+        - - -33. 1. 27.
+          - -41. 255. 34.
+      objectives:
+        - -29.5 125. 25.5
+      attacker_spawns:
+        - -36.5 125. -28.5 0. 0.
+      attacker_buff_shops:
+        - -35.5 125. -24.5 160. 0.
+      item_shops:
+        - -37.5 125. -24.5 -160. 0.
+        - -36.5 125. 26.5 0. 0.
+      emerald_spawns:
+        - -43.5 125. -2.5
+        - -22.5 125. 4.5
+
+  - BLACK:
+      defender_spawns:
+        - 30.5 125. 31.5 180. 0.
+      defender_bounding_boxes:
+        - - 26. 1. 28.
+          - 35. 255. 35.
+      objectives:
+        - 37.5 125. 26.5
+      attacker_spawns:
+        - 30.5 125. -27.5 0. 0.
+      attacker_buff_shops:
+        - 31.5 125. -23.5 160. 0.
+      item_shops:
+        - 29.5 125. -23.5 -160. 0.
+        - 30.5 125. 27.5 0. 0.
+      emerald_spawns:
+        - 23.5 125. 5.5
+        - 44.5 125. -1.5

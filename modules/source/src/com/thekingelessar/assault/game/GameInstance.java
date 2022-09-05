@@ -84,7 +84,7 @@ public class GameInstance
     public TaskCountdownAttackEnd taskCountdownAttackEnd;
     
     public TaskEmeraldSpawnTimer emeraldSpawnTimer;
-    public Hologram emeraldSpawnHologram;
+    public List<Hologram> emeraldSpawnHologram = new ArrayList<>();
     public TextLine line2;
     
     public GameTeam attackingTeam;
@@ -347,6 +347,7 @@ public class GameInstance
         if (this.getPlayers().size() == 0)
         {
             this.gameEndManager.cleanupGameInstance();
+            return;
         }
         
         if (this.gameStage.equals(GameStage.BUILDING))
@@ -414,14 +415,14 @@ public class GameInstance
         }
         
         this.gameStage = GameStage.BUILDING;
-    
+        
         for (Player player : this.getPlayers())
         {
             player.getInventory().clear();
             GamePlayer gamePlayer = this.getGamePlayer(player);
             gamePlayer.swapReset();
         }
-    
+        
         boolean intro = false;
         for (GameModifier gameModifier : modifierList)
         {
@@ -577,12 +578,19 @@ public class GameInstance
         
         if (Assault.useHolographicDisplays)
         {
-            Location hologramLocation = this.getDefendingTeam().mapBase.emeraldSpawns.get(0).toLocation(this.gameWorld);
-            hologramLocation.setY(hologramLocation.getY() + 3.5);
-            
-            emeraldSpawnHologram = HologramsAPI.createHologram(Assault.INSTANCE, hologramLocation);
-            TextLine line1 = emeraldSpawnHologram.appendTextLine("§a§lEmerald Spawn");
-            line2 = emeraldSpawnHologram.appendTextLine("§rSpawning in §d%s§r seconds!");
+            this.emeraldSpawnHologram.clear();
+            for (Coordinate coordinate : this.getDefendingTeam().mapBase.emeraldSpawns)
+            {
+                Location hologramLocation = coordinate.toLocation(this.gameWorld);
+                hologramLocation.setY(hologramLocation.getY() + 3.5);
+                
+                Hologram hologram = HologramsAPI.createHologram(Assault.INSTANCE, hologramLocation);
+                hologram.getVisibilityManager().setVisibleByDefault(true);
+                
+                this.emeraldSpawnHologram.add(hologram);
+                TextLine line1 = hologram.appendTextLine("§a§lEmerald Spawn");
+                line2 = hologram.appendTextLine("§rSpawning in §d%s§r seconds!");
+            }
         }
         
         for (GameTeam gameTeam : teams)

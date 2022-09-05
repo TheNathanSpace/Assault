@@ -13,3 +13,4 @@ game_start_countdown: 20
 map_list:
   - map_saloon
   - map_tunnels
+  - map_chess

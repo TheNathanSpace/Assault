@@ -123,7 +123,7 @@ public class LobbyUtil
     
     private static void sendGuideURL(Player player)
     {
-        String command = "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the guide online!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://thenathan.space/assault/\"}}]";
+        String command = "tellraw " + player.getName() + " [\"\",{\"text\":\"[\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\"Assault\",\"bold\":true,\"color\":\"light_purple\"},{\"text\":\"]\",\"bold\":true,\"color\":\"dark_purple\"},{\"text\":\" \",\"color\":\"blue\"},{\"text\":\"Click here to open the guide online!\",\"underlined\":true,\"color\":\"blue\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/TheKingElessar/Assault/wiki/How-to-Play\"}}]";
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
     }
     

@@ -206,9 +206,10 @@ public class PlayerMoveHandler implements Listener
     
     private void cancelMovement(PlayerMoveEvent playerMoveEvent)
     {
+        playerMoveEvent.setCancelled(true);
         System.out.println("Canceling movement");
         Player player = playerMoveEvent.getPlayer();
-        
+    
         Vector fromVec = playerMoveEvent.getFrom().toVector();
         System.out.println(String.format("fromVec: %s %s %s", fromVec.getX(), fromVec.getY(), fromVec.getZ()));
         Vector toVec = playerMoveEvent.getTo().toVector();
@@ -220,7 +221,6 @@ public class PlayerMoveHandler implements Listener
         System.out.println(String.format("newVec: %s %s %s", newVec.getX(), newVec.getY(), newVec.getZ()));
         player.setVelocity(newVec);
         
-        playerMoveEvent.setCancelled(true);
     }
     
 }

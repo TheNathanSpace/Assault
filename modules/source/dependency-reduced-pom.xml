@@ -24,6 +24,7 @@
           <include>config.yml</include>
           <include>maps/map_saloon.yml</include>
           <include>maps/map_tunnels.yml</include>
+          <include>maps/map_chess.yml</include>
         </includes>
       </resource>
     </resources>
